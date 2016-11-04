@@ -61,6 +61,17 @@ DB.load = function() {
 					alasql('INSERT INTO trans VALUES(?,?,?,?,?,?);', trans);
 				}
 			});
+	
+	// Transaction
+	alasql('DROP TABLE IF EXISTS vendor;');
+	alasql('CREATE TABLE vendor(id INT IDENTITY, name STRING, tel STRING, vencode STRING, email STRING, address STRING);');
+	var ptrans = alasql.promise('SELECT MATRIX * FROM CSV("data/VENDOR-VENDOR.csv", {headers: true})').then(
+			function(transs) {
+				for (var i = 0; i < transs.length; i++) {
+					var trans = transs[i];
+					alasql('INSERT INTO vendor VALUES(?,?,?,?,?,?);', trans);
+				}
+			});
 
 	// Reload page
 	Promise.all([ pkind, pitem, pwhouse, pstock, ptrans ]).then(function() {
