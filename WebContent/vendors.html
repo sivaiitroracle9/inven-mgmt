@@ -61,44 +61,61 @@
 
 	<div class="container">
 		<div id="page-content">
-		<form action="vendors.html" method="post">
-			<p>	
-				Vendor Code: <input type="text">
-			</p>
-			<p>	
-				Name: <input type="text">
-			</p>
-			<p>	
-				Telephone Number: <input type="text">
-			</p>
-			<p>	
-				Email: <input type="text">
-			</p>
-			<p>	
-				Address: <input type="text">
-			</p>
-		</form>
-
-		<div class="btn-group">
-			  <button id="add-btn" type="button" class="btn btn-success glyphicon glyphicon-plus" style="margin-right:2px"></button>
-			  <button id="edt-btn" type="button" class="btn btn-primary glyphicon glyphicon-pencil disabled" style="margin-right:2px"></button>
-			  <button id="save-btn" type="button" class="btn btn-primary glyphicon glyphicon-floppy-disk disabled" style="margin-right:2px"></button>
-			  <button id="del-btn" type="button" class="btn btn-danger glyphicon glyphicon-trash disabled" style="margin-right:2px"></button>
-		</div>
-		<table class="table table-bordered table-hover">
-			<tbody id="vendor-list">
-				<tr>
-					<th></th>
-					<th>CODE</th>
-					<th>NAME</th>
-					<th>TELEPHONE NUMBER</th>
-					<th>EMAIL</th>
-					<th>ADDRESS</th>
-				</tr>
-			</tbody>
-		</table>
+			<div class="btn-group">
+				  <button id="add-btn" type="button" class="btn btn-success glyphicon glyphicon-plus" style="margin-right:2px" data-toggle="modal" data-target="#add-vendor"></button>
+				  <button id="del-btn" type="button" class="btn btn-danger glyphicon glyphicon-trash disabled" style="margin-right:2px"></button>
+			</div>
+			<table class="table table-bordered table-hover">
+				<tbody id="vendor-list">
+					<tr>
+						<th></th>
+						<th>CODE</th>
+						<th>NAME</th>
+						<th>TELEPHONE NUMBER</th>
+						<th>EMAIL</th>
+						<th>ADDRESS</th>
+					</tr>
+				</tbody>
+			</table>
 		</div>
 	</div>
+
+  <div id="add-vendor" class="modal fade" role="dialog">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal">&times;</button>
+	        <h4 class="modal-title">Add Vendor</h4>
+	      </div>
+	    
+		      <div class="modal-body">
+		       <form id="add-vendor-form" action="vendors.html">
+					<p>	
+						Vendor Code: <input type="text" name="vencode">
+					</p>
+					<p>	
+						Name: <input type="text" name="name">
+					</p>
+					<p>	
+						Telephone Number: <input type="text" name="tel">
+					</p>
+					<p>	
+						Email: <input type="text" name="email" placeholder="example@domain.com">
+					</p>
+					<p>	
+						Address: <input type="text" name="addr">
+					</p>
+				</form>
+		      </div>
+		      <div class="modal-footer">
+		        <button id="submit" type="submit" class="btn btn-success" data-dismiss="modal">Save</button>
+		        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		      </div>
+
+	    </div>
+	
+	  </div>
+</div>
 	<script src="js/vendors.js"></script>
 </body>
 </html>

@@ -2,12 +2,38 @@
  * http://usejsdoc.org/
  */
 
+$("div#add-vendor button#submit").on('click', function() {
+	var addFormData = $("#add-vendor-form").serializeArray();
+	var rows = alasql("select max(id) as id from vendor");
+	var values = [];
+	if (rows.length == 1 && rows[0].id != undefined)
+		values.push(Number(rows[0].id) + 1);
+	else
+		values.push(Number(1));
+
+	addFormData.forEach(function(i){
+		if(i.name == "name")
+			values[1] = i.value;
+		else if(i.name == "vencode")
+			values[3] = i.value;
+		else if(i.name == "tel")
+			values[2] = i.value;
+		else if(i.name == "email")
+			values[4] = i.value;
+		else if(i.name == "addr")
+			values[5] = i.value;
+	});
+	
+	console.log(values)
+	alasql("INSERT INTO vendor VALUES(?,?,?,?,?,?)", values);
+});
+
 //initialization
 $("#save-btn").hide();
 var editingrow = -1;
 
 
-var rows = alasql("SELECT * FROM vendor");
+var rows = alasql("SELECT * FROM vendor order by id desc");
 
 if(rows.length !=0 ) {
 	var $tbody = $("#vendor-list");
@@ -25,73 +51,53 @@ if(rows.length !=0 ) {
 
 $("tbody#vendor-list tr.vendor-tdata").on('click', function(){
 	$(this).addClass("active").siblings().removeClass("active");
-	if($("#edt-btn").hasClass("disabled") && $("#del-btn").hasClass("disabled")) {
-		$("#edt-btn").removeClass("disabled").addClass("active");
+	if($("#del-btn").hasClass("disabled")) {
 		$("#del-btn").removeClass("disabled").addClass("active");
 	}
-	$("#edt-btn").attr("vendor", $(this).attr("id"));
 	$("#del-btn").attr("vendor", $(this).attr("id"));
 });
 
 // edit-vendor
 $("tbody#vendor-list tr.vendor-tdata td.editable").on('dblclick', function(){
+	
+	if(editingrow!=-1) {
+		updateRow(editingrow);
+	}
+	
 	editingrow = $(this).parent().attr("id");
 	$(this).parent().addClass("editing");
 	editVendorRow(editingrow);
+	
 });
 
-$("body").not("tbody#vendor-list tr.vendor-tdata#" + editingrow + ")").click(function(event){
-	console.log(editingrow);
-	if(editingrow!=-1) {
-		var query = "update vendor set ";
-		var vals = [];
-		$("tbody#vendor-list tr.vendor-tdata#" + editingrow + " td.editable input").each(function(){
-			var field = $(this).attr("id").slice(6);
-			vals.push(field + "= '" + $(this).val()+"' ");
-		});
-		query += vals.join(", ") + " where id = " + Number(editingrow);
-		console.log(query);
-		alasql(query);
+function updateRow(rowid){
+	var query = "update vendor set ";
+	var vals = [];
+	$("tbody#vendor-list tr.vendor-tdata#" + rowid + " td.editable input").each(function(){
+		var field = $(this).attr("id").slice(6);
+		vals.push(field + "= '" + $(this).val()+"' ");
+	});
+	query += vals.join(", ") + " where id = " + Number(rowid);
+	alasql(query);
 
-		$("tbody#vendor-list tr.vendor-tdata#" + editingrow + " td.editable input").each(function(){
-			$(this).parent().text($(this).val())
-		});
+	$("tbody#vendor-list tr.vendor-tdata#" + rowid + " td.editable input").each(function(){
+		$(this).parent().text($(this).val())
+	});
+}
+
+$("body").on('click', function(e){
+	if($(e.target).not("input.vendor-inline-edit").length != 0 && editingrow!=-1) {
+		updateRow(editingrow);
 		editingrow = -1;
 	}
-
-});
-
-
-$.click(function(){
-	$(this)
 });
 
 function editVendorRow(rowid){
 	$("tbody#vendor-list tr.vendor-tdata#" + rowid + " td.editable").each(function(){
 		var old = $(this).text();
-		$(this).html("<input id='input-" + $(this).attr("id") + "' type='text' value='" + old + "'>");
+		$(this).html("<input class='vendor-inline-edit' id='input-" + $(this).attr("id") + "' type='text' value='" + old + "'>");
 	});
-	$("#edt-btn").hide();
-	if($("#save-btn").hasClass("disabled")) {
-		$("#save-btn").removeClass("disabled").addClass("active");
-	}
-	$("#add-btn").removeClass("active").addClass("disabled");
-	$("#del-btn").removeClass("active").addClass("disabled");
-	$("#save-btn").attr("vendor", rowid).show();
 }
-
-$("#save-btn").on('click', function(){
-	var vid = $("#save-btn").attr("vendor");
-	var query = "update vendor set ";
-	var vals = [];
-	$("tbody#vendor-list tr.vendor-tdata#" + vid + " td.editable input").each(function(){
-		var field = $(this).attr("id").slice(6);
-		vals.push(field + "='" + $(this).val()+"'");
-	});
-	query += vals.join(",") + " where id = " + vid;
-	alasql(query);
-	location.reload();
-});
 
 // del-vendor
 $("#del-btn").on('click', function(){

@@ -4,3 +4,8 @@
 	height: 800px !important;
 	width: 200px !important;
 }
+
+#add-btn, #del-btn {
+	border: 10px !important;
+	border-radius: 10px !important;
+}
