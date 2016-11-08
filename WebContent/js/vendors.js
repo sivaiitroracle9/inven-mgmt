@@ -71,6 +71,8 @@ $("#jsGrid").jsGrid({
     	showDetailsDialog("Edit", args.item);
     },
     
+    deleteConfirm: "Do you want to delete it ?",
+    
     controller: {
         loadData: function(filter) {
         	
