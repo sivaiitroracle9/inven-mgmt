@@ -1,4 +1,102 @@
-var dialog = $("#dialog-form").dialog({
+var submitHandler;
+
+function getMakersTbl(select) {
+	var data = [];
+	getMakersFromDB().forEach(function(r) {
+
+		if(select == true) {
+			var d = {};
+			d["ID"] = r["id"];
+			d["MAKER"] = r["text"];
+			data.push(d);
+		} else if(r["id"]!=0) {
+			var d = {};
+			d["MAKER CODE"] = r["id"];
+			d["ID"] = r["id"];
+			d["MAKER"] = r["id"];
+			data.push(d);
+		}
+	});
+	return data;
+}
+
+$("#makersGird").jsGrid({
+    width: "100%",
+    autoload: false,
+	filtering: true,
+    paging: true,
+    pageLoading: true,
+    sorting: true,
+    pageSize: 10,
+    pageButtonCount: 5,
+	
+    rowClick: function(args) {},
+    
+    rowDoubleClick: function(args) {
+    	showCatDetailsDialog("Edit", args.item);
+    },
+    
+    deleteConfirm: "Do you want to delete it ?",
+    
+    controller: {
+        loadData: function(filter) {
+        	console.log(filter);
+        	var filtered = $.grep(getMakersTbl(false), function(maker) {
+                return (filter["MAKER"] == 0 || maker["ID"] == filter["MAKER"]);
+        	});
+        	
+            return {data: pageData(filtered, filter.pageIndex, filter.pageSize), itemsCount: filtered.length};
+        },
+        
+        deleteItem: function(item) {
+        	deleteProduct(item);
+        	$("#makersGird").jsGrid("reset");
+        },
+        updateItem: function(item) {
+        	showProdDetailsDialog("Edit", item);
+        	$("#makersGird").jsGrid("reset");
+        },
+
+    },
+    
+    fields: [
+        { name: "MAKER CODE", type: "text", sorting: false, filtering: false  },
+        { name: "MAKER", type: "select", items: getMakersTbl(true), valueField: "ID", textField: "MAKER", sorting: false,},
+    	{
+        	type: "control", 
+        	deleteButton: false,
+        	editButton: false,
+        	insertButton: false,
+
+            headerTemplate: function() {
+                return $("<button>").attr("type", "button")
+                	.addClass("btn btn-success")
+                	.addClass("glyphicon glyphicon-plus")
+                        .on("click", function () {
+                        	showCatDetailsDialog("Add", {});
+                        });
+            },
+        	
+          	itemTemplate: function(value, item) {
+          		
+          		var div = $("<div>");
+          		
+          		this._createGridButton("jsgrid-edit-button", "Click to Edit this row", function(grid) {
+                    grid.updateItem(item);
+                }).appendTo(div);
+
+                this._createGridButton("jsgrid-delete-button", "Click to Edit this row", function(grid) {
+                	grid.deleteItem(item);
+                }).appendTo(div);
+
+                return div;
+          	},
+        },
+            
+    ]
+});
+//--------------------------------------------------------categories ---------------------------------------------------------------------------
+var categoryDialog = $("#catdialog-form").dialog({
     autoOpen: false,
     width: 400,
     modal: true,
@@ -16,21 +114,152 @@ var dialog = $("#dialog-form").dialog({
 		$('.ui-dialog-buttonpane').find('button:contains("Cancel")').removeClass("ui-button ui-corner-all ui-widget").addClass('btn btn-default');
 	 },
     close: function() {
-        dialog.find("form")[0].reset();
+        dialog.find("form#categoryForm")[0].reset();
     }
 });
 
-var submitHandler;
-
-dialog.find("form").submit(function(e) {
+categoryDialog.find("form#categoryForm").submit(function(e) {
     e.preventDefault();
     submitHandler();
 });
 
-var showDetailsDialog = function(dialogType, product) {
+var showCatDetailsDialog = function(dialogType, product) {
 	
     submitHandler = function(event) {
     	saveClient(product, dialogType === "Add");
+    };
+
+    dialog.dialog("option", "title", dialogType + " Category").dialog("open");
+};
+
+function getCategoriesTbl(select) {
+	var data = [];
+	getCategoriesFromDB().forEach(function(r) {
+
+		if(select == true) {
+			var d = {};
+			d["ID"] = r["id"];
+			d["CAT"] = r["text"];
+			data.push(d);
+		} else if(r["id"]!=0) {
+			var d = {};
+			d["CAT CODE"] = r["id"];
+			d["ID"] = r["id"];
+			d["CATEGORY"] = r["id"];
+			data.push(d);
+		}
+	});
+	return data;
+}
+
+$("#categoriesGird").jsGrid({
+    width: "100%",
+    autoload: true,
+	filtering: true,
+    paging: true,
+    pageLoading: true,
+    sorting: true,
+    pageSize: 10,
+    pageButtonCount: 5,
+	
+    rowClick: function(args) {},
+    
+    rowDoubleClick: function(args) {
+    	showCatDetailsDialog("Edit", args.item);
+    },
+    
+    deleteConfirm: "Do you want to delete it ?",
+    
+    controller: {
+        loadData: function(filter) {
+        	var filtered = $.grep(getCategoriesTbl(false), function(category) {
+                return (filter["CATEGORY"] == 0 || category["ID"] == filter["CATEGORY"]);
+        	});
+        	
+            return {data: pageData(filtered, filter.pageIndex, filter.pageSize), itemsCount: filtered.length};
+        },
+        
+        deleteItem: function(item) {
+        	deleteProduct(item);
+        	$("#categoriesGird").jsGrid("reset");
+        },
+        updateItem: function(item) {
+        	showProdDetailsDialog("Edit", item);
+        	$("#categoriesGird").jsGrid("reset");
+        },
+
+    },
+    
+    fields: [
+        { name: "CAT CODE", type: "text", sorting: false, filtering: false
+        },
+        
+        { name: "CATEGORY", type: "select", items: getCategoriesTbl(true), valueField: "ID", textField: "CAT", sorting: false,},
+    	{
+        	type: "control", 
+        	deleteButton: false,
+        	editButton: false,
+        	insertButton: false,
+
+            headerTemplate: function() {
+                return $("<button>").attr("type", "button")
+                	.addClass("btn btn-success")
+                	.addClass("glyphicon glyphicon-plus")
+                        .on("click", function () {
+                        	showCatDetailsDialog("Add", {});
+                        });
+            },
+        	
+          	itemTemplate: function(value, item) {
+          		
+          		var div = $("<div>");
+          		
+          		this._createGridButton("jsgrid-edit-button", "Click to Edit this row", function(grid) {
+                    grid.updateItem(item);
+                }).appendTo(div);
+
+                this._createGridButton("jsgrid-delete-button", "Click to Edit this row", function(grid) {
+                	grid.deleteItem(item);
+                }).appendTo(div);
+
+                return div;
+          	},
+        },
+            
+    ]
+});
+//------------------------------------------------------------------ products ------------------------------------------------------------------
+var productDialog = $("#proddialog-form").dialog({
+    autoOpen: false,
+    width: 400,
+    modal: true,
+    closeOnEscape: true,
+    buttons: {
+        Save: function() {
+            $("#productForm").submit();
+        },
+        Cancel: function() {
+            $(this).dialog("close");
+        }
+    },
+	open: function(event) {
+		$('.ui-dialog-buttonpane').find('button:contains("Save")').removeClass("ui-button ui-corner-all ui-widget").addClass('btn btn-success');
+		$('.ui-dialog-buttonpane').find('button:contains("Cancel")').removeClass("ui-button ui-corner-all ui-widget").addClass('btn btn-default');
+	 },
+    close: function() {
+    	productDialog.find("form")[0].reset();
+    }
+});
+
+productDialog.find("form#productForm").submit(function(e) {
+    e.preventDefault();
+    submitHandler();
+});
+
+var showProdDetailsDialog = function(dialogType, product) {
+	
+    submitHandler = function(event) {
+    	saveProdClient(product, dialogType === "Add");
     };
     
     $("#prod_code").val(product["CODE"]);
@@ -63,10 +292,10 @@ var showDetailsDialog = function(dialogType, product) {
     $("#prod_price").val(product["Price"]);
     $("#prod_unit").val(product["Unit"]);
 
-    dialog.dialog("option", "title", dialogType + " product").dialog("open");
+    productDialog.dialog("option", "title", dialogType + " product").dialog("open");
 };
 
-$("#jsGrid").jsGrid({
+$("#productsGird").jsGrid({
     width: "100%",
     autoload: true,
 	filtering: true,
@@ -79,14 +308,14 @@ $("#jsGrid").jsGrid({
     rowClick: function(args) {},
     
     rowDoubleClick: function(args) {
-    	showDetailsDialog("Edit", args.item);
+    	showProdDetailsDialog("Edit", args.item);
     },
     
     deleteConfirm: "Do you want to delete it ?",
     
     controller: {
         loadData: function(filter) {
-        	
+        	console.log(filter)
         	var filtered = $.grep(getProductsFromDB(), function(product) {
                 return (!filter["CODE"] || product["CODE"].indexOf(filter["CODE"]) == 0)
             	&& (!filter["CATEGORY"] || product["CATEGORY"]==filter["CATEGORY"])
@@ -97,30 +326,49 @@ $("#jsGrid").jsGrid({
         	});
         	
         	if(filter.sortField != undefined && filter.sortOrder != undefined)
-        		filtered = sortJsonArray(filtered, filter.sortField, filter.sortOrder);
-        	
-            return {data: filtered, itemsCount: filtered.length};
+        		filtered = sortProducts(filtered, filter.sortField, filter.sortOrder);
+
+            return {data: pageData(filtered, filter.pageIndex, filter.pageSize), itemsCount: filtered.length};
         },
         
         deleteItem: function(item) {
         	deleteProduct(item);
-        	$("#jsGrid").jsGrid("reset");
+        	$("#productsGird").jsGrid("reset");
         },
         updateItem: function(item) {
-        	showDetailsDialog("Edit", item);
-        	$("#jsGrid").jsGrid("reset");
+        	showProdDetailsDialog("Edit", item);
+        	$("#productsGird").jsGrid("reset");
         },
 
     },
     
     fields: [
-        { name: "CODE", type: "text", width: 150, },
-        { name: "Detail", type: "text", width: 150, },
-        { name: "MAKER", type: "select", items: getMakersFromDB(), valueField: "id", textField: "text" },
-        { name: "CATEGORY", type: "select", items: getCategoriesFromDB(), valueField: "id", textField: "text" },
-        { name: "Price", type: "text", width: 150, },
-        { name: "Unit", type: "text", width: 150, },
+        { name: "CODE", type: "text", width: 150,
+        	headerTemplate: function() {
+        		return $("<span>CODE</span><span style='float:right' class='glyphicon glyphicon-sort'>");
+        	}
         
+        },
+        { name: "Detail", type: "text", width: 150, 
+        	headerTemplate: function() {
+        		return $("<span>Detail</span><span style='float:right' class='glyphicon glyphicon-sort'>");
+        	}
+        },
+        { name: "MAKER", type: "select", items: getMakersFromDB(), valueField: "id", textField: "text", sorting: false, },
+        { name: "CATEGORY", type: "select", items: getCategoriesFromDB(), valueField: "id", textField: "text", sorting: false, },
+        
+        { name: "Price", type: "text", width: 150, 
+        	headerTemplate: function() {
+        		return $("<span>Price</span><span style='float:right' class='glyphicon glyphicon-sort'>");
+        	}
+        },
+        
+        { name: "Unit", type: "text", width: 150, 
+        	headerTemplate: function() {
+        		return $("<span>Unit</span><span style='float:right' class='glyphicon glyphicon-sort'>");
+        	}
+        },
+                
     	{
         	type: "control", 
         	deleteButton: false,
@@ -133,7 +381,7 @@ $("#jsGrid").jsGrid({
                 	.addClass("btn btn-success")
                 	.addClass("glyphicon glyphicon-plus")
                         .on("click", function () {
-                            showDetailsDialog("Add", {});
+                        	showProdDetailsDialog("Add", {});
                         });
             },
         	
@@ -172,7 +420,7 @@ function updateProduct(id, product) {
 	alasql(query);
 }
 
-var saveClient = function(product, isNew) {
+var saveProdClient = function(product, isNew) {
 	
 	var dbproduct = {};
 	var id = 0;
@@ -189,8 +437,8 @@ var saveClient = function(product, isNew) {
     });
 
     isNew ? addProduct(dbproduct) : updateProduct(id, dbproduct);
-    dialog.dialog("close");
-	$("#jsGrid").jsGrid("reset");
+    productDialog.dialog("close");
+	$("#productsGird").jsGrid("reset");
 };
 
 function addProduct(product) {
@@ -289,7 +537,7 @@ function deleteProduct(product) {
 	alasql("delete from products where id = " + product.id);
 }
 
-function sortJsonArray(data, field, sortOrder){
+function sortCategories(data, field, sortOrder){
 	if(sortOrder == "asc") {
 	    return data.sort(function(a, b) {
 	        var x = a[field]; var y = b[field];
@@ -301,4 +549,28 @@ function sortJsonArray(data, field, sortOrder){
 	        return ((x < y) ? 1 : ((x > y) ? -1 : 0));
 	    });
 	}
+}
+
+function sortProducts(data, field, sortOrder){
+	if(sortOrder == "asc") {
+	    return data.sort(function(a, b) {
+	        var x = a[field]; var y = b[field];
+	        return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+	    });
+	} else {
+	    return data.sort(function(a, b) {
+	        var x = a[field]; var y = b[field];
+	        return ((x < y) ? 1 : ((x > y) ? -1 : 0));
+	    });
+	}
+}
+
+function pageData(data, pageIndex, pageSize) {
+	var pageData;
+	if(pageIndex!= undefined && pageSize!= undefined && pageIndex > 0) {
+		pageData = data.slice((pageIndex - 1)*pageSize, pageIndex*pageSize)	
+	} else {
+		pageData = data;
+	}
+	return pageData;
 }

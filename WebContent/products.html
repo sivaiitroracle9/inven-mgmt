@@ -23,7 +23,7 @@
 </head>
 <body>
 	<nav class="navbar navbar-default">
-		<div class="container">
+		<div class="clearfix">
 			<!-- Brand and toggle get grouped for better mobile display -->
 			<div class="navbar-header">
 				<button type="button" class="navbar-toggle collapsed"
@@ -61,17 +61,24 @@
 	</nav>
 
 	<div class="container">
-		<div id="jsGrid"></div>
+		<select id="select-dataGrid" class="btn btn-default dropdown-toggle">
+			<option value=0>Products</option>
+			<option value=1>Categories</option>
+			<option value=2>Makers</option>
+		</select>
+		<div id="productsGird"></div>
+		<div id="categoriesGird"></div>
+		<div id="makersGird"></div>
 	</div>
 
-	<div id="dialog-form" title="Details">
-	    <form id="productForm">
-	        <p><label>Product Code: <input id="prod_code" /></label></p>
-	        <p><label>Category: <select id="prod_cat" name="category"></select></label></p>
-	        <p><label>Maker: <select id="prod_maker" name="make"></select></label></p>
-	        <p><label>Detail: <input id="prod_detail" /></label></p>
-	        <p><label>Price: <input id="prod_price" /></label></p>
-	       	<p><label>Unit: <input id="prod_unit" /></label></p>
+	<div id="proddialog-form" title="Details">
+	    <form id="productForm" class="form-group">
+	        <p><label>Product Code: <input class="form-control" type="text" id="prod_code" /></label></p>
+	        <p><label>Category: <select class="form-control" id="prod_cat" name="category"></select></label></p>
+	        <p><label>Maker: <select class="form-control" id="prod_maker" name="make"></select></label></p>
+	        <p><label>Detail: <input class="form-control" type="text" id="prod_detail" /></label></p>
+	        <p><label>Price: <input class="form-control" type="text" id="prod_price" /></label></p>
+	       	<p><label>Unit: <input class="form-control" type="text" id="prod_unit" /></label></p>
 	    </form>
 	</div>
 	<nav class="sidebar">
@@ -86,5 +93,25 @@
 	</nav>
 	<script src="js/products.js"></script>
 	<script src="lib/nav-sidebar.js"></script>
+	<script>
+		$("#categoriesGird").hide();
+		$("#makersGird").hide();
+		$("#select-dataGrid").on("change", function(){
+			$("#productsGird").hide();
+			$("#categoriesGird").hide();
+			$("#makersGird").hide();
+			if($(this).val() == 1){
+				$("#categoriesGird").show();
+	        	$("#categoriesGird").jsGrid("reset");
+			} else if($(this).val() == 2) {
+				$("#makersGird").show();
+	        	$("#makersGird").jsGrid("reset");
+			} else {
+				$("#productsGird").show();
+	        	$("#productsGird").jsGrid("reset");
+			}
+		})
+
+	</script>
 </body>
 </html>

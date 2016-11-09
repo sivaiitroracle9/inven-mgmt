@@ -92,7 +92,7 @@ DB.load = function() {
 					alasql('INSERT INTO maker VALUES(?,?);', trans);
 				}
 			});
-
+	
 	// Reload page
 	Promise.all([ pkind, pitem, pwhouse, pstock, ptrans ]).then(function() {
 		window.location.reload(true);
