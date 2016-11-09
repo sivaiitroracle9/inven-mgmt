@@ -11,6 +11,10 @@ var dialog = $("#dialog-form").dialog({
             $(this).dialog("close");
         }
     },
+	open: function(event) {
+		$('.ui-dialog-buttonpane').find('button:contains("Save")').removeClass("ui-button ui-corner-all ui-widget").addClass('btn btn-success');
+		$('.ui-dialog-buttonpane').find('button:contains("Cancel")').removeClass("ui-button ui-corner-all ui-widget").addClass('btn btn-default');
+	 },
     close: function() {
         dialog.find("form")[0].reset();
     }

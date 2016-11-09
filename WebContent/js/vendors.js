@@ -1,19 +1,27 @@
 var dialog = $("#dialog-form").dialog({
-    autoOpen: false,
-    width: 400,
-    modal: true,
-    closeOnEscape: true,
-    buttons: {
-        Save: function() {
-            $("#vendorForm").submit();
-        },
-        Cancel: function() {
-            $(this).dialog("close");
-        }
-    },
-    close: function() {
-        dialog.find("form")[0].reset();
-    }
+	autoOpen : false,
+	width : 400,
+	modal : true,
+	closeOnEscape : true,
+	buttons : [ {
+		text : "Save",
+		click : function() {
+			$("#vendorForm").submit();
+		}
+	}, {
+		text : "Cancel",
+		click : function() {
+			$(this).dialog("close");
+		}
+	} ],
+	open: function(event) {
+	     $('.ui-dialog-buttonpane').find('button:contains("Save")').removeClass("ui-button ui-corner-all ui-widget").addClass('btn btn-success');
+		 $('.ui-dialog-buttonpane').find('button:contains("Cancel")').removeClass("ui-button ui-corner-all ui-widget").addClass('btn btn-default');
+	 },
+	 
+	close : function() {
+		dialog.find("form")[0].reset();
+	}
 });
 
 var submitHandler;
@@ -103,40 +111,19 @@ $("#jsGrid").jsGrid({
     fields: [
         { name: "CODE", 
         	type: "text", 
-        	width: 150, 
-        	validate: function(value, item) {
-        		if(value==undefined) {
-        			return "CODE is required";
-        		} else if(value.length <= 3) return "Length of code should be atleast 3 charactes";
-        	},
         	sorting: true,
         },
-        { name: "NAME", type: "text", width: 150, 
-        	validate: [
-        		"required",
-        		{ validator: "minLength", param: [3] }
-        	] 
+        { name: "NAME", type: "text", 
         },
     	
-        { name: "TEL", type: "text", width: 150, 
-        	validate: [
-        		"required",
-        		{ validator: "minLength", param: [3] }
-    		] 
+        { name: "TEL", type: "text",
         },
         
-    	{ name: "Email", type: "text", width: 150,
-        	validate: [
-        		"required",
-        		{ validator: "minLength", param: [3] }
-    		] 
+    	{ name: "Email", type: "text",
         },
         
-    	{ name: "Address", type: "text", width: 150,
-        	validate: [
-        		"required",
-        		{ validator: "minLength", param: [3] }
-    		] , filtering: false, sorting: false 
+    	{ name: "Address", type: "text",
+        	filtering: false, sorting: false 
     	},
         
     	{
