@@ -1,20 +1,48 @@
+
+
+
+var po_items_inserted = {};
+var max_insert_id = 0;
+
+$("#po-cancel-btn").click(function(event){
+	po_items_inserted = {};
+	max_insert_id = 0;
+	$("#po-grid").jsGrid("reset");
+});
+
+$("#po-create-btn").click(function(event){
+	if(Object.keys(po_items_inserted).length==0){
+		alert("PO cannot be created.");
+	}
+	Object.keys(po_items_inserted).forEach(function(pk){
+		console.log(po_items_inserted[pk])
+	})
+});
+
+
 $("#po-grid").jsGrid({
 	width: "100%",
 	editing: true,
 	inserting: true,
-	autoload: false,
+	autoload: true,
 	pageSize: 10,
 	pageButtonCount: 5,
     deleteConfirm: "Do you really want to delete the client?",
     
     onItemInserted: function(args){
     	console.log(args.item)
-/*    	var makeField = args.grid.fields[2];
+    	
+    	args.item["prod-code"] = getProductCode(args.item["prod-cat"], args.item["prod-make"], args.item["prod-detail"]);
+    	
+    	max_insert_id++;
+    	po_items_inserted[max_insert_id] = args.item;
+    	
+    	var makeField = args.grid.fields[2];
     	makeField.items = [];
         $(".prod-make-insert").empty().append(makeField.insertTemplate());
         var detailField = args.grid.fields[3];
         detailField.items = [];
-        $(".prod-detail-insert").empty().append(detailField.insertTemplate());*/
+        $(".prod-detail-insert").empty().append(detailField.insertTemplate());
     },
     
     controller: {
@@ -23,7 +51,7 @@ $("#po-grid").jsGrid({
     	}
     },
 	fields: [
-		{name: "prod-code", title: "PROD CODE",
+		{name: "prod-code", inserting: true, title: "PROD CODE",
 			itemTemplate: function(value, item) {
 				return getProductCode(item["prod-cat"], item["prod-make"], item["prod-detail"]);
 			}	
@@ -76,10 +104,13 @@ $("#po-grid").jsGrid({
 				return Number(this.insertControl.val());
 		    },
 		    
-		    itemTemplate: function(value){
-		    	return $.grep(this.items, function(cat){
+		    itemTemplate: function(value, item){
+		    	var list = $.grep(getCategoriesLOV(), function(cat){
 		    		return cat["id"]==value;
-		    	})[0]["text"];
+		    	});
+		    	var text = "";
+		    	if(list.length > 0) text = list[0]["text"];
+		    	return text;
 		    }
 		},
 		
@@ -122,12 +153,16 @@ $("#po-grid").jsGrid({
 				return Number(this.insertControl.val());
 		    },
 		    
-		    itemTemplate: function(value, item){
-		    	if(this.items.length != 0) {
-			    	return $.grep(this.items, function(mak){
-			    		return mak["id"]==value;
-			    	})[0]["text"];	
-		    	}
+		    itemTemplate: function(value, item) {
+		    	var list = $.grep(getMakersLOV(), function(cat){
+		    		if(cat["id"] == value) {
+		    			return true;
+		    		}
+		    		return false;
+		    	});
+		    	var text = "";
+		    	if(list.length > 0) text = list[0]["text"];
+		    	return text;
 		    }
 		},
 		
@@ -136,18 +171,12 @@ $("#po-grid").jsGrid({
 				return value!=undefined && value!=0;
 			},
 		    itemTemplate: function(value, item){
-		    	
-		    	if(this.items.length != 0) {
-		    		
-		    		var list = $.grep(this.items, function(product){
-			    		return product["id"]==value;
-			    	});
-		    		
-			    	return $.grep(this.items, function(product){
-			    		return product["id"]==value;
-			    	})[0]["text"];	
-		    	}
-		    	return 0;
+		    	var list = $.grep(getProductDetailLOV(), function(cat){
+		    		return cat["id"]==value;
+		    	});
+		    	var text = "";
+		    	if(list.length > 0) text = list[0]["text"];
+		    	return text;
 		    },
 		    
 			insertValue: function(args) {
