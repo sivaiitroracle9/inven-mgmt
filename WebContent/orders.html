@@ -61,49 +61,39 @@
 	</nav>
 
 	<div class="container">
-		<select id="select-dataGrid" class="btn btn-default dropdown-toggle">
-			<option value=0>Products</option>
-			<option value=1>Categories</option>
-			<option value=2>Makers</option>
-		</select>
-		<div id="productsGird"></div>
-		<div id="categoriesGird"></div>
-		<div id="makersGird"></div>
+		
+		<div id="tab-header">
+			<ul class="nav nav-tabs">
+		  		<li role="presentation" class="active"><a id="tab-overview" href="#">Overview</a></li>
+		  		<li role="presentation"><a id="tab-purchase" href="#">Purchase Order</a></li>
+		  		<li role="presentation"><a id="tab-sale" href="#">Sale Order</a></li>
+			</ul>
+		</div>
+		<div id="tab-content">
+			<div id="tabcontent-overview">
+				<div class="panel panel-default">
+				  <div class="panel-body">
+				    <div id="orders-grid"></div>
+				  </div>
+				</div>
+			</div>
+			<div id="tabcontent-purchase">
+				<div class="panel panel-default">
+				  <div class="panel-body">
+				    <div id="po-grid"></div>
+				  </div>
+				</div>
+			</div>
+			<div id="tabcontent-sale">
+				<div class="panel panel-default">
+				  <div class="panel-body">
+				    Basic panel example
+				  </div>
+				</div>
+			</div>
+		</div>
 	</div>
-
-	<div id="proddialog-form" title="Details">
-	    <form id="productForm" class="form-group">
-	        <p><label>Product Code: <input class="form-control" type="text" id="prod_code" /></label></p>
-	        <p><label>Category: <select class="form-control" id="prod_cat" name="category"></select></label></p>
-	        <p><label>Maker: <select class="form-control" id="prod_maker" name="make"></select></label></p>
-	        <p><label>Detail: <input class="form-control" type="text" id="prod_detail" /></label></p>
-	        <p><label>Price: <input class="form-control" type="text" id="prod_price" /></label></p>
-	       	<p><label>Unit: <input class="form-control" type="text" id="prod_unit" /></label></p>
-	    </form>
-	</div>
-
-	<script src="js/products.js"></script>
-	<script>
-		$("#categoriesGird").hide();
-		$("#makersGird").hide();
-		$("#select-dataGrid").on("change", function(){
-			$("#productsGird").hide();
-			$("#categoriesGird").hide();
-			$("#makersGird").hide();
-			if($(this).val() == 1){
-				$("#categoriesGird").show();
-	        	$("#categoriesGird").jsGrid("reset");
-			} else if($(this).val() == 2) {
-				$("#makersGird").show();
-	        	$("#makersGird").jsGrid("reset");
-			} else {
-				$("#productsGird").show();
-	        	$("#productsGird").jsGrid("reset");
-			}
-		})
-
-	</script>
-	
+	<script src="js/orders.js"></script>
 	<nav class="sidebar">
 		<ul class="menu">
 			<li><a href="index.html">Home</a></li>
@@ -115,6 +105,5 @@
 		</ul>
 	</nav>
 	<script src="lib/nav-sidebar.js"></script>
-	
 </body>
 </html>

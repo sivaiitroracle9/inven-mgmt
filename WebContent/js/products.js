@@ -304,8 +304,7 @@ $("#productsGird").jsGrid({
     pageLoading: true,
     pageSize: 10,
     pageButtonCount: 5,
-	
-    rowClick: function(args) {},
+    editing: true,
     
     rowDoubleClick: function(args) {
     	showProdDetailsDialog("Edit", args.item);
