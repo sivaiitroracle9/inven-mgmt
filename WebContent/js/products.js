@@ -103,7 +103,7 @@ var categoryDialog = $("#catdialog-form").dialog({
     closeOnEscape: true,
     buttons: {
         Save: function() {
-            $("#productForm").submit();
+            $("#categoryForm").submit();
         },
         Cancel: function() {
             $(this).dialog("close");
@@ -114,7 +114,7 @@ var categoryDialog = $("#catdialog-form").dialog({
 		$('.ui-dialog-buttonpane').find('button:contains("Cancel")').removeClass("ui-button ui-corner-all ui-widget").addClass('btn btn-default');
 	 },
     close: function() {
-        dialog.find("form#categoryForm")[0].reset();
+    	categoryDialog.find("form#categoryForm")[0].reset();
     }
 });
 
@@ -123,14 +123,61 @@ categoryDialog.find("form#categoryForm").submit(function(e) {
     submitHandler();
 });
 
-var showCatDetailsDialog = function(dialogType, product) {
+var showCatDetailsDialog = function(dialogType, category) {
 	
     submitHandler = function(event) {
-    	saveClient(product, dialogType === "Add");
+    	saveCatClient(category, dialogType === "Add");
     };
 
-    dialog.dialog("option", "title", dialogType + " Category").dialog("open");
+    categoryDialog.dialog("option", "title", dialogType + " Category").dialog("open");
 };
+
+var saveCatClient = function(category, isNew) {
+	
+	var dbcategory = {};
+	var id = 0;
+	if(isNew) dbcategory = category;
+	else id = category["id"];
+	
+	$.extend(dbcategory, {
+    	text: $("#cat_cat").val(),
+    });
+
+    isNew ? addProduct(dbproduct) : updateProduct(id, dbcategory);
+    categoryDialog.dialog("close");
+	$("#categoriesGird").jsGrid("reset");
+};
+
+function addCategory(category) {
+	var rows = alasql("select max(id) as id from kind");
+	var values = [];
+	if (rows.length == 1 && rows[0].id != undefined)
+		values.push(Number(rows[0].id) + 1);
+	else
+		values.push(Number(1));
+
+	Object.keys(category).forEach(function(key) {
+		if(key == "text")
+			values[1] = category[key];
+	});
+	alasql("INSERT INTO products VALUES(?,?)", values);
+}
+
+function updateCategory(id, category) {
+	var query = "update kind set ";
+	
+	var set = [];
+	Object.keys(category).forEach(function(key){
+		if(key == "code" || key == "detail" || key == "unit")
+			set.push(key + "='" + product[key] +"'");
+		else set.push(key + "=" + product[key]);
+	});
+	
+	query += set.join(", ");
+	query += " where id=" + id;
+	console.log(query)
+	alasql(query);
+}
 
 function getCategoriesTbl(select) {
 	var data = [];

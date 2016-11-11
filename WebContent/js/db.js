@@ -93,6 +93,36 @@ DB.load = function() {
 				}
 			});
 	
+	alasql('DROP TABLE IF EXISTS orders;');
+	alasql('CREATE TABLE orders(id INT IDENTITY, oid STRING, vendor INT, whouse INT, status INT, lastupdate STRING);');
+/*	var ptrans = alasql.promise('SELECT MATRIX * FROM CSV("data/ORDERS-ORDERS.csv", {headers: true})').then(
+			function(transs) {
+				for (var i = 0; i < transs.length; i++) {
+					var trans = transs[i];
+					alasql('INSERT INTO orders VALUES(?,?);', trans);
+				}
+			});*/
+	
+	alasql('DROP TABLE IF EXISTS oitems;');
+	alasql('CREATE TABLE oitems(id INT IDENTITY, oid STRING, pcode STRING, pcat INT, pmake INT, pdetail STRING, qty INT, lastupdate STRING);');
+/*	var ptrans = alasql.promise('SELECT MATRIX * FROM CSV("data/OITEMS-OITEMS.csv", {headers: true})').then(
+			function(transs) {
+				for (var i = 0; i < transs.length; i++) {
+					var trans = transs[i];
+					alasql('INSERT INTO orders VALUES(?,?);', trans);
+				}
+			});*/
+	
+	alasql('DROP TABLE IF EXISTS status;');
+	alasql('CREATE TABLE status(id INT IDENTITY, text STRING);');
+	var ptrans = alasql.promise('SELECT MATRIX * FROM CSV("data/STATUS-STATUS.csv", {headers: true})').then(
+			function(transs) {
+				for (var i = 0; i < transs.length; i++) {
+					var trans = transs[i];
+					alasql('INSERT INTO status VALUES(?,?);', trans);
+				}
+			});
+	
 	// Reload page
 	Promise.all([ pkind, pitem, pwhouse, pstock, ptrans ]).then(function() {
 		window.location.reload(true);

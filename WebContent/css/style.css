@@ -68,3 +68,15 @@
 }
 
 nav.sidebar.active { left: 0; }
+
+#po-vendor-info {
+	width: 300px !important;
+	float: left;
+	margin: 3px;
+}
+
+#po-warehouse-info {
+	width: 300px !important;
+	float: left;
+	margin: 3px;
+}

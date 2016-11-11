@@ -62,33 +62,66 @@
 
 	<div class="container">
 		
-		<div id="tab-header">
 			<ul class="nav nav-tabs">
-		  		<li role="presentation" class="active"><a id="tab-overview" href="#">Overview</a></li>
-		  		<li role="presentation"><a id="tab-purchase" href="#">Purchase Order</a></li>
-		  		<li role="presentation"><a id="tab-sale" href="#">Sale Order</a></li>
+		  		<li id="li-overview" class="active"><a id="tab-overview" href="#tabcontent-overview" data-toggle="tab">Overview</a></li>
+		  		<li id="li-purchase"><a id="tab-purchase" href="#tabcontent-purchase" data-toggle="tab">Purchase Order</a></li>
+		  		<li id="li-sale"><a id="tab-sale" href="#tabcontent-sale" data-toggle="tab">Sale Order</a></li>
 			</ul>
-		</div>
-		<div id="tab-content">
-			<div id="tabcontent-overview">
+
+		<div class="tab-content">
+			<div id="tabcontent-overview" class="tab-pane active">
 				<div class="panel panel-default">
 				  <div class="panel-body">
 				    <div id="orders-grid"></div>
 				  </div>
 				</div>
 			</div>
-			<div id="tabcontent-purchase">
+			<div id="tabcontent-purchase" class="tab-pane">
 				<div class="panel panel-default">
-				  <div class="panel-body">
-				    <div id="po-grid"></div>
-				    <div id="po-create">
-				    	<button id="po-cancel-btn" class="btn btn-default" style="float:right; margin:5px"> Cancel PO</button>
-				    	<button id="po-create-btn" class="btn btn-success" style="float:right; margin:5px"> Create PO</button>
-				    </div>
-				  </div>
+					<div class="panel-body">
+						<div class="panel panel-primary">
+							<div class="panel-body">
+								<div id="po-vendor-info" class="panel panel-info">
+									<div class="panel-heading">
+										<label> Vendor: </label> <select id="po-vendor-info-select" class="btn btn-default dropdown-toggle"></select>
+									</div>
+									<div class="panel-body">
+										<p>CODE: <span id="po-vendor-info-code"></span></p>
+										<p>Name: <span id="po-vendor-info-name"></span></p>
+										<p>Address: <span id="po-vendor-info-address"></span></p>
+										<br />
+										<p>Phone: <span id="po-vendor-info-tel"></span></p>
+										<p>Email: <span id="po-vendor-info-email"></span></p>
+									</div>
+								</div>
+								<div id="po-warehouse-info" class="panel panel-info">
+									<div class="panel-heading">
+										<label>Warehouse:</label> <select id="po-warehouse-info-select" class="btn btn-default dropdown-toggle"></select>
+									</div>
+									<div class="panel-body">
+										<p>Name: <span id="po-warehouse-info-name"></span></p>
+										<p>Address: <span id="po-warehouse-info-address"></span></p>
+										<br />
+										<p>Phone: <span id="po-warehouse-info-tel"></span></p>
+										<p>Email: <span id="po-warehouse-info-email"></span></p>
+									</div>
+								</div>
+
+								<label style="float: right; margin: 5px"><span style="color:#3A83D5">Date:</span>
+									<span class="label label-default" id="po-date"></span></label>
+							</div>
+						</div>
+						<div id="po-grid"></div>
+						<div id="po-create">
+							<button id="po-cancel-btn" class="btn btn-default"
+								style="float: right; margin: 5px" disabled>Cancel PO</button>
+							<button id="po-create-btn" class="btn btn-success"
+								style="float: right; margin: 5px" disabled>Create PO</button>
+						</div>
+					</div>
 				</div>
 			</div>
-			<div id="tabcontent-sale">
+			<div id="tabcontent-sale" class="tab-pane">
 				<div class="panel panel-default">
 				  <div class="panel-body">
 				    Basic panel example
@@ -97,6 +130,7 @@
 			</div>
 		</div>
 	</div>
+	<div id="notificationDialog"></div>
 	<script src="js/orders.js"></script>
 	<nav class="sidebar">
 		<ul class="menu">
