@@ -1,19 +1,99 @@
 var submitHandler;
 
+var makerDialog = $("#makedialog-form").dialog({
+    autoOpen: false,
+    width: 400,
+    modal: true,
+    closeOnEscape: true,
+    buttons: {
+        Save: function() {
+            $("#makerForm").submit();
+        },
+        Cancel: function() {
+            $(this).dialog("close");
+        }
+    },
+	open: function(event) {
+		$('.ui-dialog-buttonpane').find('button:contains("Save")').removeClass("ui-button ui-corner-all ui-widget").addClass('btn btn-success');
+		$('.ui-dialog-buttonpane').find('button:contains("Cancel")').removeClass("ui-button ui-corner-all ui-widget").addClass('btn btn-default');
+	 },
+    close: function() {
+    	makerDialog.find("form#makerForm")[0].reset();
+    }
+});
+
+makerDialog.find("form#makerForm").submit(function(e) {
+    e.preventDefault();
+    submitHandler();
+});
+
+var showMakeDetailsDialog = function(dialogType, maker) {
+	
+    submitHandler = function(event) {
+    	saveMakeClient(maker, dialogType === "Add");
+    };
+    console.log(maker)
+    $("#make_maker").val(maker["makertext"])
+    makerDialog.dialog("option", "title", dialogType + " Maker").dialog("open");
+};
+
+var saveMakeClient = function(maker, isNew) {
+	
+	var dbmaker = {};
+	var id = 0;
+	if(isNew) dbmaker = maker;
+	else id = maker["id"];
+	
+	$.extend(dbmaker, {
+    	text: $("#make_maker").val(),
+    });
+
+    isNew ? addMaker(dbmaker) : updateMaker(id, dbmaker);
+    makerDialog.dialog("close");
+};
+
+function addMaker(maker) {
+	var rows = alasql("select max(id) as id from maker");
+	var values = [];
+	if (rows.length == 1 && rows[0].id != undefined)
+		values.push(Number(rows[0].id) + 1);
+	else
+		values.push(Number(1));
+
+	Object.keys(maker).forEach(function(key) {
+		if(key == "text")
+			values[1] = maker[key];
+	});
+	alasql("INSERT INTO maker VALUES(?,?)", values);
+	$("#makersGird").jsGrid("render");
+	$("#makersGird").jsGrid("loadData");
+	$("#makersGird").jsGrid("reset");
+}
+
+function updateMaker(id, maker) {
+	var query = "update maker set text='" + maker["text"] + "' where id = " + id;
+	console.log(query)
+	alasql(query);
+	$("#makersGird").jsGrid("render");
+	$("#makersGird").jsGrid("loadData");
+	$("#makersGird").jsGrid("reset");
+}
+
 function getMakersTbl(select) {
 	var data = [];
 	getMakersFromDB().forEach(function(r) {
 
 		if(select == true) {
 			var d = {};
-			d["ID"] = r["id"];
-			d["MAKER"] = r["text"];
+			d["id"] = r["id"];
+			d["maker"] = r["text"];
 			data.push(d);
 		} else if(r["id"]!=0) {
 			var d = {};
-			d["MAKER CODE"] = r["id"];
-			d["ID"] = r["id"];
-			d["MAKER"] = r["id"];
+			d["makercode"] = r["id"];
+			d["id"] = r["id"];
+			d["maker"] = r["id"];
+			d["makertext"] = r["text"];
 			data.push(d);
 		}
 	});
@@ -33,16 +113,21 @@ $("#makersGird").jsGrid({
     rowClick: function(args) {},
     
     rowDoubleClick: function(args) {
-    	showCatDetailsDialog("Edit", args.item);
+    	showMakeDetailsDialog("Edit", args.item);
     },
     
-    deleteConfirm: "Do you want to delete it ?",
+    onItemInserted: function(args){
+    	var makerLOVField = args.grid.fields[1];
+    	makerLOVField.items = getMakersTbl(true);
+    	$(".make-insert").empty().append(makerLOVField.insertTemplate());
+    	$("#makersGird").jsGrid("reset");
+    },
     
     controller: {
         loadData: function(filter) {
         	console.log(filter);
         	var filtered = $.grep(getMakersTbl(false), function(maker) {
-                return (filter["MAKER"] == 0 || maker["ID"] == filter["MAKER"]);
+                return (filter["maker"] == 0 || maker["id"] == filter["maker"]);
         	});
         	
             return {data: pageData(filtered, filter.pageIndex, filter.pageSize), itemsCount: filtered.length};
@@ -53,15 +138,15 @@ $("#makersGird").jsGrid({
         	$("#makersGird").jsGrid("reset");
         },
         updateItem: function(item) {
-        	showProdDetailsDialog("Edit", item);
+        	showMakeDetailsDialog("Edit", item);
         	$("#makersGird").jsGrid("reset");
         },
 
     },
     
     fields: [
-        { name: "MAKER CODE", type: "text", sorting: false, filtering: false  },
-        { name: "MAKER", type: "select", items: getMakersTbl(true), valueField: "ID", textField: "MAKER", sorting: false,},
+        { name:"makercode", title: "MAKER CODE", type: "text", sorting: false, filtering: false  },
+        { name:"maker", title: "MAKER", type: "select", items: getMakersTbl(true), valueField: "id", textField: "maker", sorting: false, insertcss: "make-insert"},
     	{
         	type: "control", 
         	deleteButton: false,
@@ -73,7 +158,7 @@ $("#makersGird").jsGrid({
                 	.addClass("btn btn-success")
                 	.addClass("glyphicon glyphicon-plus")
                         .on("click", function () {
-                        	showCatDetailsDialog("Add", {});
+                        	showMakeDetailsDialog("Add", {});
                         });
             },
         	
@@ -164,17 +249,7 @@ function addCategory(category) {
 }
 
 function updateCategory(id, category) {
-	var query = "update kind set ";
-	
-	var set = [];
-	Object.keys(category).forEach(function(key){
-		if(key == "code" || key == "detail" || key == "unit")
-			set.push(key + "='" + product[key] +"'");
-		else set.push(key + "=" + product[key]);
-	});
-	
-	query += set.join(", ");
-	query += " where id=" + id;
+	var query = "update kind set text=" + maker + "where id = " + id;
 	console.log(query)
 	alasql(query);
 }
@@ -231,15 +306,14 @@ $("#categoriesGird").jsGrid({
         	$("#categoriesGird").jsGrid("reset");
         },
         updateItem: function(item) {
-        	showProdDetailsDialog("Edit", item);
+        	showCatDetailsDialog("Edit", item);
         	$("#categoriesGird").jsGrid("reset");
         },
 
     },
     
     fields: [
-        { name: "CAT CODE", type: "text", sorting: false, filtering: false
-        },
+        { name: "CAT CODE", type: "text", sorting: false, filtering: false },
         
         { name: "CATEGORY", type: "select", items: getCategoriesTbl(true), valueField: "ID", textField: "CAT", sorting: false,},
     	{
