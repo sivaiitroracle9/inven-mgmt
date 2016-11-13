@@ -19,6 +19,28 @@ $("#orders-grid").jsGrid({
         sorting: true,
         autoload: true,
  
+        onItemInserted: function(args) {
+/*        	if(args.item.status == 1) {
+            	$(".order-status-itemcss").empty().append("status-open");
+        	} else if(args.item.status == 2) {
+            	$(".order-status-itemcss").empty().append("status-closed");
+        	} else if(args.item.status == 3) {
+            	$(".order-status-itemcss").empty().append("status-canceled");
+        	}*/
+
+        },
+        
+        onItemUpdated: function(args) {
+/*        	if(args.item.status == 1) {
+            	$(".order-status-itemcss").empty().append("status-open");
+        	} else if(args.item.status == 2) {
+            	$(".order-status-itemcss").empty().append("status-closed");
+        	} else if(args.item.status == 3) {
+            	$(".order-status-itemcss").empty().append("status-canceled");
+        	}*/
+
+        },
+        
         controller: {
         	loadData: function() {
         		var orders = alasql("select * from orders order by id");
@@ -48,7 +70,14 @@ $("#orders-grid").jsGrid({
             { name: "oid", title: "ORDER ID", type: "text", editing: false,},
             { name: "vendor", title: "VENDOR", type: "select", items: getVendorsLOV(), valueField: "id", textField: "text", editing: false,},
             { name: "whouse", title: "WAREHOUSE", type: "select", items: getWarehousesLOV(), valueField: "id", textField: "text", editing: false,},
-            { name: "status", title: "STATUS", type: "select", items: getStatusLOV(), valueField: "id", textField: "text", },
+            { name: "status", title: "STATUS", type: "select", items: getStatusLOV(), valueField: "id", textField: "text", css:"order-status-itemcss",
+            	
+            	insertTemplate: function() {
+                    var $insertControl = jsGrid.fields.select.prototype.insertTemplate.call(this);
+                    $insertControl.addClass("status-open");
+                    return $insertControl;
+            	}
+            },
             { name: "lastupdate", title: "LAST UPDATE", type: "text", filtering: false, editing: false,},
             {type: "control",
             	deleteButton: false,

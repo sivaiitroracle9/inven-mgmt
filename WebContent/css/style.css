@@ -16,6 +16,9 @@
     height: 30px;
     width: 30px;
     z-index: 30;
+    margin-right: 2px;
+    border-right: 2px;
+    border-color: grey;
 }
 
 .menu {
@@ -55,19 +58,20 @@
 .sidebar {
   background: rgba(169, 195, 201,1);
   padding-right: .25em;
-  position: absolute;
-  left: -18em;
-  top: 60px;
+  position:absolute;
+  left: 0;
+  top: 50px;
   padding-top: 5em;
   box-sizing: border-box;
   z-index: 20;
   height: 60%;
+  /*
   -webkit-transition: all .3s;
   -o-transition: all .3s;
-  transition: all .3s;
+  transition: all .3s; 
+  */
+  display:none;
 }
-
-nav.sidebar.active { left: 0; }
 
 #po-vendor-info {
 	width: 300px !important;
@@ -79,4 +83,22 @@ nav.sidebar.active { left: 0; }
 	width: 300px !important;
 	float: left;
 	margin: 3px;
+}
+
+.status-open {
+	background-color: green;
+	color: black;
+	font-weight: bold;
+}
+
+.status-closed {
+	background-color: red;
+	color: black;
+	font-weight: bold;
+}
+
+.status-canceled {
+	background-color: grey;
+	color: white;
+	font-weight: bold;
 }
