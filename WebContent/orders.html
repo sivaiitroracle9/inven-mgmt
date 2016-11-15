@@ -10,11 +10,13 @@
 <link href="css/jsgrid.min.css" rel="stylesheet" />
 <link href="css/jsgrid-theme.min.css" rel="stylesheet" />
 <link href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet" />
+<link href="css/toastr.min.css" rel="stylesheet" />
 <link href="css/style.css" rel="stylesheet" />
 
 <script src="lib/alasql.js"></script>
 <script src="lib/purl.js"></script>
 <script src="js/db.js"></script>
+<script src="lib/toastr.min.js"></script>
 <meta charset="utf-8">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Cache-Control" content="no-cache">
@@ -71,9 +73,74 @@
 		<div class="tab-content">
 			<div id="tabcontent-overview" class="tab-pane active">
 				<div class="panel panel-default">
-				  <div class="panel-body">
-				    <div id="orders-grid"></div>
-				  </div>
+					<div class="panel-body">
+						<div id="orders-grid"></div>
+					</div>
+				</div>
+				<div id="poDetailsDlg" style="width:300px">
+					<div class="panel panel-primary">
+						<div class="panel-body">
+							<div>
+								<label style="font-weight: bold" class="pull-left">STATUS
+									: <span id="od-dlg-status"></span>
+								</label> <label style="font-weight: bold" class="pull-right">LAST
+									UPDATE : <span id="od-dlg-lastupdate"
+									class="label label-default"></span>
+								</label>
+							</div>
+							<br/><br/>
+							<div>
+								<div id="od-dlg-vendor-info" class="panel panel-info pull-left" >
+									<div class="panel-heading">
+										<label> Vendor </label>
+									</div>
+									<div class="panel-body">
+										<p>
+											CODE: <span id="od-dlg-vendor-info-code"></span>
+										</p>
+										<p>
+											Name: <span id="od-dlg-vendor-info-name"></span>
+										</p>
+										<p>
+											Address: <span id="od-dlg-vendor-info-address"></span>
+										</p>
+										<br />
+										<p>
+											Phone: <span id="od-dlg-vendor-info-tel"></span>
+										</p>
+										<p>
+											Email: <span id="od-dlg-vendor-info-email"></span>
+										</p>
+									</div>
+								</div>
+								<div id="od-dlg-warehouse-info" class="panel panel-info pull-right">
+									<div class="panel-heading">
+										<label> Warehouse </label>
+									</div>
+									<div class="panel-body">
+										<p>
+											Name: <span id="od-dlg-warehouse-info-name"></span>
+										</p>
+										<p>
+											Address: <span id="od-dlg-warehouse-info-address"></span>
+										</p>
+										<br />
+										<p>
+											Phone: <span id="od-dlg-warehouse-info-tel"></span>
+										</p>
+										<p>
+											Email: <span id="od-dlg-warehouse-info-email"></span>
+										</p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="panel panel-primary">
+						<div class="panel-body">
+							<div id="od-dlg-po-items"></div>
+						</div>
+					</div>
 				</div>
 			</div>
 			<div id="tabcontent-purchase" class="tab-pane">
@@ -131,10 +198,14 @@
 		</div>
 	</div>
 	<div id="notificationDialog"></div>
+	
+
 	<script src="js/orders.js"></script>
+		<script src="js/orders-po.js"></script>
 	<nav class="sidebar">
 		<ul class="menu">
 			<li><a href="index.html">Home</a></li>
+			<li><a href="inventory.html">Inventory</a></li>
 			<li><a href="products.html">Products</a></li>
 			<li><a href="vendors.html">Vendors</a></li>
 			<li><a href="orders.html">Orders</a></li>

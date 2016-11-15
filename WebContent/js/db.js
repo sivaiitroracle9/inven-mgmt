@@ -65,31 +65,31 @@ DB.load = function() {
 	// Vendor
 	alasql('DROP TABLE IF EXISTS vendor;');
 	alasql('CREATE TABLE vendor(id INT IDENTITY, name STRING, tel STRING, vencode STRING, email STRING, address STRING);');
-	var ptrans = alasql.promise('SELECT MATRIX * FROM CSV("data/VENDOR-VENDOR.csv", {headers: true})').then(
-			function(transs) {
-				for (var i = 0; i < transs.length; i++) {
-					var trans = transs[i];
-					alasql('INSERT INTO vendor VALUES(?,?,?,?,?,?);', trans);
+	var pvendor = alasql.promise('SELECT MATRIX * FROM CSV("data/VENDOR-VENDOR.csv", {headers: true})').then(
+			function(vendors) {
+				for (var i = 0; i < vendors.length; i++) {
+					var vendor = vendors[i];
+					alasql('INSERT INTO vendor VALUES(?,?,?,?,?,?);', vendor);
 				}
 			});
 	
 	alasql('DROP TABLE IF EXISTS products;');
 	alasql('CREATE TABLE products(id INT IDENTITY, code STRING, category INT, detail STRING, make INT, price INT, unit STRING);');
-	var ptrans = alasql.promise('SELECT MATRIX * FROM CSV("data/PRODUCT-PRODUCT.csv", {headers: true})').then(
-			function(transs) {
-				for (var i = 0; i < transs.length; i++) {
-					var trans = transs[i];
-					alasql('INSERT INTO products VALUES(?,?,?,?,?,?,?);', trans);
+	var pproduct = alasql.promise('SELECT MATRIX * FROM CSV("data/PRODUCT-PRODUCT.csv", {headers: true})').then(
+			function(products) {
+				for (var i = 0; i < products.length; i++) {
+					var prod = products[i];
+					alasql('INSERT INTO products VALUES(?,?,?,?,?,?,?);', prod);
 				}
 			});
 	
 	alasql('DROP TABLE IF EXISTS maker;');
 	alasql('CREATE TABLE maker(id INT IDENTITY, text STRING);');
-	var ptrans = alasql.promise('SELECT MATRIX * FROM CSV("data/MAKER-MAKER.csv", {headers: true})').then(
-			function(transs) {
-				for (var i = 0; i < transs.length; i++) {
-					var trans = transs[i];
-					alasql('INSERT INTO maker VALUES(?,?);', trans);
+	var pmaker = alasql.promise('SELECT MATRIX * FROM CSV("data/MAKER-MAKER.csv", {headers: true})').then(
+			function(makers) {
+				for (var i = 0; i < makers.length; i++) {
+					var make = makers[i];
+					alasql('INSERT INTO maker VALUES(?,?);', make);
 				}
 			});
 	
@@ -104,7 +104,7 @@ DB.load = function() {
 			});*/
 	
 	alasql('DROP TABLE IF EXISTS oitems;');
-	alasql('CREATE TABLE oitems(id INT IDENTITY, oid STRING, pcode STRING, pcat INT, pmake INT, pdetail STRING, qty INT, lastupdate STRING);');
+	alasql('CREATE TABLE oitems(id INT IDENTITY, oid STRING, pcode STRING, pcat INT, pmake INT, pdetail STRING, qty INT, status INT, received INT, lastupdate STRING);');
 /*	var ptrans = alasql.promise('SELECT MATRIX * FROM CSV("data/OITEMS-OITEMS.csv", {headers: true})').then(
 			function(transs) {
 				for (var i = 0; i < transs.length; i++) {
@@ -114,17 +114,17 @@ DB.load = function() {
 			});*/
 	
 	alasql('DROP TABLE IF EXISTS status;');
-	alasql('CREATE TABLE status(id INT IDENTITY, text STRING);');
-	var ptrans = alasql.promise('SELECT MATRIX * FROM CSV("data/STATUS-STATUS.csv", {headers: true})').then(
-			function(transs) {
-				for (var i = 0; i < transs.length; i++) {
-					var trans = transs[i];
-					alasql('INSERT INTO status VALUES(?,?);', trans);
+	alasql('CREATE TABLE status(id INT IDENTITY, text STRING, type STRING);');
+	var pstatus = alasql.promise('SELECT MATRIX * FROM CSV("data/STATUS-STATUS.csv", {headers: true})').then(
+			function(statuss) {
+				for (var i = 0; i < statuss.length; i++) {
+					var sttus = statuss[i];
+					alasql('INSERT INTO status VALUES(?,?,?);', sttus);
 				}
 			});
 	
 	// Reload page
-	Promise.all([ pkind, pitem, pwhouse, pstock, ptrans ]).then(function() {
+	Promise.all([ pkind, pitem, pwhouse, pstock, ptrans, pvendor, pproduct, pmaker, pstatus ]).then(function() {
 		window.location.reload(true);
 	});
 };

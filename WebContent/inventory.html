@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="lib/jquery.js"></script>
+<script src="lib/bootstrap.js"></script>
+<link href="css/bootstrap.css" rel="stylesheet" />
+<script src="lib/jquery-ui.js"></script>
+<link href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet" />
+
+<script src="lib/jsgrid.min.js"></script>
+<link href="css/jsgrid.min.css" rel="stylesheet" />
+<link href="css/jsgrid-theme.min.css" rel="stylesheet" />
+<link href="css/toastr.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+<link href="css/style.css" rel="stylesheet" />
+
+<script src="lib/alasql.js"></script>
+<script src="lib/purl.js"></script>
+<script src="js/db.js"></script>
+<script src="lib/toastr.min.js"></script>
+<meta charset="utf-8">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Cache-Control" content="no-cache">
+<meta name="viewport" content="width=device-width">
+<title>COMPANY</title>
+</head>
+<body>
+	<nav class="navbar navbar-default">
+		<div class="clearfix">
+			<!-- Brand and toggle get grouped for better mobile display -->
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed"
+					data-toggle="collapse" data-target="#navbar-collapse">
+					<span class="sr-only">Toggle navigation</span> <span
+						class="icon-bar"></span> <span class="icon-bar"></span> <span
+						class="icon-bar"></span>
+				</button>
+				<div class="navbar-brand"><a id="nav-menu" class="glyphicon glyphicon-list"><span> </span></a><a href="index.html">COMPANY</a></div>
+			</div>
+
+			<!-- Collect the nav links, forms, and other content for toggling -->
+			<div class="collapse navbar-collapse" id="navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li><a href="index.html">Inventory Management</a></li>
+				</ul>
+				<ul class="nav navbar-nav navbar-right">
+					<li class="dropdown"><a href="#" class="dropdown-toggle"
+						data-toggle="dropdown"><span class="glyphicon glyphicon-cog"></span>
+							Settings <span class="caret"></span></a>
+						<ul class="dropdown-menu">
+							<li><a onclick="window.location.reload(true);"><span
+									class="glyphicon glyphicon-refresh"></span> Reload</a></li>
+							<li><a onclick="DB.init();"><span
+									class="glyphicon glyphicon-repeat"></span> Init DB</a></li>
+							<li role="separator" class="divider"></li>
+							<li><a onclick="DB.remove();"><span
+									class="glyphicon glyphicon-trash"></span> Delete DB</a></li>
+						</ul></li>
+				</ul>
+			</div>
+			<!-- /.navbar-collapse -->
+		</div>
+		<!-- /.container-fluid -->
+	</nav>
+
+	<div class="container">
+		<ul class="nav nav-tabs">
+			<li id="li-overview" class="active"><a id="tab-inventory"
+				href="#tabcontent-inventory" data-toggle="tab">Inventory Stock</a></li>
+			<li id="li-purchase"><a id="tab-goodsissue"
+				href="#tabcontent-goodsissue" data-toggle="tab">Goods Issue</a></li>
+			<li id="li-sale"><a id="tab-goodsreceive" href="#tabcontent-goodsreceive"
+				data-toggle="tab">Goods Received</a></li>
+		</ul>
+		<div class="tab-content">
+			<div id="tabcontent-inventory" class="tab-pane active">
+				<div class="panel panel-primary">
+					<div class="panel-body">
+					<div id="inventory-items"></div>
+					</div>
+				</div>
+			</div>
+			<div id="tabcontent-goodsissue" class="tab-pane">
+			
+			</div>
+			<div id="tabcontent-goodsreceive" class="tab-pane">
+
+				<div class="panel panel-primary">
+					<div class="panel-body">
+						<div>
+							<label style="font-weight: bold" for="goodsissue-orderid">ORDER
+								ID: </label> <input id="goodsissue-orderid" type="text" width="20px" autocomplete="off">
+							<span class="glyphicon glyphicon-barcode"> </span>
+						</div>
+						<hr/>
+						<div class="panel panel-default">
+							<div class="panel-body">
+								<div id="gr-po-items"></div>
+								<br/>
+								<button id="goodsissue-orderid-update-btn" type="button" class="btn btn-warning pull-right" disabled>Update</button>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+	<nav class="sidebar">
+		<ul class="menu">
+			<li><a href="index.html">Home</a></li>
+			<li><a href="inventory.html">Inventory</a></li>
+			<li><a href="products.html">Products</a></li>
+			<li><a href="vendors.html">Vendors</a></li>
+			<li><a href="orders.html">Orders</a></li>
+			<li><a href="#">About</a></li>
+			<li><a href="#">Contact</a></li>
+		</ul>
+	</nav>
+	<script src="js/inventory.js"></script>
+	<script src="js/gr-inventory.js"></script>
+	<script src="lib/nav-sidebar.js"></script>
+</body>
+</html>

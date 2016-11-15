@@ -85,20 +85,32 @@
 	margin: 3px;
 }
 
-.status-open {
-	background-color: green;
-	color: black;
-	font-weight: bold;
+#od-dlg-vendor-info {
+	width: 300px !important;
+	float: left;
+	margin: 3px;
 }
 
-.status-closed {
+#od-dlg-warehouse-info {
+	width: 300px !important;
+	float: left;
+	margin: 3px;
+}
+
+.status {
+	font-weight: bold;
+}
+.status-open{
 	background-color: red;
 	color: black;
-	font-weight: bold;
 }
 
-.status-canceled {
+.status-closed > .jsgrid-row {
+	background-color: red;
+	color: black;
+}
+
+.status-canceled>.jsgrid-row {
 	background-color: grey;
 	color: white;
-	font-weight: bold;
 }
