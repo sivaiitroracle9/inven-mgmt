@@ -57,6 +57,12 @@
 									class="glyphicon glyphicon-trash"></span> Delete DB</a></li>
 						</ul></li>
 				</ul>
+				<ul class="nav navbar-nav navbar-right">
+					<li class="dropdown"><a href="#" class="dropdown-toggle"
+						data-toggle="dropdown"><span class="glyphicon glyphicon-globe"></span></a>
+						<ul class="dropdown-menu">
+						</ul></li>
+				</ul>
 			</div>
 			<!-- /.navbar-collapse -->
 		</div>
@@ -67,45 +73,83 @@
 		<ul class="nav nav-tabs">
 			<li id="li-overview" class="active"><a id="tab-inventory"
 				href="#tabcontent-inventory" data-toggle="tab">Inventory Stock</a></li>
-			<li id="li-purchase"><a id="tab-goodsissue"
+			<li id="li-goodsissue"><a id="tab-goodsissue"
 				href="#tabcontent-goodsissue" data-toggle="tab">Goods Issue</a></li>
-			<li id="li-sale"><a id="tab-goodsreceive" href="#tabcontent-goodsreceive"
+			<li id="li-goodsreceive"><a id="tab-goodsreceive" href="#tabcontent-goodsreceive"
 				data-toggle="tab">Goods Received</a></li>
+			<li id="li-settings" class="pull-right"><a id="tab-settings" href="#tabcontent-settings"
+				data-toggle="tab">Stock Settings</a></li>
 		</ul>
 		<div class="tab-content">
 			<div id="tabcontent-inventory" class="tab-pane active">
 				<div class="panel panel-primary">
 					<div class="panel-body">
-					<div id="inventory-items"></div>
+						<div id="inventory-items"></div>
 					</div>
 				</div>
 			</div>
-			<div id="tabcontent-goodsissue" class="tab-pane">
-			
-			</div>
+			<div id="tabcontent-goodsissue" class="tab-pane"></div>
 			<div id="tabcontent-goodsreceive" class="tab-pane">
 
 				<div class="panel panel-primary">
 					<div class="panel-body">
 						<div>
-							<label style="font-weight: bold" for="goodsissue-orderid">ORDER
-								ID: </label> <input id="goodsissue-orderid" type="text" width="20px" autocomplete="off">
-							<span class="glyphicon glyphicon-barcode"> </span>
+							<label style="font-weight: bold" for="goodsreceive-orderid">ORDER
+								ID: </label> <input id="goodsreceive-orderid" type="text" width="20px"
+								autocomplete="off"> <span
+								class="glyphicon glyphicon-barcode"> </span>
+							<div class="pull-right" style="margin-right: 3px">
+								<label style="font-weight: bold;">WAREHOUSE: </label><span
+									id="goodsreceive-whouse"> </span>
+							</div>
+							<div class="pull-right" style="margin-right: 10px">
+								<label style="font-weight: bold;">VENDOR: </label><span
+									id="goodsreceive-vendor"> </span>
+							</div>
 						</div>
-						<hr/>
+						<br /></br>
+						<hr />
 						<div class="panel panel-default">
 							<div class="panel-body">
 								<div id="gr-po-items"></div>
-								<br/>
-								<button id="goodsissue-orderid-update-btn" type="button" class="btn btn-warning pull-right" disabled>Update</button>
+								<br />
+								<button id="goodsreceive-orderid-update-btn" type="button"
+									class="btn btn-warning pull-right" disabled>Update</button>
 							</div>
 						</div>
 					</div>
 				</div>
 
 			</div>
-		</div>
-	</div>
+			<div id="tabcontent-settings" class="tab-pane">
+				<br>
+				<ul class="nav nav-tabs">
+					<li id="li-criticalstock-settings" class="active"><a id="tab-criticalstock-settings"
+						href="#tabcontent-criticalstock-settings"" data-toggle="tab">Critical Stock</a></li>
+				</ul>
+				<div class="tab-content">
+					<div id="tabcontent-criticalstock-settings" class="tab-pane active">
+						<div class="panel panel-primary">
+							<div class="panel-body">
+								<div style="margin:2px">
+									<label>Generate Purchase Order: </label>
+									<input type="radio" id="auto-po-on" class="auto-po"><label for="auto-po-on">AUTO </label>
+									<input type="radio" id="auto-po-off" class="auto-po"><label for="auto-po-off">MANUAL </label>
+								</div>
+								<div style="margin:2px">
+									<label>Set Critical Stock values: </label>
+									<input type="radio" id="cstock-gnl" class="cstock-set"><label for="cstock-gnl">GENERAL </label>
+									<input type="radio" id="cstock-spc" class="cstock-set"><label for="cstock-spc">SPECIFIC </label>
+								</div>
+								<div id="settings-inventory-items"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+					</div>
+				</div>
+			</div>
 	<nav class="sidebar">
 		<ul class="menu">
 			<li><a href="index.html">Home</a></li>
@@ -119,6 +163,7 @@
 	</nav>
 	<script src="js/inventory.js"></script>
 	<script src="js/gr-inventory.js"></script>
+		<script src="js/inventory-settings.js"></script>
 	<script src="lib/nav-sidebar.js"></script>
 </body>
 </html>

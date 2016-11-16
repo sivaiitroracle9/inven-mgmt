@@ -31,15 +31,18 @@ function openPODetails(poid) {
 				$("#od-dlg-status").addClass("label label-success");
 				$("#od-dlg-status").text(lov.text);
 			} else if(status === 2) {
-				$("#od-dlg-status").addClass("label label-primary");
+				$("#od-dlg-status").addClass("label label-default");
 				$("#od-dlg-status").text(lov.text);
 			} else if(status === 3) {
 				$("#od-dlg-status").addClass("label label-info");
 				$("#od-dlg-status").text(lov.text);
 			} else if(status === 4) {
-				$("#od-dlg-status").addClass("label label-danger");
+				$("#od-dlg-status").addClass("label label-primary");
 				$("#od-dlg-status").text(lov.text);
 			} else if(status === 5) {
+				$("#od-dlg-status").addClass("label label-danger");
+				$("#od-dlg-status").text(lov.text);
+			} else if(status === 6) {
 				$("#od-dlg-status").addClass("label label-warning");
 				$("#od-dlg-status").text(lov.text);
 			}
@@ -110,11 +113,11 @@ $("#od-dlg-po-items").jsGrid({
         		var str = "";
         		this.items.forEach(function(r){
         			if(value == r.id) {
-        				if(value == 6) {
+        				if(value == 7) {
         					str =  "<span style='font-weight:bold' class='label label-warning'>"+ r.text + "</span>";
-        				} else if(value == 7) {
-        					str =  "<span style='font-weight:bold' class='label label-info'>"+ r.text + "</span>";
         				} else if(value == 8) {
+        					str =  "<span style='font-weight:bold' class='label label-info'>"+ r.text + "</span>";
+        				} else if(value == 9) {
         					str =  "<span style='font-weight:bold' class='label label-primary'>"+ r.text + "</span>";
         				}
             		}
@@ -203,14 +206,17 @@ $("#orders-grid").jsGrid({
             				if(value == 1) {
             					str =  "<span style='font-weight:bold' class='label label-success'>"+ r.text + "</span>";
             				} else if(value == 2) {
-            					str =  "<span style='font-weight:bold' class='label label-primary'>"+ r.text + "</span>";
+            					str =  "<span style='font-weight:bold' class='label label-default'>"+ r.text + "</span>";
             				} else if(value == 3) {
             					str =  "<span style='font-weight:bold' class='label label-info'>"+ r.text + "</span>";
             				}
             				else if(value == 4) {
-            					str =  "<span style='font-weight:bold' class='label label-danger'>"+ r.text + "</span>";
+            					str =  "<span style='font-weight:bold' class='label label-primary'>"+ r.text + "</span>";
             				}
             				else if(value == 5) {
+            					str =  "<span style='font-weight:bold' class='label label-danger'>"+ r.text + "</span>";
+            				}
+            				else if(value == 6) {
             					str =  "<span style='font-weight:bold' class='label label-warning'>"+ r.text + "</span>";
             				}
                 		}
@@ -223,7 +229,7 @@ $("#orders-grid").jsGrid({
             {type: "control",
             	deleteButton: false,
             	itemTemplate: function(value, item) {
-            		if(item.status === 1 || item.status === 2 || item.status === 3) {
+            		if(item.status === 1 || item.status === 2 || item.status === 3 || item.status === 4) {
             			return this._createEditButton(item);
             		}
             		return "";
@@ -336,6 +342,7 @@ function getWarehouseById(id) {
 		return d;
 	}
 }
+
 function getVendorById(id) {
 	var rows = alasql("SELECT * FROM vendor where id =" + Number(id) + " order by id desc");
 	if (rows.length != 0) {

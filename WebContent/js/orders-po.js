@@ -141,7 +141,7 @@ function createPO(po_items_inserted) {
 			values.push(item["prod-make"]);
 			values.push("'" + item["prod-detail"] + "'");
 			values.push(item["prod-quant"]);
-			values.push(6);
+			values.push(7);
 			values.push(0);
 			values.push("'" + (new Date()).toLocaleString() + "'");
 			var oitemInsert = "INSERT INTO oitems VALUES (" + values.join(",") + ")";
