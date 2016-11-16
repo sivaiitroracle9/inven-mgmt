@@ -1,6 +1,15 @@
+//---- Initialization ------- //
+$("input.auto-po").each(function(){
+	var value = 0;
+	var stocks = alasql("select autopo from stock");
+	if(stocks!=undefined && stocks.length!=0) value = stocks[0].autopo;
+	
+	if($(this).val() == value) $(this).prop('checked', true);
+});
+
 var settings_inventory_items_stock = [];
 
-$("#settings-inventory-items").jsGrid({
+$("#cstock-spc-items").jsGrid({
 	width:"100%",
 	filtering: true,
 	editing: true,
@@ -130,21 +139,22 @@ function getWarehousesLOV() {
 	return data;
 }
 
-$("a#tab-settings, li#li-settings").click(function() {
-	$("#settings-inventory-items").jsGrid("reset");
-});
-
-$('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-	  var target = $(e.target).attr("href") // activated tab
-	  if(target == "#tabcontent-settings") {
-		  $("#settings-inventory-items").jsGrid("reset");
-	  }
-	});
-
-$("input.auto-po, input.cstock-set").change(function() {
+$("input.auto-po").change(function() {
 	if ($(this).is(":checked")) {
 		$(this).siblings("input").each(function() {
 			$(this).prop('checked', false);
-		})
+		});
+		alasql("UPDATE stock set autopo = " + $(this).val());
+	}
+});
+
+$("input.cstock-set").change(function() {
+	if ($(this).is(":checked")) {
+		$(this).siblings("input").each(function() {
+			$(this).prop('checked', false);
+			$("#"+$(this).attr("id")+"-items").hide();
+		});
+		$("#"+$(this).attr("id")+"-items").show();
+		$("#cstock-spc-items").jsGrid("reset");
 	}
 });

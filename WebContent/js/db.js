@@ -42,12 +42,12 @@ DB.load = function() {
 
 	// Inventories
 	alasql('DROP TABLE IF EXISTS stock;');
-	alasql('CREATE TABLE stock(id INT IDENTITY, item INT, whouse INT, balance INT, threshold INT);');
+	alasql('CREATE TABLE stock(id INT IDENTITY, item INT, whouse INT, balance INT, threshold INT, autopo INT);');
 	var pstock = alasql.promise('SELECT MATRIX * FROM CSV("data/STOCK-STOCK.csv", {headers: true})').then(
 			function(stocks) {
 				for (var i = 0; i < stocks.length; i++) {
 					var stock = stocks[i];
-					alasql('INSERT INTO stock VALUES(?,?,?,?,?);', stock);
+					alasql('INSERT INTO stock VALUES(?,?,?,?,?,?);', stock);
 				}
 			});
 

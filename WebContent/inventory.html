@@ -124,31 +124,40 @@
 			<div id="tabcontent-settings" class="tab-pane">
 				<br>
 				<ul class="nav nav-tabs">
-					<li id="li-criticalstock-settings" class="active"><a id="tab-criticalstock-settings"
-						href="#tabcontent-criticalstock-settings"" data-toggle="tab">Critical Stock</a></li>
+					<li id="li-criticalstock-settings" class="active"><a
+						id="tab-criticalstock-settings"
+						href="#tabcontent-criticalstock-settings" " data-toggle="tab">Critical
+							Stock</a></li>
 				</ul>
 				<div class="tab-content">
 					<div id="tabcontent-criticalstock-settings" class="tab-pane active">
 						<div class="panel panel-primary">
 							<div class="panel-body">
-								<div style="margin:2px">
-									<label>Generate Purchase Order: </label>
-									<input type="radio" id="auto-po-on" class="auto-po"><label for="auto-po-on">AUTO </label>
-									<input type="radio" id="auto-po-off" class="auto-po"><label for="auto-po-off">MANUAL </label>
+								<div style="margin: 2px">
+									<label>Generate Purchase Order: </label> 
+									<input type="radio" id="auto-po-on" class="auto-po" value=1><label for="auto-po-on">AUTO </label>
+									<input type="radio" id="auto-po-off" class="auto-po" value=0><label for="auto-po-off">MANUAL </label>
+									<hr />
 								</div>
-								<div style="margin:2px">
-									<label>Set Critical Stock values: </label>
-									<input type="radio" id="cstock-gnl" class="cstock-set"><label for="cstock-gnl">GENERAL </label>
-									<input type="radio" id="cstock-spc" class="cstock-set"><label for="cstock-spc">SPECIFIC </label>
+								<div>
+									<div style="margin: 3px">
+										<label>Set Critical Stock values: </label> <input type="radio"
+											id="cstock-gnl" class="cstock-set" checked><label
+											for="cstock-gnl">GENERAL </label> <input type="radio"
+											id="cstock-spc" class="cstock-set"><label
+											for="cstock-spc">SPECIFIC </label>
+									<hr />
+									</div>
+									<div id="cstock-gnl-items"></div>
+									<div id="cstock-spc-items" style="display: none"></div>
 								</div>
-								<div id="settings-inventory-items"></div>
 							</div>
 						</div>
 					</div>
 				</div>
 
-					</div>
-				</div>
+			</div>
+		</div>
 			</div>
 	<nav class="sidebar">
 		<ul class="menu">
