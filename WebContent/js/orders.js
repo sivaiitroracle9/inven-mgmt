@@ -1,4 +1,4 @@
-var poDetailsDlg = $("#poDetailsDlg").dialog({
+var orderDetailsDlg = $("#orderDetailsDlg").dialog({
     autoOpen: false,
     width: 400,
     modal: true,
@@ -15,79 +15,157 @@ var poDetailsDlg = $("#poDetailsDlg").dialog({
 });
 
 var od_dlg_po_item = [];
-function openPODetails(poid) {
-	var rows = alasql("select * from orders where id = " + poid);
-	var vendor = rows[0].vendor;
-	var whouse = rows[0].whouse;
+function openDetails(onumber) {
+	console.log(onumber)
+	var rows = alasql("select * from orders where oid = '" + onumber + "'");
+	var from = rows[0].fromagent;
+	var to = rows[0].toagent;
+	var fromtype = rows[0].fromtype;
+	var totype = rows[0].totype;
 	var status = rows[0].status;
-
+	var otype = rows[0].otype;
+	
 	console.log(rows[0]);
-	
 	$("#od-dlg-status").attr("class", "");
+	$("#od-dlg-type").attr("class", "");
 	$("#od-dlg-status").text("")
-	getStatusLOV("ORDER").forEach(function(lov){
-		if(lov.id === status) {
-			if(status === 1) {
-				$("#od-dlg-status").addClass("label label-success");
-				$("#od-dlg-status").text(lov.text);
-			} else if(status === 2) {
-				$("#od-dlg-status").addClass("label label-default");
-				$("#od-dlg-status").text(lov.text);
-			} else if(status === 3) {
-				$("#od-dlg-status").addClass("label label-info");
-				$("#od-dlg-status").text(lov.text);
-			} else if(status === 4) {
-				$("#od-dlg-status").addClass("label label-primary");
-				$("#od-dlg-status").text(lov.text);
-			} else if(status === 5) {
-				$("#od-dlg-status").addClass("label label-danger");
-				$("#od-dlg-status").text(lov.text);
-			} else if(status === 6) {
-				$("#od-dlg-status").addClass("label label-warning");
-				$("#od-dlg-status").text(lov.text);
+	if(otype == 1) {
+		$("#od-dlg-type").text("Purchase");
+		$("#od-dlg-type").addClass("label label-primary");
+		
+		getStatusLOV("ORDER").forEach(function(lov){
+			if(lov.id === status) {
+				if(status === 1) {
+					$("#od-dlg-status").addClass("label label-success");
+					$("#od-dlg-status").text(lov.text);
+				} else if(status === 2) {
+					$("#od-dlg-status").addClass("label label-default");
+					$("#od-dlg-status").text(lov.text);
+				} else if(status === 3) {
+					$("#od-dlg-status").addClass("label label-info");
+					$("#od-dlg-status").text(lov.text);
+				} else if(status === 4) {
+					$("#od-dlg-status").addClass("label label-primary");
+					$("#od-dlg-status").text(lov.text);
+				} else if(status === 5) {
+					$("#od-dlg-status").addClass("label label-danger");
+					$("#od-dlg-status").text(lov.text);
+				} else if(status === 6) {
+					$("#od-dlg-status").addClass("label label-warning");
+					$("#od-dlg-status").text(lov.text);
+				}
 			}
-		}
-	});
-
-	var oddate = rows[0].lastupdate;
-	$("#od-dlg-lastupdate").text(oddate);
-	
-	var whouse = getWarehouseById(whouse);
-	$("#od-dlg-warehouse-info-name").text(whouse["name"]);
-	$("#od-dlg-warehouse-info-address").text(whouse["address"]);
-	$("#od-dlg-warehouse-info-tel").text(whouse["tel"]);
-	
-	var vendor = getVendorById(vendor);
-	$("#od-dlg-vendor-info-code").text(vendor["CODE"]);
-	$("#od-dlg-vendor-info-name").text(vendor["NAME"]);
-	$("#od-dlg-vendor-info-address").text(vendor["Address"]);
-	$("#od-dlg-vendor-info-tel").text(vendor["TEL"]);
-	$("#od-dlg-vendor-info-email").text(vendor["Email"]);
-	
-	
-	var selectQry = "select * from oitems where oid='PO" + poid + "'";
-	console.log(selectQry)
-	var oitems = alasql(selectQry);
-	
-	od_dlg_po_item = [];
-	if(oitems!=undefined && oitems.length > 0) {
-		oitems.forEach(function(oitem){
-			var item = {};
-			item.pcode = oitem.pcode;
-			item.pcat = oitem.pcat;
-			item.pmake = oitem.pmake;
-			item.pdetail = oitem.pdetail;
-			item.qty = oitem.qty;
-			item.status = oitem.status;
-			item.receivedqty = oitem.received;
-			od_dlg_po_item.push(item);
 		});
+
+		var oddate = rows[0].lastupdate;
+		$("#od-dlg-lastupdate").text(oddate);
+		
+		var whouse = getWarehouseById(Number(to));
+		$("#od-dlg-to-name").text(whouse["name"]);
+		$("#od-dlg-to-address").text(whouse["address"]);
+		$("#od-dlg-to-tel").text(whouse["tel"]);
+		
+		var vendor = getVendorById(Number(from));
+		$("#od-dlg-from-code").text(vendor["CODE"]);
+		$("#od-dlg-from-name").text(vendor["NAME"]);
+		$("#od-dlg-from-address").text(vendor["Address"]);
+		$("#od-dlg-from-tel").text(vendor["TEL"]);
+		$("#od-dlg-from-email").text(vendor["Email"]);
+		
+		
+		var selectQry = "select * from poitems where oid='" + onumber + "'";
+		console.log(selectQry)
+		var poitems = alasql(selectQry);
+		
+		od_dlg_po_item = [];
+		if(poitems!=undefined && poitems.length > 0) {
+			poitems.forEach(function(poitem){
+				var item = {};
+				item.pcode = poitem.pcode;
+				item.pcat = poitem.pcat;
+				item.pmake = poitem.pmake;
+				item.pdetail = poitem.pdetail;
+				item.qty = poitem.qty;
+				item.status = poitem.status;
+				item.receivedqty = poitem.received;
+				od_dlg_po_item.push(item);
+			});
+		}
+		console.log(od_dlg_po_item)
+		orderDetailsDlg.dialog({minWidth:1050});
+		orderDetailsDlg.dialog("open");
+		$("#od-dlg-po-items").jsGrid("reset");
+		$("#od-dlg-po-items").jsGrid("render");
 	}
-	console.log(od_dlg_po_item)
-	poDetailsDlg.dialog({minWidth:1050});
-	poDetailsDlg.dialog("open");
-	$("#od-dlg-po-items").jsGrid("reset");
-	$("#od-dlg-po-items").jsGrid("render");
+
+	if(otype == 2) {
+
+		$("#od-dlg-status").text("")
+		getStatusLOV("ORDER").forEach(function(lov){
+			if(lov.id === status) {
+				if(status === 1) {
+					$("#od-dlg-status").addClass("label label-success");
+					$("#od-dlg-status").text(lov.text);
+				} else if(status === 2) {
+					$("#od-dlg-status").addClass("label label-default");
+					$("#od-dlg-status").text(lov.text);
+				} else if(status === 3) {
+					$("#od-dlg-status").addClass("label label-info");
+					$("#od-dlg-status").text(lov.text);
+				} else if(status === 4) {
+					$("#od-dlg-status").addClass("label label-primary");
+					$("#od-dlg-status").text(lov.text);
+				} else if(status === 5) {
+					$("#od-dlg-status").addClass("label label-danger");
+					$("#od-dlg-status").text(lov.text);
+				} else if(status === 6) {
+					$("#od-dlg-status").addClass("label label-warning");
+					$("#od-dlg-status").text(lov.text);
+				}
+			}
+		});
+
+		var oddate = rows[0].lastupdate;
+		$("#od-dlg-lastupdate").text(oddate);
+		
+		var whouse = getWarehouseById(whouse);
+		$("#od-dlg-warehouse-info-name").text(whouse["name"]);
+		$("#od-dlg-warehouse-info-address").text(whouse["address"]);
+		$("#od-dlg-warehouse-info-tel").text(whouse["tel"]);
+		
+		var vendor = getVendorById(vendor);
+		$("#od-dlg-vendor-info-code").text(vendor["CODE"]);
+		$("#od-dlg-vendor-info-name").text(vendor["NAME"]);
+		$("#od-dlg-vendor-info-address").text(vendor["Address"]);
+		$("#od-dlg-vendor-info-tel").text(vendor["TEL"]);
+		$("#od-dlg-vendor-info-email").text(vendor["Email"]);
+		
+		
+		var selectQry = "select * from oitems where oid='PO" + poid + "'";
+		console.log(selectQry)
+		var oitems = alasql(selectQry);
+		
+		od_dlg_po_item = [];
+		if(oitems!=undefined && oitems.length > 0) {
+			oitems.forEach(function(oitem){
+				var item = {};
+				item.pcode = oitem.pcode;
+				item.pcat = oitem.pcat;
+				item.pmake = oitem.pmake;
+				item.pdetail = oitem.pdetail;
+				item.qty = oitem.qty;
+				item.status = oitem.status;
+				item.receivedqty = oitem.received;
+				od_dlg_po_item.push(item);
+			});
+		}
+		console.log(od_dlg_po_item)
+		poDetailsDlg.dialog({minWidth:1050});
+		poDetailsDlg.dialog("open");
+		$("#od-dlg-po-items").jsGrid("reset");
+		$("#od-dlg-po-items").jsGrid("render");
+	}
+	
 }
 $("#od-dlg-po-items").jsGrid({
 	width:"100%",
@@ -172,30 +250,65 @@ $("#orders-grid").jsGrid({
         			orders.forEach(function(or){
         				var d = {};
         				d["id"] = or["id"];
-        				d["oid"] = or["oid"];
-        				d["vendor"] = or["vendor"];
-        				d["whouse"] = or["whouse"];
+        				d["onumber"] = or["oid"];
+        				d["otype"] = or["otype"];
+        				d["fromtype"] = or["fromtype"];
+        				d["totype"] = or["totype"];
+        				d["fromagent"] = or["fromagent"];
+        				d["toagent"] = or["toagent"];
         				d["status"] = or["status"];
         				d["lastupdate"] = or["lastupdate"];
         				data.push(d);
         			});
         		}
+        		console.log(data)
         		return data;
         	},
         },
  
         fields: [
-            { name: "id", title: "ID", type: "text", filtering: false, editing: false,},
-            { name: "oid", title: "ORDER ID", type: "text", editing: false,
+            { name: "onumber", title: "ORD. NUMBER", type: "text", editing: false,
             	itemTemplate: function(value, item) {
             		var poid = Number(value.slice(2));
 
-            		return "<a href='#' onclick=openPODetails(" + poid + ")>" + value + "</a>";
+            		return "<a href='#' onclick=openDetails(\"" + value + "\")>" + value + "</a>";
             	}
             },
+            { name: "otype", title: "ORD. TYPE", type: "select", items: getOrderType(), valueField: "id", textField: "text", editing: false,
+            	itemTemplate: function(value, item) {
+            		var str = "";
+            		this.items.forEach(function(r){
+            			if(value == r.id) {
+
+            				if(value == 1) {
+            					str =  "<span style='font-weight:bold' class='label label-primary'>"+ r.text + "</span>";
+            				} else if(value == 2) {
+            					str =  "<span style='font-weight:bold' class='label label-warning'>"+ r.text + "</span>";
+            				} 
+                		}
+            		});
+            		return str;
+            	},
+            },
+            { name: "fromagent", title: "FROM", type: "select", items: getWarehousesLOV(), valueField: "id", textField: "text", editing: false,
+            	itemTemplate: function(value, item) {
+            		var str = "";
+            		this.items.forEach(function(r){
+            			if(value == r.id) {
+
+            				if(value == 3) {
+            					str =  "<span style='font-weight:bold' class='label label-info'>"+ r.text + "</span>";
+            				}
+            				else if(value == 4) {
+            					str =  "<span style='font-weight:bold' class='label label-primary'>"+ r.text + "</span>";
+            				}
+                		}
+            		});
+            		return str;
+            	},
+            },
             
-            { name: "vendor", title: "VENDOR", type: "select", items: getVendorsLOV(), valueField: "id", textField: "text", editing: false,},
-            { name: "whouse", title: "WAREHOUSE", type: "select", items: getWarehousesLOV(), valueField: "id", textField: "text", editing: false,},
+            { name: "toagent", title: "TO", type: "select", items: getVendorsLOV(), valueField: "id", textField: "text", editing: false,},
             { name: "status", title: "STATUS", type: "select", items: getStatusLOV("ORDER"), valueField: "id", textField: "text",
 
             	itemTemplate: function(value, item) {
@@ -355,4 +468,21 @@ function getVendorById(id) {
 		d["Address"] = rows[0].address;
 		return d;
 	}
+}
+
+function getOrderType() {
+	var ordertypes = [];
+	var d = {};
+	d["id"] = 0;
+	d["text"] = "";
+	ordertypes.push(d);
+	d = {};
+	d["id"] = 1;
+	d["text"] = "Purchase";
+	ordertypes.push(d);
+	d = {};
+	d["id"] = 2;
+	d["text"] = "Sales";
+	ordertypes.push(d);
+	return ordertypes;
 }

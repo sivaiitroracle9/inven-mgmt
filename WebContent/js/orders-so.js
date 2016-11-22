@@ -1,114 +1,120 @@
-//--------------------------------------------------------------------- PO -------------------------------------------------------------
-$("#po-date").text((new Date()).toLocaleString());
-getVendorsLOV().forEach(function(lov){
-	var option = $("<option>");
-	option.val(lov.id);
-	option.text(lov.text);
-	option.appendTo($("#po-vendor-info-select"));
-});
+//--------------------------------------------------------------------- so -------------------------------------------------------------
+$("#so-date").text((new Date()).toLocaleString());
 
-$("#po-vendor-info div.panel-body").hide();
-$("#po-vendor-info-select").on("change", function(event) {
-	var vendorId = $("#po-vendor-info-select").val();
-	if(vendorId == 0) $("#po-vendor-info div.panel-body").hide();
-	else {
-		$("#po-vendor-info div.panel-body").show();
-		var vendor = getVendorById(vendorId);
-		$("#po-vendor-info-code").text(vendor["CODE"]);
-		$("#po-vendor-info-name").text(vendor["NAME"]);
-		$("#po-vendor-info-address").text(vendor["Address"]);
-		$("#po-vendor-info-tel").text(vendor["TEL"]);
-		$("#po-vendor-info-email").text(vendor["Email"]);
+
+$("#so-to-info div.panel-body").hide();
+$("#so-to-info div.panel-body div#so-outlet").hide();
+$("#so-to-info div.panel-body div#so-customer").hide();
+
+$("#so-to-info-select").change(function(){
+	if($(this).val() == 1) {
+		$("#so-outlet-info-select").hide();
+		$("#so-to-info div.panel-body div#so-outlet").hide();
+		$("#so-to-info div.panel-body").show();
+		$("#so-to-info div.panel-body div#so-customer").show();
+	} else {
+		$("#so-to-info div.panel-body div#so-customer").hide();
+		$("#so-outlet-info-select").show();
+		if($("#so-outlet-info-select").val()!=0) {
+			$("#so-to-info div.panel-body").show();
+			$("#so-to-info div.panel-body div#so-outlet").show();
+		} else {
+			$("#so-to-info div.panel-body").hide();
+		}
 	}
+	
 });
 
 getWarehousesLOV().forEach(function(lov){
 	var option = $("<option>");
 	option.val(lov.id);
 	option.text(lov.text);
-	option.appendTo($("#po-warehouse-info-select"));
+	option.appendTo($("#so-warehouse-info-select"));
 });
 
-$("#po-warehouse-info div.panel-body").hide();
-$("#po-warehouse-info-select").on("change", function(event) {
-	var whouseId = $("#po-warehouse-info-select").val();
-	if(whouseId == 0) $("#po-warehouse-info div.panel-body").hide();
+getVendorsLOV().forEach(function(lov){
+	var option = $("<option>");
+	option.val(lov.id);
+	option.text(lov.text);
+	option.appendTo($("#so-outlet-info-select"));
+});
+
+$("#so-outlet-info-select").on("change", function(event) {
+	var outletId = $("#so-outlet-info-select").val();
+	if(outletId == 0) {
+		$("#so-to-info div.panel-body").hide();
+		$("#so-to-info div.panel-body div#so-outlet").hide();
+		$("#so-to-info div.panel-body div#so-customer").hide();
+	}
 	else {
-		$("#po-warehouse-info div.panel-body").show();
+		var outlet = getVendorById(outletId);
+		$("#so-outlet-code").text(outlet["CODE"]);
+		$("#so-outlet-name").text(outlet["NAME"]);
+		$("#so-outlet-address").text(outlet["Address"]);
+		$("#so-outlet-tel").text(outlet["TEL"]);
+		$("#so-outlet-email").text(outlet["Email"]);
+		$("#so-to-info div.panel-body").show();
+		$("#so-to-info div.panel-body div#so-outlet").show();
+	}
+});
+
+
+$("#so-warehouse-info div.panel-body").hide();
+$("#so-warehouse-info-select").on("change", function(event) {
+	var whouseId = $("#so-warehouse-info-select").val();
+	if(whouseId == 0) $("#so-warehouse-info div.panel-body").hide();
+	else {
+		$("#so-warehouse-info div.panel-body").show();
 		var whouse = getWarehouseById(whouseId);
-		$("#po-warehouse-info-name").text(whouse["name"]);
-		$("#po-warehouse-info-address").text(whouse["address"]);
-		$("#po-warehouse-info-tel").text(whouse["tel"]);
+		$("#so-warehouse-info-name").text(whouse["name"]);
+		$("#so-warehouse-info-address").text(whouse["address"]);
+		$("#so-warehouse-info-tel").text(whouse["tel"]);
 	}
 });
 
-var po_items_inserted = {};
-var po_max_insert_id = 0;
+var so_items_inserted = {};
+var so_max_insert_id = 0;
 
-function nextPOInsertId() {
-	po_max_insert_id++;
 
-}
-
-function decPOInsertId(clear) {
-	if(clear == true) {
-		po_max_insert_id=0	
-	} else po_max_insert_id--;
-}
-
-function addPOItem(item) {
-	po_items_inserted[po_max_insert_id] = item;
-	if(Object.keys(po_items_inserted).length > 0) {
-		$("#po-create-btn").prop("disabled", false);
-		$("#po-cancel-btn").prop("disabled", false);
-	}
-}
-
-function removePOItem(clear, id) {
-	if(clear == true) {
-		decPOInsertId(clear);
-		po_items_inserted = {};
-	} else {
-		delete po_items_inserted[id];
-	}
-	console.log(po_items_inserted);
-	if(Object.keys(po_items_inserted).length == 0) {
-		$("#po-create-btn").prop("disabled", true);
-		$("#po-cancel-btn").prop("disabled", true);
-	}
-}
-
-$("#po-cancel-btn").click(function(event){
-	removePOItem(true);
-	resetPOGrids();
-	$("#po-vendor-info-select").val(0);
-	$("#po-warehouse-info-select").val(0);
+$("#so-cancel-btn").click(function(event){
+	so_items_inserted = {};
+	so_max_insert_id=0;
+	$("#so-customer-info-select").val(0);
+	$("#so-warehouse-info-select").val(0);
 });
 
-$("#po-create-btn").click(function(event){
-	console.log(po_items_inserted);
-	if(Object.keys(po_items_inserted).length==0){
-		alert("PO cannot be created.");
+$("#so-create-btn").click(function(event){
+	console.log(so_items_inserted);
+	if(Object.keys(so_items_inserted).length==0){
+		alert("so cannot be created.");
 	}
-	Object.keys(po_items_inserted).forEach(function(pk){
-		console.log(po_items_inserted[pk])
+	Object.keys(so_items_inserted).forEach(function(pk){
+		console.log(so_items_inserted[pk])
 	})
-	createPO(po_items_inserted);
-	resetPOGrids();
-	$("#po-vendor-info-select").val(0);
-	$("#po-vendor-info div.panel-body").hide();
-	$("#po-warehouse-info-select").val(0);
-	$("#po-warehouse-info div.panel-body").hide();
+	createSO(so_items_inserted);
+	$("#so-outlet-info-select").val(0);
+	$("#so-to-info-select").val(0);
+	$("#so-warehouse-info-select").val(0);
+	$("#so-warehouse-info div.panel-body").hide();
+	$("#so-to-info div.panel-body").hide();
+	$("#so-customer-info div.panel-body").hide();
+	$("#so-grid").jsGrid("render");
+	so_max_insert_id = 0;
+	so_items_inserted = {};
+	$("#so-create-btn").prop("disabled", true);
+	$("#so-cancel-btn").prop("disabled", true);
+	
 });
 
-function createPO(po_items_inserted) {
+function createSO(so_items_inserted) {
 
-	if(Object.keys(po_items_inserted).length > 0) {
-		var row = po_items_inserted[Object.keys(po_items_inserted)[0]];
-		console.log(po_items_inserted)
+	if(Object.keys(so_items_inserted).length > 0) {
+		var row = so_items_inserted[Object.keys(so_items_inserted)[0]];
+		console.log(so_items_inserted)
 		console.log(row)
-		var from = row["from"];
 		var to = row["to"];
+		var from = row["from"];
+		var totype = row["totype"];
 		var status = row["status"];
 		
 		var orderQuery = "select max(id) as id from orders";
@@ -118,11 +124,11 @@ function createPO(po_items_inserted) {
 		orderId++;
 		var values = [];
 		values.push(orderId);
-		values.push("'PO"+orderId+"'");
-		values.push(1); // order type
-		values.push(0); // to type -- warehouse
+		values.push("'SO"+orderId+"'");
+		values.push(2); // order type
+		values.push(totype); // to type
 		values.push(Number(to));
-		values.push(1); // from type -- vendor
+		values.push(0); // from type -- warehouse
 		values.push(Number(from));
 		values.push(Number(status));
 		values.push("'" + (new Date()).toLocaleString() + "'");
@@ -131,34 +137,34 @@ function createPO(po_items_inserted) {
 		alasql(orderInsert);
 		
 		// order-items
-		var poitems = alasql("select max(id) as id from poitems");
-		var poitemId = 0;
-		if(poitems.length != 0 && poitems[0].id !=undefined) poitemId = poitems[0].id;
-		Object.values(po_items_inserted).forEach(function(item){
-			poitemId++;
+		var soitems = alasql("select max(id) as id from soitems");
+		var soitemId = 0;
+		if(soitems.length != 0 && soitems[0].id !=undefined) soitemId = soitems[0].id;
+		Object.values(so_items_inserted).forEach(function(item){
+			soitemId++;
 			var values = [];
-			values.push(poitemId);
-			values.push("'PO"+orderId+"'");
+			values.push(soitemId);
+			values.push("'SO"+orderId+"'");
 			values.push("'" + item["pcode"] + "'");
 			values.push(item["pcat"]);
 			values.push(item["pmake"]);
 			values.push("'" + item["pdetail"] + "'");
 			values.push(item["pquant"]);
 			values.push(10); // status
-			values.push(0); // received
+			values.push(0); // shipped
 			values.push("'" + (new Date()).toLocaleString() + "'");
-			var poitemInsert = "INSERT INTO poitems VALUES (" + values.join(",") + ")";
-			console.log(poitemInsert)
-			alasql(poitemInsert);
+			var soitemInsert = "INSERT INTO soitems VALUES (" + values.join(",") + ")";
+			console.log(soitemInsert)
+			alasql(soitemInsert);
 		});
 		
 		toastr.clear();
-		toastr.success('PO created successfully.');
+		toastr.success('so created successfully.');
 	}
 }
 
 
-$("#po-grid").jsGrid({
+$("#so-grid").jsGrid({
 	width: "100%",
 	inserting: true,
 	autoload: true,
@@ -177,16 +183,16 @@ $("#po-grid").jsGrid({
 	},
 	
     onItemInserted: function(args){
-    	if($("#po-warehouse-info-select").val()==0 || $("#po-vendor-info-select").val()==0) {
+    	if($("#so-warehouse-info-select").val()==0 || $("#so-customer-info-select").val()==0) {
     		
-    		if($("#po-vendor-info-select").val()==0) {
-    			notification("Please select Vendor.");
+    		if($("#so-customer-info-select").val()==0) {
+    			notification("Please select customer.");
     		}
     		
-    		if($("#po-warehouse-info-select").val()==0) {
+    		if($("#so-warehouse-info-select").val()==0) {
     			notification("Please select Warehouse.");
     		}
-    		$("#po-grid").jsGrid("deleteItem", args.item);
+    		$("#so-grid").jsGrid("deleteItem", args.item);
         	var makeField = args.grid.fields[2];
         	makeField.items = [];
             $(".prod-make-insert").empty().append(makeField.insertTemplate());
@@ -196,22 +202,32 @@ $("#po-grid").jsGrid({
     	} else {
     		
         	args.item["pcode"] = getProductCode(args.item["pcat"], args.item["pmake"], args.item["pdetail"]);
-
-        	nextPOInsertId();
         	
         	var dbitem = {};
         	
-        	dbitem["to"] = $("#po-warehouse-info-select").val();
-        	dbitem["from"] = $("#po-vendor-info-select").val();
+        	dbitem["from"] = $("#so-warehouse-info-select").val();
+    		dbitem["totype"] = $("#so-to-info-select").val();
+        	if($("#so-to-info-select").val() == 0) {
+        		dbitem["to"] = $("#so-outlet-info-select").val();
+        	} else {
+        		dbitem["to"] = {};
+        	}
+        	
         	dbitem["status"] = 1;
-        	dbitem["po-row-id"] = po_max_insert_id;
         	dbitem["pcode"] = args.item["pcode"];
         	dbitem["pcat"] = args.item["pcat"];
         	dbitem["pmake"] = args.item["pmake"];
         	dbitem["pdetail"] = args.item["pdetail"];
         	dbitem["pquant"] = args.item["pquant"];
+        	
+        	so_max_insert_id++;
+        	dbitem["so-row-id"] = so_max_insert_id;
+			so_items_inserted[so_max_insert_id] = dbitem;
+			if(Object.keys(so_items_inserted).length > 0) {
+				$("#so-create-btn").prop("disabled", false);
+				$("#so-cancel-btn").prop("disabled", false);
+			}
         	console.log(dbitem)
-        	addPOItem(dbitem);
 
         	var makeField = args.grid.fields[2];
         	makeField.items = [];
@@ -223,7 +239,14 @@ $("#po-grid").jsGrid({
     },
     
     onItemDeleted: function(args) {
-    	removePOItem(false, args.item["po-row-id"]);
+    	var id = args.item["so-row-id"];
+    	if(so_items_inserted[id] != undefined)
+    		delete so_items_inserted[id];
+		if(Object.keys(so_items_inserted).length == 0) {
+			$("#so-create-btn").prop("disabled", true);
+			$("#so-cancel-btn").prop("disabled", true);
+		}
+		console.log(so_items_inserted);
     },
     
     controller: {
@@ -508,8 +531,8 @@ function notification(message) {
 	});
 }
 
-function getVendorById(id) {
-	var rows = alasql("SELECT * FROM vendor where id =" + Number(id) + " order by id desc");
+function getcustomerById(id) {
+	var rows = alasql("SELECT * FROM customer where id =" + Number(id) + " order by id desc");
 	if (rows.length != 0) {
 		var d = {};
 		d["id"] = rows[0].id;
@@ -522,8 +545,8 @@ function getVendorById(id) {
 	}
 }
 
-function getVendorsLOV() {
-	var rows = alasql("SELECT id, name FROM vendor order by name");
+function getcustomersLOV() {
+	var rows = alasql("SELECT id, name FROM customer order by name");
 
 	var data = [];
 	var d = {};
@@ -556,6 +579,26 @@ function getWarehouseById(id) {
 
 function getWarehousesLOV() {
 	var rows = alasql("SELECT id, name FROM whouse order by name");
+
+	var data = [];
+	var d = {};
+	d["id"] = 0;
+	d["text"] = "";
+	data.push(d);
+	if (rows.length != 0) {
+		rows.forEach(function(r) {
+			var d = {};
+			d["id"] = r.id;
+			d["text"] = r.name;
+			data.push(d);
+		});
+	}
+
+	return data;
+}
+
+function getVendorsLOV() {
+	var rows = alasql("SELECT id, name FROM vendor order by name");
 
 	var data = [];
 	var d = {};

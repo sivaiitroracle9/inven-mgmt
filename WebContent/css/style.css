@@ -31,7 +31,7 @@
 
 .menu a {
   background: url(icons.png) no-repeat left top;
-  color: #000000;
+  color: white;
   text-decoration: none;
   text-transform: uppercase;
   display: block;
@@ -44,6 +44,8 @@
   -webkit-transition: all .5s;
   -o-transition: all .5s;
   transition: all .5s;
+   color: black;
+   font-weight: bold;
 }
 
 .menu li {
@@ -56,7 +58,8 @@
 }
 
 .sidebar {
-  background: rgba(169, 195, 201,1);
+/*   background: rgba(169, 195, 201,1); */
+  background:#171048;
   padding-right: .25em;
   position:absolute;
   left: 0;
@@ -73,26 +76,16 @@
   display:none;
 }
 
-#po-vendor-info {
+
+#po-vendor-info, #po-warehouse-info, #od-dlg-vendor-info,
+	#od-dlg-warehouse-info, #so-warehouse-info {
 	width: 300px !important;
 	float: left;
 	margin: 3px;
 }
 
-#po-warehouse-info {
-	width: 300px !important;
-	float: left;
-	margin: 3px;
-}
-
-#od-dlg-vendor-info {
-	width: 300px !important;
-	float: left;
-	margin: 3px;
-}
-
-#od-dlg-warehouse-info {
-	width: 300px !important;
+#so-to-info {
+	width: 400px !important;
 	float: left;
 	margin: 3px;
 }
@@ -113,4 +106,38 @@
 .status-canceled>.jsgrid-row {
 	background-color: grey;
 	color: white;
+}
+
+.jewel_cnt {
+background-color: red;
+    margin: 1px;
+    left: 6px;
+    top: -9px;
+    color: white;
+    font-weight: bold;
+    position: absolute;
+    display: inline-block;
+    border: red;
+    border-style: solid;
+    border-radius: 5px;
+    border-top-width: 0px;
+    font-size: smaller;
+}
+.navbar-default, .navbar-default .navbar-nav > .open > a, .navbar-nav > li > .dropdown-menu {
+	background-color:#171048 !important;
+}
+.navbar-default .navbar-nav > li > a, .dropdown-menu > li > a {
+	color: #d8d1d1 !important;
+}
+
+.dropdown-menu > li > a:hover {
+	color: #000000 !important;
+	font-weight: bold;
+}
+
+.login-form-element {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
 }

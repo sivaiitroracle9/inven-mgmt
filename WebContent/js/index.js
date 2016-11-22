@@ -1,3 +1,13 @@
+//window.location.href= "login.html";
+
+/*var notlogin = true;
+
+if(notlogin) {
+    var hiddenElement = document.createElement('a');
+    hiddenElement.href = "login.html"
+    hiddenElement.click();
+}
+*/
 // create search box
 var rows = alasql('SELECT * FROM whouse;');
 for (var i = 0; i < rows.length; i++) {

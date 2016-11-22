@@ -56,12 +56,6 @@
 									class="glyphicon glyphicon-trash"></span> Delete DB</a></li>
 						</ul></li>
 				</ul>
-				<ul class="nav navbar-nav navbar-right">
-					<li class="dropdown"><a href="#" class="dropdown-toggle"
-						data-toggle="dropdown"><span class="glyphicon glyphicon-globe" style="font-size:20px"><span id="jewel_count" class="jewel_cnt">5</span></span></a>
-						<ul class="dropdown-menu">
-						</ul></li>
-				</ul>
 			</div>
 			<!-- /.navbar-collapse -->
 		</div>
@@ -69,31 +63,59 @@
 	</nav>
 
 	<div class="container">
-		<div id="jsGrid" style="float:right;"></div>
-	</div>
+		<form action="index.html" class="form-inline text-center">
+			<div class="form-group">
+				<label>Warehouse</label> <select name="q1" class="form-control">
+					<option value="0">All</option>
+				</select>
+			</div>
+			<div class="form-group">
+				<label>Classification</label> <select name="q2" class="form-control">
+					<option value="0">All</option>
+				</select>
+			</div>
+			<div class="form-group">
+				<label>Code</label> <input name="q3" type="text"
+					class="form-control" placeholder="Prefix Search">
+			</div>
+			<button type="submit" class="btn btn-primary">
+				<span class="glyphicon glyphicon-search"></span> Search
+			</button>
+		</form>
+		<hr>
 
-	<div id="dialog-form" title="Details">
-	    <form id="vendorForm" class="form-group">
-	        <p><label>Vendor Code: <input id="ven_code" type="text" class="form-control" /></label></p>
-	        <p><label>Name: <input id="ven_name" type="text" class="form-control"/></label></p>
-	        <p><label>Telephone Number: <input id="ven_tel" type="text" class="form-control"/></label></p>
-	        <p><label>Email: <input id="ven_email" type="text" class="form-control"/ ></label></p>
-	        <p><label>Address: <input id="ven_addr" type="text" class="form-control"/></label></p>
-	    </form>
-	</div>
+		<div class="clearfix" style="margin: 10px 0;">
+			<a href="stock-form.html" class="btn btn-sm btn-success pull-right"><span
+				class="glyphicon glyphicon-plus"></span> New</a>
+		</div>
 
+		<table class="table table-hover table-condensed">
+			<thead>
+				<tr>
+					<th>Warehouse</th>
+					<th>Classification</th>
+					<th>Code</th>
+					<th>Maker</th>
+					<th>Detail</th>
+					<th>Price</th>
+					<th>In Stock</th>
+					<th>Unit</th>
+				</tr>
+			</thead>
+			<tbody id="tbody-stocks"></tbody>
+		</table>
+	</div>
 	<nav class="sidebar">
 		<ul class="menu">
 			<li><a href="index.html">Home</a></li>
-			<li><a href="dashboard.html">Dashboard</a></li>
+			<li><a href="inventory.html">Inventory</a></li>
 			<li><a href="products.html">Products</a></li>
 			<li><a href="vendors.html">Vendors</a></li>
 			<li><a href="orders.html">Orders</a></li>
-			<li><a href="#">About</a></li>
-			<li><a href="#">Contact</a></li>
+			<li><a href="users.html">Users</a></li>
 		</ul>
 	</nav>
-	<script src="js/vendors.js"></script>
+	<script src="js/index.js"></script>
 	<script src="lib/nav-sidebar.js"></script>
 </body>
 </html>

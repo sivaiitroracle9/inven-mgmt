@@ -56,12 +56,6 @@
 									class="glyphicon glyphicon-trash"></span> Delete DB</a></li>
 						</ul></li>
 				</ul>
-				<ul class="nav navbar-nav navbar-right">
-					<li class="dropdown"><a href="#" class="dropdown-toggle"
-						data-toggle="dropdown"><span class="glyphicon glyphicon-globe" style="font-size:20px"><span id="jewel_count" class="jewel_cnt">5</span></span></a>
-						<ul class="dropdown-menu">
-						</ul></li>
-				</ul>
 			</div>
 			<!-- /.navbar-collapse -->
 		</div>
@@ -69,23 +63,42 @@
 	</nav>
 
 	<div class="container">
-		<div id="jsGrid" style="float:right;"></div>
-	</div>
+		<div class="panel panel-primary">
+			<div class="panel-header">
+				Top selling products ... by
+				<div class="btn-group">
+					<button type="button" class="btn btn-default"> Sales</button>
+					<button type="button" class="btn btn-default dropdown-toggle"
+						data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						<span class="caret"></span> <span class="sr-only">Toggle
+							Dropdown</span>
+					</button>
+					<ul class="dropdown-menu">
+						<li><a href="#">Action</a></li>
+						<li><a href="#">Another action</a></li>
+						<li><a href="#">Something else here</a></li>
+						<li role="separator" class="divider"></li>
+						<li><a href="#">Separated link</a></li>
+					</ul>
+				</div>
+			</div>
+			<div class="panel-body"></div>
+		</div>
+		<div class="panel panel-success">
+			<div class="panel-body">
+				<div>
+				<span>Inventory Value</span>
+				<span>10599</span>
+				</div>
+			</div>
+		</div>
 
-	<div id="dialog-form" title="Details">
-	    <form id="vendorForm" class="form-group">
-	        <p><label>Vendor Code: <input id="ven_code" type="text" class="form-control" /></label></p>
-	        <p><label>Name: <input id="ven_name" type="text" class="form-control"/></label></p>
-	        <p><label>Telephone Number: <input id="ven_tel" type="text" class="form-control"/></label></p>
-	        <p><label>Email: <input id="ven_email" type="text" class="form-control"/ ></label></p>
-	        <p><label>Address: <input id="ven_addr" type="text" class="form-control"/></label></p>
-	    </form>
 	</div>
-
 	<nav class="sidebar">
 		<ul class="menu">
 			<li><a href="index.html">Home</a></li>
 			<li><a href="dashboard.html">Dashboard</a></li>
+			<li><a href="inventory.html">Inventory</a></li>
 			<li><a href="products.html">Products</a></li>
 			<li><a href="vendors.html">Vendors</a></li>
 			<li><a href="orders.html">Orders</a></li>
@@ -93,7 +106,7 @@
 			<li><a href="#">Contact</a></li>
 		</ul>
 	</nav>
-	<script src="js/vendors.js"></script>
+	<script src="js/index.js"></script>
 	<script src="lib/nav-sidebar.js"></script>
 </body>
 </html>

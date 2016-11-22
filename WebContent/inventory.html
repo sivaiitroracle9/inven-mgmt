@@ -59,7 +59,7 @@
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
 					<li class="dropdown"><a href="#" class="dropdown-toggle"
-						data-toggle="dropdown"><span class="glyphicon glyphicon-globe"></span></a>
+						data-toggle="dropdown"><span class="glyphicon glyphicon-globe" style="font-size:20px"><span id="jewel_count" class="jewel_cnt">5</span></span></a>
 						<ul class="dropdown-menu">
 						</ul></li>
 				</ul>
@@ -77,18 +77,48 @@
 				href="#tabcontent-goodsissue" data-toggle="tab">Goods Issue</a></li>
 			<li id="li-goodsreceive"><a id="tab-goodsreceive" href="#tabcontent-goodsreceive"
 				data-toggle="tab">Goods Received</a></li>
-			<li id="li-settings" class="pull-right"><a id="tab-settings" href="#tabcontent-settings"
+			<li id="li-settings" class="pull-right" style="left:50px"><a id="tab-settings" href="#tabcontent-settings"
 				data-toggle="tab">Stock Settings</a></li>
 		</ul>
 		<div class="tab-content">
 			<div id="tabcontent-inventory" class="tab-pane active">
-				<div class="panel panel-primary">
+				<div class="panel panel-primary" style="width:1250px;">
 					<div class="panel-body">
 						<div id="inventory-items"></div>
 					</div>
 				</div>
 			</div>
-			<div id="tabcontent-goodsissue" class="tab-pane"></div>
+			<div id="tabcontent-goodsissue" class="tab-pane">
+				<div class="panel panel-primary">
+					<div class="panel-body">
+						<div>
+							<label style="font-weight: bold" for="goodsissue-orderid">ORDER
+								ID: </label> <input id="goodsissue-orderid" type="text" width="20px"
+								autocomplete="off"> <span
+								class="glyphicon glyphicon-barcode"> </span>
+							<div class="pull-right" style="margin-right: 3px">
+								<label style="font-weight: bold;">WAREHOUSE: </label><span
+									id="goodsissue-whouse"> </span>
+							</div>
+							<div class="pull-right" style="margin-right: 10px">
+								<label style="font-weight: bold;">VENDOR: </label><span
+									id="goodsissue-vendor"> </span>
+							</div>
+						</div>
+						<br /></br>
+						<hr />
+						<div class="panel panel-default">
+							<div class="panel-body">
+								<div id="gi-so-items"></div>
+								<br />
+								<button id="goodsissue-orderid-update-btn" type="button"
+									class="btn btn-warning pull-right" disabled>Update</button>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
 			<div id="tabcontent-goodsreceive" class="tab-pane">
 
 				<div class="panel panel-primary">
@@ -148,7 +178,19 @@
 											for="cstock-spc">SPECIFIC </label>
 									<hr />
 									</div>
-									<div id="cstock-gnl-items"></div>
+									<div id="cstock-gnl-items" class="panel panel-info" style="width:30%">
+										<div class="panel-body">
+											<ul style="list-style:none">
+												<li><input type="radio" class="cstock-gnl-radio" id="year" value=3><input type="text" style="margin:5px;width:80px" class="cstock-gnl-text" id="year" value=0 disabled><span> year (s) sales</span></li>
+												<li><input type="radio" class="cstock-gnl-radio" id="month" value=2><input type="text" style="margin:5px;width:80px" class="cstock-gnl-text" id="month" value=0 disabled><span> month (s) sales</span></li>
+												<li><input type="radio" class="cstock-gnl-radio" id="day" value=1><input type="text" style="margin:5px;width:80px" class="cstock-gnl-text" id="day" value=0 disabled><span> day (s) sales</span></li>
+												<li><input type="radio" class="cstock-gnl-radio" id="value" checked value=0><input type="text" style="margin:5px;width:80px" class="cstock-gnl-text" id="value" value=0><span> value </span></li>
+											</ul>
+										</div>
+										<div class="panel-footer" style="height:50px">
+											<button type="button" id="btn-cstock-gnl" class="btn btn-success pull-right"><span class="glyphicon glyphicon-ok"> Save</span></button>
+										</div>
+									</div>
 									<div id="cstock-spc-items" style="display: none"></div>
 								</div>
 							</div>
@@ -166,8 +208,7 @@
 			<li><a href="products.html">Products</a></li>
 			<li><a href="vendors.html">Vendors</a></li>
 			<li><a href="orders.html">Orders</a></li>
-			<li><a href="#">About</a></li>
-			<li><a href="#">Contact</a></li>
+			<li><a href="users.html">Users</a></li>
 		</ul>
 	</nav>
 	<script src="js/inventory.js"></script>

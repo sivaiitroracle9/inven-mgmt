@@ -42,12 +42,12 @@ DB.load = function() {
 
 	// Inventories
 	alasql('DROP TABLE IF EXISTS stock;');
-	alasql('CREATE TABLE stock(id INT IDENTITY, item INT, whouse INT, balance INT, threshold INT, autopo INT);');
+	alasql('CREATE TABLE stock(id INT IDENTITY, item INT, whouse INT, balance INT, threshold INT, autopo INT, cstock INT, cstock_type INT);');
 	var pstock = alasql.promise('SELECT MATRIX * FROM CSV("data/STOCK-STOCK.csv", {headers: true})').then(
 			function(stocks) {
 				for (var i = 0; i < stocks.length; i++) {
 					var stock = stocks[i];
-					alasql('INSERT INTO stock VALUES(?,?,?,?,?,?);', stock);
+					alasql('INSERT INTO stock VALUES(?,?,?,?,?,?,?,?);', stock);
 				}
 			});
 
@@ -73,6 +73,17 @@ DB.load = function() {
 				}
 			});
 	
+/*	// Outlet
+	alasql('DROP TABLE IF EXISTS outlet;');
+	alasql('CREATE TABLE outlet(id INT IDENTITY, name STRING, tel STRING, outletcode STRING, email STRING, address STRING);');
+	var pvendor = alasql.promise('SELECT MATRIX * FROM CSV("data/VENDOR-VENDOR.csv", {headers: true})').then(
+			function(vendors) {
+				for (var i = 0; i < vendors.length; i++) {
+					var vendor = vendors[i];
+					alasql('INSERT INTO outlet VALUES(?,?,?,?,?,?);', vendor);
+				}
+			});*/
+	
 	alasql('DROP TABLE IF EXISTS products;');
 	alasql('CREATE TABLE products(id INT IDENTITY, code STRING, category INT, detail STRING, make INT, price INT, unit STRING);');
 	var pproduct = alasql.promise('SELECT MATRIX * FROM CSV("data/PRODUCT-PRODUCT.csv", {headers: true})').then(
@@ -94,24 +105,16 @@ DB.load = function() {
 			});
 	
 	alasql('DROP TABLE IF EXISTS orders;');
-	alasql('CREATE TABLE orders(id INT IDENTITY, oid STRING, vendor INT, whouse INT, status INT, lastupdate STRING);');
-/*	var ptrans = alasql.promise('SELECT MATRIX * FROM CSV("data/ORDERS-ORDERS.csv", {headers: true})').then(
-			function(transs) {
-				for (var i = 0; i < transs.length; i++) {
-					var trans = transs[i];
-					alasql('INSERT INTO orders VALUES(?,?);', trans);
-				}
-			});*/
+	alasql('CREATE TABLE orders(id INT IDENTITY, oid STRING, otype INT, totype INT, toagent INT, fromtype INT, fromagent INT, status INT, lastupdate STRING);');
+
+	alasql('DROP TABLE IF EXISTS poitems;');
+	alasql('CREATE TABLE poitems(id INT IDENTITY, oid STRING, pcode STRING, pcat INT, pmake INT, pdetail STRING, qty INT, status INT, received INT, lastupdate STRING);');
+
+	alasql('DROP TABLE IF EXISTS soitems;');
+	alasql('CREATE TABLE soitems(id INT IDENTITY, oid STRING, pcode STRING, pcat INT, pmake INT, pdetail STRING, qty INT, status INT, shipped INT, lastupdate STRING);');
 	
-	alasql('DROP TABLE IF EXISTS oitems;');
-	alasql('CREATE TABLE oitems(id INT IDENTITY, oid STRING, pcode STRING, pcat INT, pmake INT, pdetail STRING, qty INT, status INT, received INT, lastupdate STRING);');
-/*	var ptrans = alasql.promise('SELECT MATRIX * FROM CSV("data/OITEMS-OITEMS.csv", {headers: true})').then(
-			function(transs) {
-				for (var i = 0; i < transs.length; i++) {
-					var trans = transs[i];
-					alasql('INSERT INTO orders VALUES(?,?);', trans);
-				}
-			});*/
+	alasql('DROP TABLE IF EXISTS customer;');
+	alasql('CREATE TABLE customer(id INT IDENTITY, cname STRING, cemail STRING, ctel STRING, caddress STRING);');
 	
 	alasql('DROP TABLE IF EXISTS status;');
 	alasql('CREATE TABLE status(id INT IDENTITY, text STRING, type STRING);');
@@ -122,6 +125,7 @@ DB.load = function() {
 					alasql('INSERT INTO status VALUES(?,?,?);', sttus);
 				}
 			});
+	
 	
 	// Reload page
 	Promise.all([ pkind, pitem, pwhouse, pstock, ptrans, pvendor, pproduct, pmaker, pstatus ]).then(function() {

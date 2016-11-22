@@ -1,25 +1,27 @@
 var inventory_items_stock = [];
 
 $("#inventory-items").jsGrid({
-	width:"100%",
-	height:"700px",
+	width:"1200px",
 	filtering: true,
     sorting: true,
     autoload: true,
     paging: true,
-    pageSize: 15,
+    pageSize: 10,
     pageButtonCount: 10,
     
     controller: {
     	loadData: function(filter) {
     		
-    		var products = alasql("select products.id as id, stock.whouse as whouse, stock.balance as qty, products.code as code, " +
+    		var products = alasql("select stock.id as pstockid, stock.cstock as cstock, stock.cstock_type as cstock_type, products.id as id, stock.whouse as whouse, stock.balance as qty, products.code as code, " +
     				"products.category as category, products.detail as detail, products.make as make, products.price as price, products.unit as unit" +
     				" from products JOIN stock ON products.id=stock.item");
     		
     		var inventory_items_stock = [];
     		products.forEach(function(prd){
     			var iitem = {};
+    			iitem.pstockid = prd.pstockid;
+    			iitem.cstock = prd.cstock;
+    			iitem.cstock_type = prd.cstock_type;
     			iitem.whouse = prd.whouse;
     			iitem.pcat = prd.category;
     			iitem.pcode = prd.code;
@@ -40,6 +42,8 @@ $("#inventory-items").jsGrid({
     					&& (!filter["pprice"] || filter["pprice"] === iitem["pprice"]));
     		});
     		
+    		
+    		
     		return filtered;
     	},
     	
@@ -50,9 +54,27 @@ $("#inventory-items").jsGrid({
          { name: "pcode", title: "PROD CODE", type: "text", editing:false},
          { name: "pmake", title: "MAKER", type: "select", items:getMakersLOV(), valueField: "id", textField: "text",},
          { name: "pdetail", title: "DETAIL", type: "text",},
-         { name: "pprice", title: "PRICE ", type: "text", filtering: false},   
-         { name: "inStock", title: "In Stock QTY", type: "text",},
-         { type: "control", deleteButton: false, editButton: false
+         { name: "pprice", title: "PRICE ", type: "number", filtering: false},   
+         { name: "inStock", title: "In Stock QTY", type: "number", 
+        	 
+         
+         },
+         
+         
+         { type: "control", width:"100px", deleteButton: false, editButton: false,
+        	 itemTemplate: function(value, item) {
+            		 
+        		 if(item.inStock < item.cstock) {
+        			 if(item.inStock === 0) {
+            			 return "<label class='label label-danger'> Out of Stock </label><br/><span>Safety stock: " +
+         			 	item.cstock +"</span>";	
+        			 }
+        			 
+        			 return "<label class='label label-warning'> Low Stock </label><br/><span>Safety stock: " +
+     			 		item.cstock +"</span>";	
+        		 } 
+            		 
+        	 }
          }
        ]
 });
