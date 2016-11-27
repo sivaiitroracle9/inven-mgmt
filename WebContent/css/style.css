@@ -141,3 +141,7 @@ background-color: red;
 	justify-content: center;
 	align-items: center;
 }
+
+.jsgrid-header-row .header-cell-placeholder {
+    background: #E3F1FF;
+}

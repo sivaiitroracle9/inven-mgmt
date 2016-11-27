@@ -61,15 +61,15 @@ $("#inventory-items").jsGrid({
     	
     },
     fields: [
-             { name: "pcode", title: "PROD CODE", type: "text", editing:false},
-             { name: "pcat", title: "CATEGORY", type: "select", items:getCategoriesLOV(), valueField: "id", textField: "text",},
-             { name: "pmake", title: "MAKER", type: "select", items:getMakersLOV(), valueField: "id", textField: "text",},
-             { name: "pdetail", title: "DETAIL", type: "text",},
-             { name: "whouse", title: "WAREHOUSE", type: "select", items:getWarehousesLOV(), valueField: "id", textField: "text",},
-         { name: "pprice", title: "PRICE ", type: "number", filtering: false},   
-         { name: "inStock", title: "In Stock QTY", type: "number", },
+             { name: "pcode", title: "PROD CODE", type: "text", editing:false, width:70, },
+             { name: "pcat", title: "CATEGORY", type: "select", items:getCategoriesLOV(), valueField: "id", textField: "text", width:70, },
+             { name: "pmake", title: "MAKER", type: "select", items:getMakersLOV(), valueField: "id", textField: "text", width:70, },
+             { name: "pdetail", title: "DETAIL", type: "text", width:70, },
+             { name: "whouse", title: "WAREHOUSE", type: "select", items:getWarehousesLOV(), valueField: "id", textField: "text", width:70, },
+         { name: "pprice", title: "PRICE ", type: "number", filtering: false, width:70, },   
+         { name: "inStock", title: "In Stock QTY", type: "number", width:70, },
          
-         { type: "control", width:"100px", deleteButton: false, editButton: false,
+         { type: "control", width:"100px", deleteButton: false, editButton: false, width:30, 
         	 itemTemplate: function(value, item) {
             		 
         		 if(item.inStock < item.cstock) {
@@ -84,7 +84,33 @@ $("#inventory-items").jsGrid({
             		 
         	 }
          }
-       ]
+       ],
+       
+       onRefreshed: function(e) {
+           var $headerRow = $("#inventory-items .jsgrid-header-row");
+           var $headerCells = $headerRow.find("th");
+           var fields = e.grid.option("fields");
+
+           $.each(fields, function(index, field) {
+               $headerCells.eq(index).data("JSField", field);
+           });
+
+           $headerRow.sortable({
+               axis: "x",
+               placeholder: "header-cell-placeholder",
+               start: function(e, ui){
+                   //ui.placeholder.width(ui.helper.width());
+            	   $(".header-cell-placeholder").css({width: $(ui.item).width()}); 
+               },
+               update: function(e, ui) {
+                   var fields = $.map($headerRow.find("th"), function(cell) {
+                       return $(cell).data("JSField");
+                   });
+
+                   $("#inventory-items").jsGrid("option", "fields", fields);
+               }
+           });
+       }
 });
 
 function loadStock(){
