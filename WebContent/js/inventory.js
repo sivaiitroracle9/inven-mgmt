@@ -1,3 +1,14 @@
+$(".inventory-items-grid-cols").change(function(){
+	var fieldIndex = Number($(this).attr("id").slice(21));
+	if($(this).is(":checked")) {
+		$("#inventory-items").data('JSGrid').fields[fieldIndex].visible = true;
+	} else {
+		$("#inventory-items").data('JSGrid').fields[fieldIndex].visible = false;
+	}
+	$("#inventory-items").jsGrid("render");
+});
+
+
 var inventory_items_stock = [];
 
 $("#inventory-items").jsGrid({
@@ -5,6 +16,7 @@ $("#inventory-items").jsGrid({
 	filtering: true,
     sorting: true,
     autoload: true,
+    visible:true,
     paging: true,
     pageSize: 10,
     pageButtonCount: 10,
@@ -49,17 +61,13 @@ $("#inventory-items").jsGrid({
     	
     },
     fields: [
-    	 { name: "whouse", title: "WAREHOUSE", type: "select", items:getWarehousesLOV(), valueField: "id", textField: "text",},
-         { name: "pcat", title: "CATEGORY", type: "select", items:getCategoriesLOV(), valueField: "id", textField: "text",},
-         { name: "pcode", title: "PROD CODE", type: "text", editing:false},
-         { name: "pmake", title: "MAKER", type: "select", items:getMakersLOV(), valueField: "id", textField: "text",},
-         { name: "pdetail", title: "DETAIL", type: "text",},
+             { name: "pcode", title: "PROD CODE", type: "text", editing:false},
+             { name: "pcat", title: "CATEGORY", type: "select", items:getCategoriesLOV(), valueField: "id", textField: "text",},
+             { name: "pmake", title: "MAKER", type: "select", items:getMakersLOV(), valueField: "id", textField: "text",},
+             { name: "pdetail", title: "DETAIL", type: "text",},
+             { name: "whouse", title: "WAREHOUSE", type: "select", items:getWarehousesLOV(), valueField: "id", textField: "text",},
          { name: "pprice", title: "PRICE ", type: "number", filtering: false},   
-         { name: "inStock", title: "In Stock QTY", type: "number", 
-        	 
-         
-         },
-         
+         { name: "inStock", title: "In Stock QTY", type: "number", },
          
          { type: "control", width:"100px", deleteButton: false, editButton: false,
         	 itemTemplate: function(value, item) {

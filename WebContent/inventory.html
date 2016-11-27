@@ -24,7 +24,7 @@
 <meta name="viewport" content="width=device-width">
 <title>COMPANY</title>
 </head>
-<body>
+<body style="background-color:#cae2db">
 	<nav class="navbar navbar-default">
 		<div class="clearfix">
 			<!-- Brand and toggle get grouped for better mobile display -->
@@ -83,7 +83,15 @@
 		<div class="tab-content">
 			<div id="tabcontent-inventory" class="tab-pane active">
 				<div class="panel panel-primary" style="width:1250px;">
-					<div class="panel-body">
+					<div class="panel-body" style="background-color:whitesmoke">
+						<div class="panel panel-info"> <div class="panel-body">
+							<input type="checkbox" class="inventory-items-grid-cols" id="inventory-items-grid-1" checked><label style="margin-right:3px;" for="inventory-items-grid-1">CATEGORY</label> 
+							<input type="checkbox" class="inventory-items-grid-cols" id="inventory-items-grid-2" checked><label style="margin-right:3px;" for="inventory-items-grid-2">MAKER </label> 
+							<input type="checkbox" class="inventory-items-grid-cols" id="inventory-items-grid-3" checked><label style="margin-right:3px;" for="inventory-items-grid-3">DETAIL </label> 
+							<input type="checkbox" class="inventory-items-grid-cols" id="inventory-items-grid-4" checked><label style="margin-right:3px;" for="inventory-items-grid-4">WAREHOUSE </label> 
+							<input type="checkbox" class="inventory-items-grid-cols" id="inventory-items-grid-5" checked><label style="margin-right:3px;" for="inventory-items-grid-5">PRICE </label> 
+							<input type="checkbox" class="inventory-items-grid-cols" id="inventory-items-grid-6" checked><label style="margin-right:3px;" for="inventory-items-grid-6">IN STOCK </label> 
+						</div></div>
 						<div id="inventory-items"></div>
 					</div>
 				</div>
@@ -178,6 +186,7 @@
 											for="cstock-spc">SPECIFIC </label>
 									<hr />
 									</div>
+<<<<<<< Updated upstream
 									<div id="cstock-gnl-items" class="panel panel-info" style="width:30%">
 										<div class="panel-body">
 											<ul style="list-style:none">
