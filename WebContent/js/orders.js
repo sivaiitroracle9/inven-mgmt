@@ -290,7 +290,7 @@ $("#orders-grid").jsGrid({
             		return str;
             	},
             },
-            { name: "fromagent", title: "FROM", type: "select", items: getWarehousesLOV(), valueField: "id", textField: "text", editing: false,
+            { name: "fromagent", title: "Vendor", type: "select", items: getWarehousesLOV(), valueField: "id", textField: "text", editing: false,
             	itemTemplate: function(value, item) {
             		var str = "";
             		this.items.forEach(function(r){
@@ -308,7 +308,7 @@ $("#orders-grid").jsGrid({
             	},
             },
             
-            { name: "toagent", title: "TO", type: "select", items: getVendorsLOV(), valueField: "id", textField: "text", editing: false,},
+            { name: "toagent", title: "", type: "select", items: getVendorsLOV(), valueField: "id", textField: "text", editing: false,},
             { name: "status", title: "STATUS", type: "select", items: getStatusLOV("ORDER"), valueField: "id", textField: "text",
 
             	itemTemplate: function(value, item) {
