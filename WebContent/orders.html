@@ -69,7 +69,6 @@
 	</nav>
 
 	<div class="container">
-		
 			<ul class="nav nav-tabs">
 				<li id="li-po" class="active"><a id="tab-po href="#tabcontent-po" data-toggle="tab">Purchase Order</a></li>
 				<li id="li-so"><a id="tab-so" href="#tabcontent-so" data-toggle="tab">Sales Order</a></li>
@@ -86,7 +85,7 @@
 					<div id="tabcontent-po-overview"" class="tab-pane active" style="margin-top:10px">
 						<div class="panel panel-default">
 							<div class="panel-body">
-								<div id="orders-grid"></div>
+								<div id="po-orders-grid"></div>
 							</div>
 							<div id="orderDetailsDlg" style="width: 300px">
 								<div class="panel panel-primary">
@@ -161,7 +160,6 @@
 					</div>
 					<div id="tabcontent-po-create" " class="tab-pane"
 						style="margin-top: 10px">
-
 						<div class="panel panel-default">
 							<div class="panel-body">
 								<div class="panel panel-primary">
@@ -218,12 +216,12 @@
 											class="label label-default" id="po-date"></span></label>
 									</div>
 								</div>
-								<div id="po-grid"></div>
-								<div id="po-create">
+								<div id="po-create-grid"></div>
+								<div id="btns-po-create">
 									<button id="po-cancel-btn" class="btn btn-default"
-										style="float: right; margin: 5px" disabled>Cancel PO</button>
+										style="float: right; margin: 5px" disabled>Cancel</button>
 									<button id="po-create-btn" class="btn btn-success"
-										style="float: right; margin: 5px" disabled>Create PO</button>
+										style="float: right; margin: 5px" disabled>Create</button>
 								</div>
 							</div>
 						</div>
@@ -241,7 +239,82 @@
 				</ul>
 				<div class="tab-content">
 					<div id="tabcontent-so-overview" " class="tab-pane active"
-						style="margin-top: 10px"></div>
+						style="margin-top: 10px">
+												<div class="panel panel-default">
+							<div class="panel-body">
+								<div id="so-orders-grid"></div>
+							</div>
+							<div id="so-orderDetailsDlg" style="width: 300px">
+								<div class="panel panel-primary">
+									<div class="panel-body">
+										<div>
+											<span style="font-weight: bold" class="pull-left">STATUS
+												: <span id="od-dlg-status"></span>
+											</span> <span style="font-weight: bold" class="pull-left">ORDER
+												TYPE : <span id="od-dlg-type"></span>
+											</span> <span style="font-weight: bold" class="pull-right">LAST
+												UPDATE : <span id="od-dlg-lastupdate"
+												class="label label-default"></span>
+											</span>
+										</div>
+										<br />
+										<br />
+										<div>
+											<div id="od-dlg-from-info" class="panel panel-info pull-left">
+												<div class="panel-heading">
+													<label> Vendor </label>
+												</div>
+												<div class="panel-body">
+													<p>
+														CODE: <span id="od-dlg-to-code"></span>
+													</p>
+													<p>
+														Name: <span id="od-dlg-to-name"></span>
+													</p>
+													<p>
+														Address: <span id="od-dlg-to-address"></span>
+													</p>
+													<br />
+													<p>
+														Phone: <span id="od-dlg-to-tel"></span>
+													</p>
+													<p>
+														Email: <span id="od-dlg-to-email"></span>
+													</p>
+												</div>
+											</div>
+											<div id="od-dlg-to-info" class="panel panel-info pull-right">
+												<div class="panel-heading">
+													<label> Warehouse </label>
+												</div>
+												<div class="panel-body">
+													<p>
+														Name: <span id="od-dlg-from-name"></span>
+													</p>
+													<p>
+														Address: <span id="od-dlg-from-address"></span>
+													</p>
+													<br />
+													<p>
+														Phone: <span id="od-dlg-from-tel"></span>
+													</p>
+													<p>
+														Email: <span id="od-dlg-from-email"></span>
+													</p>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="panel panel-primary">
+									<div class="panel-body">
+										<div id="od-dlg-po-items"></div>
+									</div>
+								</div>
+							</div>
+
+						</div>
+					</div>
 					<div id="tabcontent-so-create" " class="tab-pane"
 						style="margin-top: 10px">
 						<div class="panel panel-default">
@@ -322,8 +395,8 @@
 											class="label label-default" id="so-date"></span></label>
 									</div>
 								</div>
-								<div id="so-grid"></div>
-								<div id="so-create">
+								<div id="so-orders-grid"></div>
+								<div id="btns-so-create">
 									<button id="so-cancel-btn" class="btn btn-default"
 										style="float: right; margin: 5px" disabled>Cancel</button>
 									<button id="so-create-btn" class="btn btn-success"

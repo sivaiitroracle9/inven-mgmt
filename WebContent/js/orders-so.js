@@ -164,7 +164,7 @@ function createSO(so_items_inserted) {
 }
 
 
-$("#so-grid").jsGrid({
+$("#so-orders-grid").jsGrid({
 	width: "100%",
 	inserting: true,
 	autoload: true,

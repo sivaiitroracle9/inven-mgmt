@@ -158,7 +158,7 @@ function createPO(po_items_inserted) {
 }
 
 
-$("#po-grid").jsGrid({
+$("#po-create-grid").jsGrid({
 	width: "100%",
 	inserting: true,
 	autoload: true,

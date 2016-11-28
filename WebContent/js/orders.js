@@ -223,7 +223,7 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
 	  }
 	});
 
-$("#orders-grid").jsGrid({
+$("#po-orders-grid").jsGrid({
         width: "100%",
         filtering: true,
         editing: true,
