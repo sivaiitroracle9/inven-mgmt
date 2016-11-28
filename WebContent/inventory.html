@@ -44,6 +44,10 @@
 					<li><a href="index.html">Inventory Management</a></li>
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
+					<li><a onclick="logout()" href="#"><span class="glyphicon glyphicon-log-out"> Logout</span></a>
+					</li>
+				</ul>
+				<ul class="nav navbar-nav navbar-right">
 					<li class="dropdown"><a href="#" class="dropdown-toggle"
 						data-toggle="dropdown"><span class="glyphicon glyphicon-cog"></span>
 							Settings <span class="caret"></span></a>
@@ -62,6 +66,9 @@
 						data-toggle="dropdown"><span class="glyphicon glyphicon-globe" style="font-size:20px"><span id="jewel_count" class="jewel_cnt">5</span></span></a>
 						<ul class="dropdown-menu">
 						</ul></li>
+				</ul>
+				<ul class="nav navbar-nav navbar-right">
+					<li><a><span> Welcome <span id="username"></span></span></a></li>
 				</ul>
 			</div>
 			<!-- /.navbar-collapse -->
@@ -85,34 +92,42 @@
 				<div class="panel panel-primary" style="width:1250px;">
 					<div class="panel-body" style="background-color:whitesmoke">
 						<div class="panel panel-info"> <div class="panel-body" style="background-color:whitesmoke">
-
-								<div style="float: right">
-									<label> Show/Hide Columns: </label> <input type="checkbox"
-										class="inventory-items-grid-cols" id="inventory-items-grid-1"
-										checked><label style="margin-right: 3px;"
-										for="inventory-items-grid-1">CATEGORY</label> <input
-										type="checkbox" class="inventory-items-grid-cols"
-										id="inventory-items-grid-2" checked><label
-										style="margin-right: 3px;" for="inventory-items-grid-2">MAKER
-									</label> <input type="checkbox" class="inventory-items-grid-cols"
-										id="inventory-items-grid-3" checked><label
-										style="margin-right: 3px;" for="inventory-items-grid-3">DETAIL
-									</label> <input type="checkbox" class="inventory-items-grid-cols"
-										id="inventory-items-grid-4" checked><label
-										style="margin-right: 3px;" for="inventory-items-grid-4">WAREHOUSE
-									</label> <input type="checkbox" class="inventory-items-grid-cols"
-										id="inventory-items-grid-5" checked><label
-										style="margin-right: 3px;" for="inventory-items-grid-5">PRICE
-									</label> <input type="checkbox" class="inventory-items-grid-cols"
-										id="inventory-items-grid-6" checked><label
-										style="margin-right: 3px;" for="inventory-items-grid-6">IN
-										STOCK </label>
+								<div class="row" style="float: right">
+									<div class="col-lg-12">
+										<div class="button-group">
+											<button type="button"
+												class="btn btn-default btn-sm dropdown-toggle"
+												data-toggle="dropdown">
+												<span class="glyphicon glyphicon-cog"></span> Hide Columns<span
+													class="caret"></span>
+											</button>
+											<ul class="dropdown-menu" style="background:#171048">
+												<li><a href="#" class="small" data-value="pcat"
+													tabIndex="-1"><input type="checkbox" checked />CATEGORY</a></li>
+												<li><a href="#" class="small" data-value="pmake"
+													tabIndex="-1"><input type="checkbox" checked />MAKER</a></li>
+												<li><a href="#" class="small" data-value="pdetail"
+													tabIndex="-1"><input type="checkbox" checked />DETAIL</a></li>
+												<li><a href="#" class="small" data-value="whouse"
+													tabIndex="-1"><input type="checkbox" checked />WAREHOUSE</a></li>
+												<li><a href="#" class="small" data-value="pprice"
+													tabIndex="-1"><input type="checkbox" checked />PRICE</a></li>
+											</ul>
+										</div>
+									</div>
+								</div>
+								<div style="float: right;margin:3px">
+									<a href=""><span class="glyphicon glyphicon-share">Share </span></a>
+								</div >
+								<div style="float: right; margin:3px">
+									<a href=""><span class="glyphicon glyphicon-save">Download </span></a>
 								</div>
 								<div>
 									<label>LIST OF INVENTORY</label>
 								</div>
 
-							</div></div>
+							</div>
+						</div>
 						<div id="inventory-items"></div>
 					</div>
 				</div>
@@ -207,7 +222,6 @@
 											for="cstock-spc">SPECIFIC </label>
 									<hr />
 									</div>
-<<<<<<< Updated upstream
 									<div id="cstock-gnl-items" class="panel panel-info" style="width:30%">
 										<div class="panel-body">
 											<ul style="list-style:none">
@@ -233,17 +247,22 @@
 			</div>
 	<nav class="sidebar">
 		<ul class="menu">
-			<li><a href="index.html">Home</a></li>
-			<li><a href="inventory.html">Inventory</a></li>
-			<li><a href="products.html">Products</a></li>
-			<li><a href="vendors.html">Vendors</a></li>
-			<li><a href="orders.html">Orders</a></li>
-			<li><a href="users.html">Users</a></li>
+			<li id="sidebar-home"><a href="index.html">Home</a></li>
+			<li id="sidebar-inventory"><a href="inventory.html">Inventory</a></li>
+			<li id="sidebar-products"><a href="products.html">Products</a></li>
+			<li id="sidebar-vendors"><a href="vendors.html">Vendors</a></li>
+			<li id="sidebar-orders"><a href="orders.html">Orders</a></li>
+			<li id="sidebar-users"><a href="users.html">Users</a></li>
 		</ul>
 	</nav>
 	<script src="js/inventory.js"></script>
 	<script src="js/gr-inventory.js"></script>
 		<script src="js/inventory-settings.js"></script>
 	<script src="lib/nav-sidebar.js"></script>
+	<script type="text/javascript">
+		function logout() {
+			$(location).attr('href', 'login.html');
+		}
+		</script>
 </body>
 </html>

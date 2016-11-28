@@ -46,6 +46,20 @@
 					<li><a href="#" onclick=showLoginForm()><span class="glyphicon glyphicon-log-in"> Login</span></a>
 					</li>
 				</ul>
+				<ul class="nav navbar-nav navbar-right">
+					<li class="dropdown"><a href="#" class="dropdown-toggle"
+						data-toggle="dropdown"><span class="glyphicon glyphicon-cog"></span>
+							Settings <span class="caret"></span></a>
+						<ul class="dropdown-menu">
+							<li><a onclick="window.location.reload(true);"><span
+									class="glyphicon glyphicon-refresh"></span> Reload</a></li>
+							<li><a onclick="DB.init();"><span
+									class="glyphicon glyphicon-repeat"></span> Init DB</a></li>
+							<li role="separator" class="divider"></li>
+							<li><a onclick="DB.remove();"><span
+									class="glyphicon glyphicon-trash"></span> Delete DB</a></li>
+						</ul></li>
+				</ul>
 			</div>
 			<!-- /.navbar-collapse -->
 		</div>
@@ -54,16 +68,26 @@
 
 	<div class="container">
 		<form class="form-group" style="display:none;position:absolute;left:45%;top:30%">
-			<label for="email">User ID: </label><input id="text" type="email" class="form-control login-form-element">
+			<label for="email">User ID: </label><input id="userid" type="text" class="form-control login-form-element">
 			<label for="password">Password: </label><input id="password" type="password" class="form-control login-form-element">
 			<br/>
-			<button type="button" class="form-control btn btn-primary">Submit</button>
+			<button id="btn-login" type="button" class="form-control btn btn-primary">Submit</button>
 		</form>
 	</div>
 	<script type="text/javascript">
 		function showLoginForm() {
 			$("form").show();
 		}
+		
+		$("#btn-login").on('click', function(){
+			
+			if($("#userid").val()!=="" && $("#password").val()!=="" && $("#userid").val()=== $("#password").val()){
+				console.log("logged in")
+				var rows = alasql("select id from users where name='" + $("#userid").val().trim()+"'");
+				$(location).attr('href', 'dashboard.html?user='+rows[0].id)
+			}
+			
+		});
 	</script>
 </body>
 </html>

@@ -126,6 +126,12 @@ DB.load = function() {
 				}
 			});
 	
+	alasql('DROP TABLE IF EXISTS users;');
+	alasql('CREATE TABLE users(id INT IDENTITY, name STRING);');
+	alasql("INSERT INTO users VALUES(0,'admin');");
+	alasql("INSERT INTO users VALUES(1,'manager');");
+	alasql("INSERT INTO users VALUES(2,'shelf_supervisor');");
+	alasql("INSERT INTO users VALUES(3,'goodsreceipt_supervisor');");
 	
 	// Reload page
 	Promise.all([ pkind, pitem, pwhouse, pstock, ptrans, pvendor, pproduct, pmaker, pstatus ]).then(function() {
