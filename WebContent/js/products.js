@@ -694,3 +694,14 @@ function pageData(data, pageIndex, pageSize) {
 	}
 	return pageData;
 }
+
+$('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
+	var target = $(e.target).attr("href")
+	if (target === "#tabcontent-categories") {
+		$("#categoriesGird").jsGrid("reset");
+	} else if (target === "#tabcontent-makers") {
+		$("#makersGird").jsGrid("reset");
+	} else if (target === "#tabcontent-products") {
+		$("#productsGird").jsGrid("reset");
+	}
+});

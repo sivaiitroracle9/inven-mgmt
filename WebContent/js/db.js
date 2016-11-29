@@ -104,12 +104,18 @@ DB.load = function() {
 				}
 			});
 	
-	alasql('DROP TABLE IF EXISTS orders;');
-	alasql('CREATE TABLE orders(id INT IDENTITY, oid STRING, otype INT, totype INT, toagent INT, fromtype INT, fromagent INT, status INT, lastupdate STRING);');
+	alasql('DROP TABLE IF EXISTS porders;');
+	alasql('CREATE TABLE porders(id INT IDENTITY, poid STRING, vendor INT, warehouse INT, status INT, lastupdate STRING);');
 
 	alasql('DROP TABLE IF EXISTS poitems;');
-	alasql('CREATE TABLE poitems(id INT IDENTITY, oid STRING, pcode STRING, pcat INT, pmake INT, pdetail STRING, qty INT, status INT, received INT, lastupdate STRING);');
-
+	alasql('CREATE TABLE poitems(id INT IDENTITY, poid STRING, pcode STRING, pcat INT, pmake INT, pdetail STRING, qty INT, status INT, received INT, lastupdate STRING);');
+	
+	alasql('DROP TABLE IF EXISTS intrans_items;');
+	alasql('CREATE TABLE intrans_items(id INT IDENTITY, inoid STRING, initemid INT, transQty INT, lastupdate STRING);');
+	
+	alasql('DROP TABLE IF EXISTS sorders;');
+	alasql('CREATE TABLE sorders(id INT IDENTITY, oid STRING, otype INT, totype INT, toagent INT, fromtype INT, fromagent INT, status INT, lastupdate STRING);');
+	
 	alasql('DROP TABLE IF EXISTS soitems;');
 	alasql('CREATE TABLE soitems(id INT IDENTITY, oid STRING, pcode STRING, pcat INT, pmake INT, pdetail STRING, qty INT, status INT, shipped INT, lastupdate STRING);');
 	

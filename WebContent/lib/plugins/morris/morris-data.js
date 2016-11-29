@@ -65,7 +65,7 @@ $(function() {
     });
 
     // Donut Chart
-    Morris.Donut({
+var dnt=   Morris.Donut({
         element: 'morris-donut-chart',
         data: [{
             label: "Download Sales",
@@ -79,6 +79,8 @@ $(function() {
         }],
         resize: true
     });
+
+console.log(dnt)
 
     // Line Chart
     Morris.Line({
@@ -222,6 +224,5 @@ $(function() {
         hideHover: 'auto',
         resize: true
     });
-
 
 });

@@ -7,6 +7,7 @@
 <script src="lib/jsgrid.min.js"></script>
 
 <link href="css/bootstrap.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <link href="css/jsgrid.min.css" rel="stylesheet" />
 <link href="css/jsgrid-theme.min.css" rel="stylesheet" />
 <link href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet" />
@@ -67,14 +68,148 @@
 	</nav>
 
 	<div class="container">
-		<select id="select-dataGrid" class="btn btn-default dropdown-toggle">
-			<option value=0>Products</option>
-			<option value=1>Categories</option>
-			<option value=2>Makers</option>
-		</select>
-		<div id="productsGird"></div>
-		<div id="categoriesGird"></div>
-		<div id="makersGird"></div>
+		<ul class="nav nav-tabs">
+			<li id="li-products" class="active"><a id="tab-po"
+				href="#tabcontent-products" data-toggle="tab">Products</a></li>
+			<li id="li-categories"><a id="tab-so" href="#tabcontent-categories"
+				data-toggle="tab">Categories</a></li>
+			<li id="li-makers"><a id="tab-st" href="#tabcontent-makers"
+				data-toggle="tab">Makers</a></li>
+		</ul>
+
+		<div class="tab-content">
+			<div id="tabcontent-products" class="tab-pane active"
+				style="margin-top: 10px">
+				<div class="panel panel-success">
+					<div class="panel-heading">
+						<label>LIST OF PRODUCTS</label>
+						<div class="pull-right">
+							<a class="btn btn-default"><span
+								class="glyphicon glyphicon-share"> Share</span></a> <a
+								class="btn btn-default"><span class="fa fa-print">
+									Print</span></a> <a class="btn btn-default"><span
+								class="glyphicon glyphicon-envelope"> Email</span></a>
+						</div>
+						<div class="btn-group pull-right">
+							<button type="button" class="btn btn-default dropdown-toggle"
+								data-toggle="dropdown" aria-haspopup="true"
+								aria-expanded="false">
+								<span class="fa fa-download"> </span> Export <span class="caret"></span>
+							</button>
+							<ul class="dropdown-menu" style="background:#171048">
+								<li style="width:96px"><a href="#"><span class="fa fa-file-excel-o"> </span> CSV</a></li>
+								<li style="width:96px"><a href="#"><span class="fa fa-file-pdf-o"> </span> PDF</a></li>
+								<li style="width:96px"><a href="#"><span class="fa fa-file-code-o"> </span> JSON</a></li>
+							</ul>
+						</div>
+						<div class="btn-group pull-right">
+							<button type="button" class="btn btn-default dropdown-toggle"
+								data-toggle="dropdown" aria-haspopup="true"
+								aria-expanded="false">
+								<span class="fa fa-upload"> </span> Import <span class="caret"></span>
+							</button>
+							<ul class="dropdown-menu" style="background:#171048">
+								<li style="width:96px"><a href="#" onclick=importFile()><span class="fa fa-file-excel-o"> </span> CSV</a></li>
+								<li style="width:96px"><a href="#" onclick=importFile()><span class="fa fa-file-pdf-o"> </span> PDF</a></li>
+								<li style="width:96px"><a href="#" onclick=importFile()><span class="fa fa-file-code-o"> </span> JSON</a></li>
+								<li style="width:96px; display:none"><input id="input-products-file" type="file"></li>
+							</ul>
+						</div>
+					</div>
+					<div class="panel-body">
+						<div id="productsGird"></div>
+					</div>
+				</div>
+			</div>
+
+			<div id="tabcontent-categories" class="tab-pane"
+				style="margin-top: 10px">
+				<div class="panel panel-success">
+					<div class="panel-heading">
+						<label>LIST OF CATEGORIES</label>
+						<div class="pull-right">
+							<a class="btn btn-default"><span
+								class="glyphicon glyphicon-share"> Share</span></a> <a
+								class="btn btn-default"><span class="fa fa-print">
+									Print</span></a> <a class="btn btn-default"><span
+								class="glyphicon glyphicon-envelope"> Email</span></a>
+						</div>
+						<div class="btn-group pull-right">
+							<button type="button" class="btn btn-default dropdown-toggle"
+								data-toggle="dropdown" aria-haspopup="true"
+								aria-expanded="false">
+								<span class="fa fa-download"> </span> Export <span class="caret"></span>
+							</button>
+							<ul class="dropdown-menu" style="background:#171048">
+								<li style="width:96px"><a href="#"><span class="fa fa-file-excel-o"> </span> CSV</a></li>
+								<li style="width:96px"><a href="#"><span class="fa fa-file-pdf-o"> </span> PDF</a></li>
+								<li style="width:96px"><a href="#"><span class="fa fa-file-code-o"> </span> JSON</a></li>
+							</ul>
+						</div>
+						<div class="btn-group pull-right">
+							<button type="button" class="btn btn-default dropdown-toggle"
+								data-toggle="dropdown" aria-haspopup="true"
+								aria-expanded="false">
+								<span class="fa fa-upload"> </span> Import <span class="caret"></span>
+							</button>
+							<ul class="dropdown-menu" style="background:#171048">
+								<li style="width:96px"><a href="#" onclick=importFile()><span class="fa fa-file-excel-o"> </span> CSV</a></li>
+								<li style="width:96px"><a href="#" onclick=importFile()><span class="fa fa-file-pdf-o"> </span> PDF</a></li>
+								<li style="width:96px"><a href="#" onclick=importFile()><span class="fa fa-file-code-o"> </span> JSON</a></li>
+								<li style="width:96px; display:none"><input id="input-products-file" type="file"></li>
+							</ul>
+						</div>
+					</div>
+					<div class="panel-body">
+						<div id="categoriesGird"></div>
+					</div>
+				</div>
+
+			</div>
+			<div id="tabcontent-makers" class="tab-pane" style="margin-top: 10px">
+				<div class="panel panel-success">
+					<div class="panel-heading">
+						<label>LIST OF MAKERS</label>
+						<div class="pull-right">
+							<a class="btn btn-default"><span
+								class="glyphicon glyphicon-share"> Share</span></a> <a
+								class="btn btn-default"><span class="fa fa-print">
+									Print</span></a> <a class="btn btn-default"><span
+								class="glyphicon glyphicon-envelope"> Email</span></a>
+						</div>
+						<div class="btn-group pull-right">
+							<button type="button" class="btn btn-default dropdown-toggle"
+								data-toggle="dropdown" aria-haspopup="true"
+								aria-expanded="false">
+								<span class="fa fa-download"> </span> Export <span class="caret"></span>
+							</button>
+							<ul class="dropdown-menu" style="background:#171048">
+								<li style="width:96px"><a href="#"><span class="fa fa-file-excel-o"> </span> CSV</a></li>
+								<li style="width:96px"><a href="#"><span class="fa fa-file-pdf-o"> </span> PDF</a></li>
+								<li style="width:96px"><a href="#"><span class="fa fa-file-code-o"> </span> JSON</a></li>
+							</ul>
+						</div>
+						<div class="btn-group pull-right">
+							<button type="button" class="btn btn-default dropdown-toggle"
+								data-toggle="dropdown" aria-haspopup="true"
+								aria-expanded="false">
+								<span class="fa fa-upload"> </span> Import <span class="caret"></span>
+							</button>
+							<ul class="dropdown-menu" style="background:#171048">
+								<li style="width:96px"><a href="#" onclick=importFile()><span class="fa fa-file-excel-o"> </span> CSV</a></li>
+								<li style="width:96px"><a href="#" onclick=importFile()><span class="fa fa-file-pdf-o"> </span> PDF</a></li>
+								<li style="width:96px"><a href="#" onclick=importFile()><span class="fa fa-file-code-o"> </span> JSON</a></li>
+								<li style="width:96px; display:none"><input id="input-products-file" type="file"></li>
+							</ul>
+						</div>
+					</div>
+					<div class="panel-body">
+						<div id="makersGird"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+
 	</div>
 
 	<div id="proddialog-form" title="Details">
@@ -101,27 +236,6 @@
 	</div>
 
 	<script src="js/products.js"></script>
-	<script>
-		$("#categoriesGird").hide();
-		$("#makersGird").hide();
-		$("#select-dataGrid").on("change", function(){
-			$("#productsGird").hide();
-			$("#categoriesGird").hide();
-			$("#makersGird").hide();
-			if($(this).val() == 1){
-				$("#categoriesGird").show();
-	        	$("#categoriesGird").jsGrid("reset");
-			} else if($(this).val() == 2) {
-				$("#makersGird").show();
-	        	$("#makersGird").jsGrid("reset");
-			} else {
-				$("#productsGird").show();
-	        	$("#productsGird").jsGrid("reset");
-			}
-		})
-
-	</script>
-	
 	<nav class="sidebar">
 		<ul class="menu">
 			<li><a href="index.html">Home</a></li>
@@ -134,6 +248,11 @@
 		</ul>
 	</nav>
 	<script src="lib/nav-sidebar.js"></script>
+	<script type="text/javascript">
+		function importFile(filehandle){
+			$("#input-products-file").click();
+		}
+	</script>
 	
 </body>
 </html>

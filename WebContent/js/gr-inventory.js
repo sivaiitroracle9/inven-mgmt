@@ -15,42 +15,51 @@ $("#goodsreceive-orderid-update-btn").click(function(){
 		Object.values(gi_orderid_po_update_items).forEach(function(upitem){
 			console.log(upitem)
 			
-    		var rows = alasql("select qty, received from oitems where id = " + upitem.id);
+    		var rows = alasql("select qty, received from poitems where id = " + upitem.id);
     		var qty = rows[0].qty;
     		var received = rows[0].received + Number(upitem.receivedQty);
     		var status = 0;
     		if(received == 0) status = 7;
     		else if(qty > received) status = 8;
     		else status = 9;
-    		alasql("update oitems set received=" + received + ", status=" + status + " where id = " + upitem.id);
+    		alasql("update poitems set received=" + received + ", status=" + status + " where id = " + upitem.id);
+    		
+    		// intrans-items
+    		var intransitem = 0;
+    		var intrans = alasql("select max(id) as id from intrans_items");
+    		if(intrans.length == 1 && intrans[0].id!=undefined) intransitem = intrans[0].id;
+    		intransitem++;
+    		var query = "INSERT INTO intrans_items VALUES("+ intransitem + ",'" + upitem.poid +"'," + upitem.id +"," + Number(upitem.receivedQty) +")";
+    		console.log(query)
+    		alasql(query);
     		
     		// order status change
-    		var oitemsQty = alasql("select SUM(qty) as qty, SUM(received) as received from oitems where oid='" + upitem.oid +"'");
+    		var oitemsQty = alasql("select SUM(qty) as qty, SUM(received) as received from poitems where oid='" + upitem.poid +"'");
     		console.log(oitemsQty)
     		
     		if(oitemsQty!=undefined && oitemsQty.length > 0 && oitemsQty[0].received!=0 && oitemsQty[0].qty > oitemsQty[0].received) {
     			status = 3;
-    			alasql("update orders set status=" + status + " where oid = '" + upitem.oid + "'");
+    			alasql("update porders set status=" + status + " where poid = '" + upitem.poid + "'");
     		}
     		
     		if(oitemsQty!=undefined && oitemsQty.length > 0 && oitemsQty[0].received !== 0 && oitemsQty[0].qty === oitemsQty[0].received) {
     			status = 4;
-    			alasql("update orders set status=" + status + " where oid = '" + upitem.oid + "'");
+    			alasql("update porders set status=" + status + " where poid = '" + upitem.poid + "'");
     		}
     		
     		// stock balance change.
-			var currOrders = alasql("select * from orders where oid='" + upitem.oid +"'");
+			var currOrders = alasql("select * from porders where poid='" + upitem.poid +"'");
     		var currProduct = alasql("select * from products where code='" + upitem.pcode +"'");
-    		var currstock = alasql("select * from stock where item="+currProduct[0].id+" and whouse="+currOrders[0].whouse);
+    		var currstock = alasql("select * from stock where item="+currProduct[0].id+" and whouse="+currOrders[0].warehouse);
     		if(currstock==undefined || currstock.length==0) {
     			var nextID = 0;
     			var stocks = alasql("select max(id) as id from stock");
     			if(stocks.length != 0) nextID = stocks[0].id;
     			nextID++;
     			
-    			alasql("INSERT into stock VALUES(" + nextID + "," + currProduct[0].id + "," + currOrders[0].whouse + "," + Number(upitem.receivedQty) + ")");
+    			alasql("INSERT into stock VALUES(" + nextID + "," + currProduct[0].id + "," + currOrders[0].warehouse + "," + Number(upitem.receivedQty) + ")");
     		} else {
-    			alasql("UPDATE stock set balance=" + (currstock[0].balance + Number(upitem.receivedQty)) + " where item="+currProduct[0].id+" and whouse="+currOrders[0].whouse);
+    			alasql("UPDATE stock set balance=" + (currstock[0].balance + Number(upitem.receivedQty)) + " where item="+currProduct[0].id+" and whouse="+currOrders[0].warehouse);
     		}
 		});
 	}
@@ -83,13 +92,28 @@ $("#gr-po-items").jsGrid({
         { name: "pcat", title: "CATEGORY", type: "select", items:getCategoriesLOV(), valueField: "id", textField: "text", filtering: false, editing:false},
         { name: "pmake", title: "MAKER", type: "select", items:getMakersLOV(), valueField: "id", textField: "text", filtering: false, editing:false},
         { name: "pdetail", title: "DETAIL", type: "text",editing:false},
-        { name: "toReceiveQty", title: "TO RECEIVE QTY", type: "text", editing:false, filtering: false},   
-        { name: "receivedQty", title: "Received QTY", type: "text",filtering: false},
+        { name: "toReceiveQty", title: "TO RECEIVE QTY", type: "text", editing:false, filtering: false,
+        	itemTemplate: function(value, item) {
+        		if(value == 0) return "--";
+        		else return value;
+        	}
+        },   
+        
+        { name: "receivedQty", title: "Received QTY", type: "text",filtering: false, 
+        	itemTemplate: function(value, item) {
+        		if(value == 0 && item.toReceiveQty == 0) return "--";
+        		else return value;
+        	}
+        },
+        
         { type: "control",
           deleteButton: false,
           itemTemplate: function(value, item) {
-        	  if(item.toReceiveQty !== 0) return this._createEditButton(item);
-        	  return "";
+        	  if(item.toReceiveQty != 0) return this._createEditButton(item);
+        	  else {
+        		  //TODO make editing false in the grid.
+        		  return "<span style='font-weight:bold' class='label label-success'>FULFILLED</span>";;
+        	  }
           }
         },
        ]
@@ -130,12 +154,12 @@ function getCategoriesLOV(){
 
 function loadOrderWithItems(poid) {
 	
-	var orders = alasql("select id, status, whouse, vendor from orders where oid='" + poid + "'");
+	var orders = alasql("select id, status, warehouse, vendor from porders where poid='" + poid + "'");
 
 	gi_orderid_po_items = [];
 	if(orders!= undefined && orders.length > 0 && orders[0].id !=undefined) {
-		if(orders[0].status === 2 || orders[0].status === 3 || orders[0].status === 4) {
-			var selectQry = "select * from oitems where oid='" + poid + "'";
+		//if(orders[0].status === 2 || orders[0].status === 3 || orders[0].status === 4) {
+			var selectQry = "select * from poitems where poid='" + poid + "'";
 
 			var oitems = alasql(selectQry);
 			
@@ -143,8 +167,8 @@ function loadOrderWithItems(poid) {
 				oitems.forEach(function(oitem){
 					var item = {};
 					item.id = oitem.id;
-					item.oid = oitem.oid;
-					item.whouse = orders[0].whouse;
+					item.poid = oitem.poid;
+					item.whouse = orders[0].warehouse;
 					item.vendor = orders[0].vendor;
 					item.pcode = oitem.pcode;
 					item.pcat = oitem.pcat;
@@ -156,12 +180,12 @@ function loadOrderWithItems(poid) {
 				});
 			}
 			
-			$("#goodsreceive-whouse").text(getWarehouseById(orders[0].whouse).name);
+			$("#goodsreceive-whouse").text(getWarehouseById(orders[0].warehouse).name);
 			$("#goodsreceive-vendor").text(getVendorById(orders[0].vendor).NAME);
-		} else {
+		/*} else {
 			toastr.clear();
 			toastr.warning("Order already Not Open/Closed/Cancelled.");
-		}
+		}*/
 
 	} else {
 		toastr.clear();

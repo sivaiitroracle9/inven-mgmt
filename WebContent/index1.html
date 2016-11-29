@@ -161,7 +161,6 @@
                     </div>
                 </div>
 
-
                 <div class="row">
                     <div class="col-lg-3 col-md-6">
                         <div class="panel panel-primary">
@@ -266,8 +265,53 @@
                         </div>
                     </div>
                 </div>
-                <!-- /.row -->
 
+				<div class="row">
+					<div class="col-lg-6">
+						<div class="panel panel-default">
+							<div class="panel-heading" style="white-space: nowrap;">
+								<h3 class="panel-title" style="line-height: 100%">
+									<i class="fa fa-bar-chart-o fa-fw"></i> Inbound Chart:
+								</h3>
+								<a class="btn btn-default pull-right inbound-chart-">Year</a> 
+								<a class="btn btn-default pull-right">Month</a> 
+								<a class="btn btn-default pull-right active">Day</a> 
+								<select
+									class="form-control" style="width: 150px">
+									<option value=0>Category</option>
+									<option value=1>Product</option>
+								</select>
+
+							</div>
+							<div class="panel-body">
+								<div id="inbound-po-fulfilment"></div>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-6">
+						<div class="panel panel-default">
+							<div class="panel-heading" style="white-space: nowrap;">
+								<h3 class="panel-title" style="line-height: 100%">
+									<i class="fa fa-bar-chart-o fa-fw"></i> Outbound Chart:
+								</h3>
+								<a class="btn btn-default pull-right">Year</a> <a
+									class="btn btn-default pull-right">Month</a> <a
+									class="btn btn-default pull-right">Day</a> <select
+									class="form-control" style="width: 150px">
+									<option value=0>Category</option>
+									<option value=1>Product</option>
+								</select>
+
+							</div>
+							<div class="panel-body">
+								<div id="inbound-po-fulfilment"></div>
+							</div>
+						</div>
+					</div>
+
+				</div>
+
+				<!-- /.row -->
                 <div class="row">
                     <div class="col-lg-4">
                         <div class="panel panel-default">
@@ -350,10 +394,8 @@
             <!-- /.container-fluid -->
 
         </div>
-        <!-- /#page-wrapper -->
 
     </div>
-    <!-- /#wrapper -->
 
     <!-- jQuery -->
     <script src="lib/jquery.js"></script>
@@ -365,7 +407,25 @@
     <script src="lib/plugins/morris/raphael.min.js"></script>
     <script src="lib/plugins/morris/morris.min.js"></script>
     <script src="lib/plugins/morris/morris-data.js"></script>
-
+	<script type="text/javascript">
+	Morris.Bar({
+		element : 'inbound-po-fulfilment',
+		data : [ {
+			day : 101,
+			order : 1000
+		}, {
+			day : 102,
+			order : 1200
+		} ],
+		xkey : 'day',
+		ykeys : [ 'order' ],
+		labels : [ 'Sales' ],
+		barRatio : 0.4,
+		xLabelAngle : 35,
+		hideHover : 'auto',
+		resize : true
+	});
+	</script>
 </body>
 
 </html>

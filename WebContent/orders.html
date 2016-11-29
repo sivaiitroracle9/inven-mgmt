@@ -70,7 +70,7 @@
 
 	<div class="container">
 			<ul class="nav nav-tabs">
-				<li id="li-po" class="active"><a id="tab-po href="#tabcontent-po" data-toggle="tab">Purchase Order</a></li>
+				<li id="li-po" class="active"><a id="tab-po" href="#tabcontent-po" data-toggle="tab">Purchase Order</a></li>
 				<li id="li-so"><a id="tab-so" href="#tabcontent-so" data-toggle="tab">Sales Order</a></li>
 				<li id="li-st"><a id="tab-st" href="#tabcontent-st" data-toggle="tab">Stock Transfer</a></li>
 			</ul>
@@ -87,7 +87,7 @@
 							<div class="panel-body">
 								<div id="po-orders-grid"></div>
 							</div>
-							<div id="orderDetailsDlg" style="width: 300px">
+							<div id="po-order-details-dlg" style="width: 300px">
 								<div class="panel panel-primary">
 									<div class="panel-body">
 										<div>
@@ -109,20 +109,20 @@
 												</div>
 												<div class="panel-body">
 													<p>
-														CODE: <span id="od-dlg-to-code"></span>
+														CODE: <span id="po-vendor-dlg-code"></span>
 													</p>
 													<p>
-														Name: <span id="od-dlg-to-name"></span>
+														Name: <span id="po-vendor-dlg-name"></span>
 													</p>
 													<p>
-														Address: <span id="od-dlg-to-address"></span>
+														Address: <span id="po-vendor-dlg-address"></span>
 													</p>
 													<br />
 													<p>
-														Phone: <span id="od-dlg-to-tel"></span>
+														Phone: <span id="po-vendor-dlg-tel"></span>
 													</p>
 													<p>
-														Email: <span id="od-dlg-to-email"></span>
+														Email: <span id="po-vendor-dlg-email"></span>
 													</p>
 												</div>
 											</div>
@@ -132,17 +132,17 @@
 												</div>
 												<div class="panel-body">
 													<p>
-														Name: <span id="od-dlg-from-name"></span>
+														Name: <span id="po-whouse-dlg-name"></span>
 													</p>
 													<p>
-														Address: <span id="od-dlg-from-address"></span>
+														Address: <span id="po-whouse-dlg-address"></span>
 													</p>
 													<br />
 													<p>
-														Phone: <span id="od-dlg-from-tel"></span>
+														Phone: <span id="po-whouse-dlg-tel"></span>
 													</p>
 													<p>
-														Email: <span id="od-dlg-from-email"></span>
+														Email: <span id="po-whouse-dlg-email"></span>
 													</p>
 												</div>
 											</div>
@@ -151,7 +151,7 @@
 								</div>
 								<div class="panel panel-primary">
 									<div class="panel-body">
-										<div id="od-dlg-po-items"></div>
+										<div id="po-dlg-items"></div>
 									</div>
 								</div>
 							</div>
@@ -244,7 +244,7 @@
 							<div class="panel-body">
 								<div id="so-orders-grid"></div>
 							</div>
-							<div id="so-orderDetailsDlg" style="width: 300px">
+							<div id="so-order-details-dlg" style="width: 300px">
 								<div class="panel panel-primary">
 									<div class="panel-body">
 										<div>
@@ -413,9 +413,9 @@
 	<div id="notificationDialog"></div>
 	
 
-	<script src="js/orders.js"></script>
 	<script src="js/orders-po.js"></script>
-	<script src="js/orders-so.js"></script>
+	<script src="js/orders-po-create.js"></script>
+<!-- 	<script src="js/orders-so.js"></script> -->
 	<nav class="sidebar">
 		<ul class="menu">
 			<li><a href="index.html">Home</a></li>
