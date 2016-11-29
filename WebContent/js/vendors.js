@@ -58,12 +58,15 @@ var saveClient = function(vendor, isNew) {
     	email: $("#ven_email").val(),
     	address: $("#ven_addr").val()
     });
-	console.log(dbvendor);
     isNew ? addVendor(dbvendor) : updateVendor(id, dbvendor);
     dialog.dialog("close");
-	$("#jsGrid").jsGrid("reset");
+    refreshVendorGrid();
 };
 
+function refreshVendorGrid() {
+	$("#jsGrid").jsGrid("reset");
+	$("#jsGrid").jsGrid("loadData");
+}
 
 $("#jsGrid").jsGrid({
     width: "100%",
@@ -76,7 +79,7 @@ $("#jsGrid").jsGrid({
     rowClick: function(args) {},
     
     rowDoubleClick: function(args) {
-    	showDetailsDialog("Edit", args.item);
+    	
     },
     
     deleteConfirm: "Do you want to delete it ?",
@@ -99,33 +102,25 @@ $("#jsGrid").jsGrid({
         
         deleteItem: function(item) {
         	deleteVendor(item);
-        	$("#jsGrid").jsGrid("reset");
+            refreshVendorGrid();
         },
         updateItem: function(item) {
         	showDetailsDialog("Edit", item);
-        	$("#jsGrid").jsGrid("reset");
+            refreshVendorGrid();
         },
 
     },
     
     fields: [
-        { name: "CODE", 
-        	type: "text", 
-        	sorting: true,
-        },
-        { name: "NAME", type: "text", 
-        },
-    	
-        { name: "TEL", type: "text",
-        },
-        
-    	{ name: "Email", type: "text",
-        },
-        
-    	{ name: "Address", type: "text",
-        	filtering: false, sorting: false 
+        { name: "CODE", type: "text", sorting: true, },
+        { name: "NAME", type: "text", },
+        { name: "TEL", type: "text",  },
+    	{ name: "Email", type: "text", 
+        	itemTemplate: function(value, item){
+        		return value + " <a onclick='venodorEmail(" + value + ")'><span class='glyphicon glyphicon-envelope'> </span></a>"
+        	}
     	},
-        
+    	{ name: "Address", type: "text", filtering: false, sorting: false },
     	{
         	type: "control", 
         	deleteButton: false,
