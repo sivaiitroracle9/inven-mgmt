@@ -214,12 +214,37 @@
 
 	<div id="proddialog-form" title="Details">
 	    <form id="productForm" class="form-group">
-	        <p><label>Product Code: <input class="form-control" type="text" id="prod_code" /></label></p>
-	        <p><label>Category: <select class="form-control" id="prod_cat" name="category"></select></label></p>
-	        <p><label>Maker: <select class="form-control" id="prod_maker" name="make"></select></label></p>
-	        <p><label>Detail: <input class="form-control" type="text" id="prod_detail" /></label></p>
-	        <p><label>Price: <input class="form-control" type="text" id="prod_price" /></label></p>
-	       	<p><label>Unit: <input class="form-control" type="text" id="prod_unit" /></label></p>
+	    	<div><label>Product Code: <input class="form-control" type="text" id="prod_code" /></label></div>
+	    	
+	    	<div id="prod_cat-select-dlg"><label>Category: 
+	        <select class="form-control" id="prod_cat" name="category"></select></label><a>
+	        	<span class="btn btn-success fa fa-plus" style="border-radius:10px;padding:2px;margin:2px"></span></a></div>
+	        
+	        <div id="prod_cat-input-dlg" style="display:none">
+	        	<label>Category: 
+	        		<input type="text" class="form-control" id="dlg-new-cat">
+	        	</label>
+	        	<a id="save-new-cat"><span class="btn btn-success glyphicon glyphicon-ok-sign" style="border-radius:10px;padding:2px;margin:2px"></span></a>
+	        	<a id="remove-new-cat"><span class="btn btn-danger glyphicon glyphicon-remove-sign" style="border-radius:10px;padding:2px;margin:2px"></span></a>
+	        </div>
+	        	
+	    	<div id="prod_maker-select-dlg"><label>Maker: <select class="form-control" id="prod_maker" name="make"></select></label><a>
+	        	<span class="btn btn-success fa fa-plus" style="border-radius:10px;padding:2px;margin:2px"></span></a></div>
+			<div id="prod_maker-input-dlg" style="display:none">
+				<label>Maker: <input type="text" class="form-control"
+					id="dlg-new-maker">
+				</label> 
+				<a id="save-new-maker"><span
+					class="btn btn-success glyphicon glyphicon-ok-sign"
+					style="border-radius: 10px; padding: 2px; margin: 2px"></span></a> 
+				<a
+					id="remove-new-maker"><span
+					class="btn btn-danger glyphicon glyphicon-remove-sign"
+					style="border-radius: 10px; padding: 2px; margin: 2px"></span></a>
+			</div>
+			<div> <label>Detail: <input class="form-control" type="text" id="prod_detail" /></label></div>
+	    	<div><label>Price: <input class="form-control" type="text" id="prod_price" /></label></div>
+	    	<div><label>Unit: <input class="form-control" type="text" id="prod_unit" /></label></div>
 	    </form>
 	</div>
 	

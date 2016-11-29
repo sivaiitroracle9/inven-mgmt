@@ -378,42 +378,43 @@ productDialog.find("form#productForm").submit(function(e) {
 });
 
 var showProdDetailsDialog = function(dialogType, product) {
-	
-    submitHandler = function(event) {
-    	saveProdClient(product, dialogType === "Add");
-    };
-    
-    $("#prod_code").val(product["CODE"]);
-    
-    $("#prod_maker").html("");
-    getMakersFromDB().forEach(function(m){
-    	var option = $("<option>");
-    	option.val(m["id"]);
-    	option.text(m["text"]);
-    	option.appendTo($("#prod_maker"));
-    });
-    
-    $("#prod_cat").html("");
-    getCategoriesFromDB().forEach(function(m){
-    	var option = $("<option>");
-    	option.val(m["id"]);
-    	option.text(m["text"]);
-    	option.appendTo($("#prod_cat"));
-    });
-    
-    if(product["CATEGORY"] !=undefined) {
-    	$("#prod_cat").val(product["CATEGORY"]);
-    }
-    
-    if(product["MAKER"] !=undefined) {
-    	$("#prod_maker").val(product["MAKER"]);
-    }
-    
-    $("#prod_detail").val(product["Detail"]);
-    $("#prod_price").val(product["Price"]);
-    $("#prod_unit").val(product["Unit"]);
 
-    productDialog.dialog("option", "title", dialogType + " product").dialog("open");
+	submitHandler = function(event) {
+		saveProdClient(product, dialogType === "Add");
+	};
+
+	$("#prod_code").val(product["CODE"]);
+
+	$("#prod_maker").html("");
+	getMakersFromDB().forEach(function(m) {
+		var option = $("<option>");
+		option.val(m["id"]);
+		option.text(m["text"]);
+		option.appendTo($("#prod_maker"));
+	});
+
+	$("#prod_cat").html("");
+	getCategoriesFromDB().forEach(function(m) {
+		var option = $("<option>");
+		option.val(m["id"]);
+		option.text(m["text"]);
+		option.appendTo($("#prod_cat"));
+	});
+
+	if (product["CATEGORY"] != undefined) {
+		$("#prod_cat").val(product["CATEGORY"]);
+	}
+
+	if (product["MAKER"] != undefined) {
+		$("#prod_maker").val(product["MAKER"]);
+	}
+
+	$("#prod_detail").val(product["Detail"]);
+	$("#prod_price").val(product["Price"]);
+	$("#prod_unit").val(product["Unit"]);
+
+	productDialog.dialog("option", "title", dialogType + " product").dialog(
+			"open");
 };
 
 $("#productsGird").jsGrid({
@@ -426,6 +427,10 @@ $("#productsGird").jsGrid({
     pageSize: 10,
     pageButtonCount: 5,
     editing: true,
+    
+    rowClick: function(){
+    	
+    },
     
     rowDoubleClick: function(args) {
     	showProdDetailsDialog("Edit", args.item);
@@ -463,6 +468,14 @@ $("#productsGird").jsGrid({
     },
     
     fields: [
+    	{ name: "products-ckb", type: "checkbox", width: 20,
+        	headerTemplate: function() {
+        		return $("<input id='products-header-ckb' type='checkbox' checked>");
+        	},
+        	itemTemplate: function(value, item){
+        		return $("<input id='products-ckb-"+ item.id + "' type='checkbox' checked>");
+        	}
+        },
         { name: "CODE", type: "text", width: 150,
         	headerTemplate: function() {
         		return $("<span>CODE</span><span style='float:right' class='glyphicon glyphicon-sort'>");
@@ -559,6 +572,8 @@ var saveProdClient = function(product, isNew) {
     isNew ? addProduct(dbproduct) : updateProduct(id, dbproduct);
     productDialog.dialog("close");
 	$("#productsGird").jsGrid("reset");
+	$("#productsGird").jsGrid("render");
+	location.reload();
 };
 
 function addProduct(product) {
@@ -698,10 +713,86 @@ function pageData(data, pageIndex, pageSize) {
 $('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
 	var target = $(e.target).attr("href")
 	if (target === "#tabcontent-categories") {
+		$("#categoriesGird").jsGrid("loadData");
+		$("#categoriesGird").jsGrid("render");
 		$("#categoriesGird").jsGrid("reset");
 	} else if (target === "#tabcontent-makers") {
+		$("#makersGird").jsGrid("loadData");
+		$("#makersGird").jsGrid("render");
 		$("#makersGird").jsGrid("reset");
 	} else if (target === "#tabcontent-products") {
+		$("#productsGird").jsGrid("loadData");
+		$("#productsGird").jsGrid("render");
 		$("#productsGird").jsGrid("reset");
 	}
+});
+
+$("div#prod_cat-select-dlg a").click(function(){
+	$("div#prod_cat-select-dlg").hide();
+	$("div#prod_cat-input-dlg").show();
+});
+
+$("div#prod_cat-input-dlg a#save-new-cat").click(function(){
+	var newcat = $("#dlg-new-cat").val();
+	newcat = newcat.trim();
+	if(newcat!= "") {
+		var maxid = 0;
+		var rows = alasql("SELECT max(id) as id FROM kind");
+		console.log(rows)
+		if(rows.length > 0 && rows[0].id != undefined) {
+			maxid = rows[0].id;
+		}
+		console.log(maxid)
+		maxid++;
+		alasql("INSERT INTO kind VALUES("+maxid + ",'" + newcat+ "')");
+		$("#prod_cat").html("");
+		getCategoriesFromDB().forEach(function(m) {
+			var option = $("<option>");
+			option.val(m["id"]);
+			option.text(m["text"]);
+			option.appendTo($("#prod_cat"));
+		});
+		$("#prod_cat").val(maxid);
+	}
+	$("div#prod_cat-select-dlg").show();
+	$("div#prod_cat-input-dlg").hide();
+});
+$("div#prod_cat-input-dlg a#remove-new-cat").click(function(){
+	$("div#prod_cat-select-dlg").show();
+	$("div#prod_cat-input-dlg").hide();
+});
+
+$("div#prod_maker-select-dlg a").click(function(){
+	$("div#prod_maker-select-dlg").hide();
+	$("div#prod_maker-input-dlg").show();
+});
+
+$("div#prod_maker-input-dlg a#save-new-maker").click(function(){
+	var newmaker = $("#dlg-new-maker").val();
+	newmaker = newmaker.trim();
+	if(newmaker!= "") {
+		var maxid = 0;
+		var rows = alasql("SELECT max(id) as id FROM maker");
+		console.log(rows)
+		if(rows.length > 0 && rows[0].id != undefined) {
+			maxid = rows[0].id;
+		}
+		console.log(maxid)
+		maxid++;
+		alasql("INSERT INTO maker VALUES("+maxid + ",'" + newmaker+ "')");
+		$("#prod_maker").html("");
+		getMakersFromDB().forEach(function(m) {
+			var option = $("<option>");
+			option.val(m["id"]);
+			option.text(m["text"]);
+			option.appendTo($("#prod_maker"));
+		});
+		$("#prod_maker").val(maxid);
+	}
+	$("div#prod_maker-select-dlg").show();
+	$("div#prod_maker-input-dlg").hide();
+});
+$("div#prod_maker-input-dlg a#remove-new-maker").click(function(){
+	$("div#prod_maker-select-dlg").show();
+	$("div#prod_maker-input-dlg").hide();
 });
