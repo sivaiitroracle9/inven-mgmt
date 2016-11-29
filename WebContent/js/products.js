@@ -14,8 +14,10 @@ var makerDialog = $("#makedialog-form").dialog({
         }
     },
 	open: function(event) {
-		$('.ui-dialog-buttonpane').find('button:contains("Save")').removeClass("ui-button ui-corner-all ui-widget").addClass('btn btn-success');
-		$('.ui-dialog-buttonpane').find('button:contains("Cancel")').removeClass("ui-button ui-corner-all ui-widget").addClass('btn btn-default');
+		$('.ui-dialog-buttonpane').find('button:contains("Save")')
+			.removeClass("ui-button ui-corner-all ui-widget").addClass('btn btn-success');
+		$('.ui-dialog-buttonpane').find('button:contains("Cancel")')
+			.removeClass("ui-button ui-corner-all ui-widget").addClass('btn btn-default');
 	 },
     close: function() {
     	makerDialog.find("form#makerForm")[0].reset();
@@ -50,7 +52,14 @@ var saveMakeClient = function(maker, isNew) {
 
     isNew ? addMaker(dbmaker) : updateMaker(id, dbmaker);
     makerDialog.dialog("close");
+    resetMakerGrid();
 };
+
+function resetMakerGrid(){
+	$("#makersGird").data("JSGrid").fields[1].items = getMakersTbl(true);
+	$("#makersGird").jsGrid("render");
+	$("#makersGird").jsGrid("loadData");
+}
 
 function addMaker(maker) {
 	var rows = alasql("select max(id) as id from maker");
@@ -65,18 +74,12 @@ function addMaker(maker) {
 			values[1] = maker[key];
 	});
 	alasql("INSERT INTO maker VALUES(?,?)", values);
-	$("#makersGird").jsGrid("render");
-	$("#makersGird").jsGrid("loadData");
-	$("#makersGird").jsGrid("reset");
 }
 
 function updateMaker(id, maker) {
 	var query = "update maker set text='" + maker["text"] + "' where id = " + id;
 	console.log(query)
 	alasql(query);
-	$("#makersGird").jsGrid("render");
-	$("#makersGird").jsGrid("loadData");
-	$("#makersGird").jsGrid("reset");
 }
 
 function getMakersTbl(select) {
@@ -107,7 +110,7 @@ $("#makersGird").jsGrid({
     paging: true,
     pageLoading: true,
     sorting: true,
-    pageSize: 10,
+    pageSize: 20,
     pageButtonCount: 5,
 	
     rowClick: function(args) {},
@@ -115,17 +118,10 @@ $("#makersGird").jsGrid({
     rowDoubleClick: function(args) {
     	showMakeDetailsDialog("Edit", args.item);
     },
-    
-    onItemInserted: function(args){
-    	var makerLOVField = args.grid.fields[1];
-    	makerLOVField.items = getMakersTbl(true);
-    	$(".make-insert").empty().append(makerLOVField.insertTemplate());
-    	$("#makersGird").jsGrid("reset");
-    },
-    
+   
     controller: {
         loadData: function(filter) {
-        	console.log(filter);
+
         	var filtered = $.grep(getMakersTbl(false), function(maker) {
                 return (filter["maker"] == 0 || maker["id"] == filter["maker"]);
         	});
@@ -135,11 +131,10 @@ $("#makersGird").jsGrid({
         
         deleteItem: function(item) {
         	deleteProduct(item);
-        	$("#makersGird").jsGrid("reset");
+        	resetMakerGrid();
         },
         updateItem: function(item) {
         	showMakeDetailsDialog("Edit", item);
-        	$("#makersGird").jsGrid("reset");
         },
 
     },
@@ -228,9 +223,11 @@ var saveCatClient = function(category, isNew) {
     	text: $("#cat_cat").val(),
     });
 
-    isNew ? addProduct(dbproduct) : updateProduct(id, dbcategory);
+    isNew ? addCategory(dbcategory) : updateCategory(id, dbcategory);
     categoryDialog.dialog("close");
-	$("#categoriesGird").jsGrid("reset");
+	$("#categoriesGird").data("JSGrid").fields[1].items = getCategoriesTbl(true);
+	$("#categoriesGird").jsGrid("render");
+	$("#categoriesGird").jsGrid("loadData");
 };
 
 function addCategory(category) {
@@ -245,7 +242,7 @@ function addCategory(category) {
 		if(key == "text")
 			values[1] = category[key];
 	});
-	alasql("INSERT INTO products VALUES(?,?)", values);
+	alasql("INSERT INTO kind VALUES(?,?)", values);
 }
 
 function updateCategory(id, category) {
@@ -281,7 +278,7 @@ $("#categoriesGird").jsGrid({
     paging: true,
     pageLoading: true,
     sorting: true,
-    pageSize: 10,
+    pageSize: 20,
     pageButtonCount: 5,
 	
     rowClick: function(args) {},
@@ -424,7 +421,7 @@ $("#productsGird").jsGrid({
 	sorting: true,
     paging: true,
     pageLoading: true,
-    pageSize: 10,
+    pageSize: 20,
     pageButtonCount: 5,
     editing: true,
     
@@ -468,14 +465,6 @@ $("#productsGird").jsGrid({
     },
     
     fields: [
-    	{ name: "products-ckb", type: "checkbox", width: 20,
-        	headerTemplate: function() {
-        		return $("<input id='products-header-ckb' type='checkbox' checked>");
-        	},
-        	itemTemplate: function(value, item){
-        		return $("<input id='products-ckb-"+ item.id + "' type='checkbox' checked>");
-        	}
-        },
         { name: "CODE", type: "text", width: 150,
         	headerTemplate: function() {
         		return $("<span>CODE</span><span style='float:right' class='glyphicon glyphicon-sort'>");

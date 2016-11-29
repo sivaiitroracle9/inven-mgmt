@@ -161,6 +161,10 @@ $("#jsGrid").jsGrid({
     ]
 });
 
+$("#vendorImportGrid").jsGrid({
+	
+})
+
 function updateVendor(id, vendor) {
 	var query = "update vendor set ";
 	
