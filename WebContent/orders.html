@@ -260,46 +260,49 @@
 										<br />
 										<br />
 										<div>
-											<div id="od-dlg-from-info" class="panel panel-info pull-left">
+											<div id="so-dlg-from-info" class="panel panel-info pull-left">
 												<div class="panel-heading">
 													<label> Vendor </label>
 												</div>
 												<div class="panel-body">
 													<p>
-														CODE: <span id="od-dlg-to-code"></span>
+														CODE: <span id="so-dlg-warehouse-code"></span>
 													</p>
 													<p>
-														Name: <span id="od-dlg-to-name"></span>
+														Name: <span id="so-dlg-warehouse-name"></span>
 													</p>
 													<p>
-														Address: <span id="od-dlg-to-address"></span>
+														Address: <span id="so-dlg-warehouse-address"></span>
 													</p>
 													<br />
 													<p>
-														Phone: <span id="od-dlg-to-tel"></span>
+														Phone: <span id="so-dlg-warehouse-tel"></span>
 													</p>
 													<p>
-														Email: <span id="od-dlg-to-email"></span>
+														Email: <span id="so-dlg-warehouse-email"></span>
 													</p>
 												</div>
 											</div>
-											<div id="od-dlg-to-info" class="panel panel-info pull-right">
+											<div id="so-dlg-to-info" class="panel panel-info pull-right">
 												<div class="panel-heading">
 													<label> Warehouse </label>
 												</div>
 												<div class="panel-body">
 													<p>
-														Name: <span id="od-dlg-from-name"></span>
+														CODE: <span id="so-dlg-outlet-code"></span>
 													</p>
 													<p>
-														Address: <span id="od-dlg-from-address"></span>
+														Name: <span id="so-dlg-outlet-name"></span>
+													</p>
+													<p>
+														Address: <span id="so-dlg-outlet-address"></span>
 													</p>
 													<br />
 													<p>
-														Phone: <span id="od-dlg-from-tel"></span>
+														Phone: <span id="so-dlg-outlet-tel"></span>
 													</p>
 													<p>
-														Email: <span id="od-dlg-from-email"></span>
+														Email: <span id="so-dlg-outlet-email"></span>
 													</p>
 												</div>
 											</div>
@@ -308,7 +311,7 @@
 								</div>
 								<div class="panel panel-primary">
 									<div class="panel-body">
-										<div id="od-dlg-po-items"></div>
+										<div id="so-dlg-items"></div>
 									</div>
 								</div>
 							</div>
@@ -321,7 +324,6 @@
 							<div class="panel-body">
 								<div class="panel panel-primary">
 									<div class="panel-body">
-
 										<div id="so-warehouse-info" class="panel panel-info">
 											<div class="panel-heading">
 												<label>Warehouse:</label> <select
@@ -344,7 +346,6 @@
 												</p>
 											</div>
 										</div>
-
 										<div id="so-to-info" class="panel panel-info">
 											<div class="panel-heading">
 												<label>To: </label> <select id="so-to-info-select"
@@ -395,7 +396,7 @@
 											class="label label-default" id="so-date"></span></label>
 									</div>
 								</div>
-								<div id="so-orders-grid"></div>
+								<div id="so-create-grid"></div>
 								<div id="btns-so-create">
 									<button id="so-cancel-btn" class="btn btn-default"
 										style="float: right; margin: 5px" disabled>Cancel</button>
@@ -408,14 +409,16 @@
 					</div>
 				</div>
 			</div>
+			<div id="tabcontent-st" class="tab-pane" style="margin-top:10px"></div>
 		</div>
 	</div>
 	<div id="notificationDialog"></div>
 	
-
+	<script src="js/orders-common.js"></script>
 	<script src="js/orders-po.js"></script>
 	<script src="js/orders-po-create.js"></script>
-<!-- 	<script src="js/orders-so.js"></script> -->
+	<script src="js/orders-so.js"></script>
+	<script src="js/orders-so-create.js"></script>
 	<nav class="sidebar">
 		<ul class="menu">
 			<li><a href="index.html">Home</a></li>

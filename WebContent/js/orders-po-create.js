@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------- PO -------------------------------------------------------------
-$("#po-date").text((new Date()).toLocaleString());
+$("#o-date").text((new Date()).toLocaleString());
 getVendorsLOV().forEach(function(lov){
 	var option = $("<option>");
 	option.val(lov.id);
@@ -45,94 +45,7 @@ $("#po-warehouse-info-select").on("change", function(event) {
 var po_items_inserted = {};
 var po_max_insert_id = 0;
 
-function refreshButtons() {
-	if(Object.keys(po_items_inserted).length == 0) {
-		$("#po-create-btn").prop("disabled", true);
-		$("#po-cancel-btn").prop("disabled", true);
-	} else {
-		$("#po-create-btn").prop("disabled", false);
-		$("#po-cancel-btn").prop("disabled", false);
-	}
-}
-
-function resetPOCreateGrid(){
-	$("#po-create-grid").jsGrid("render");
-}
-
-$("#po-cancel-btn").click(function(event){
-	po_max_insert_id=0;
-	po_items_inserted = {};
-	refreshButtons();
-	resetPOCreateGrid();
-	$("#po-vendor-info-select").val(0);
-	$("#po-warehouse-info-select").val(0);
-});
-
-$("#po-create-btn").click(function(event){
-	console.log(po_items_inserted);
-	if(Object.keys(po_items_inserted).length==0){
-		alert("PO cannot be created.");
-	}
-	createPO(po_items_inserted);
-	resetPOCreateGrid();
-	$("#po-vendor-info-select").val(0);
-	$("#po-vendor-info div.panel-body").hide();
-	$("#po-warehouse-info-select").val(0);
-	$("#po-warehouse-info div.panel-body").hide();
-});
-
-function createPO(po_items_inserted) {
-	console.log(po_items_inserted)
-	if(Object.keys(po_items_inserted).length > 0) {
-		var row = po_items_inserted[Object.keys(po_items_inserted)[0]];
-		console.log(row)
-		var status = row["status"];
-		var pvendor = row["pvendor"];
-		var pwarehouse = row["pwarehouse"];
-		
-		var orderQuery = "select max(id) as id from porders";
-		var orders = alasql(orderQuery);
-		var orderId = 0;
-		if(orders.length != 0 && orders[0].id !=undefined) orderId = orders[0].id;
-		orderId++;
-		var values = [];
-		values.push(orderId);
-		values.push("'PO-0000"+orderId+"'");
-		values.push(pvendor);
-		values.push(pwarehouse);
-		values.push(Number(status));
-		values.push("'" + (new Date()).toLocaleString() + "'");
-		var orderInsert = "INSERT INTO porders VALUES (" + values.join(",") + ")";
-		console.log(orderInsert)
-		alasql(orderInsert);
-		
-		// order-items
-		var poitems = alasql("select max(id) as id from poitems");
-		var poitemId = 0;
-		if(poitems.length != 0 && poitems[0].id !=undefined) poitemId = poitems[0].id;
-		Object.values(po_items_inserted).forEach(function(item){
-			poitemId++;
-			var values = [];
-			values.push(poitemId);
-			values.push("'PO-0000"+orderId+"'");
-			values.push("'" + item["pcode"] + "'");
-			values.push(item["pcat"]);
-			values.push(item["pmake"]);
-			values.push("'" + item["pdetail"] + "'");
-			values.push(item["pquant"]);
-			values.push(10); // status
-			values.push(0); // received
-			values.push("'" + (new Date()).toLocaleString() + "'");
-			var poitemInsert = "INSERT INTO poitems VALUES (" + values.join(",") + ")";
-			console.log(poitemInsert)
-			alasql(poitemInsert);
-		});
-		
-		toastr.clear();
-		toastr.success('PO created successfully.');
-	}
-}
-
+//--------------------------------------------------------------------- PO -------------------------------------------------------------
 
 $("#po-create-grid").jsGrid({
 	width: "100%",
@@ -182,7 +95,7 @@ $("#po-create-grid").jsGrid({
         	console.log(dbitem)
         	
         	po_items_inserted[po_max_insert_id] = dbitem;
-        	refreshButtons();
+        	refreshPOButtons();
         	
         	var makeField = args.grid.fields[2];
         	makeField.items = [];
@@ -195,7 +108,7 @@ $("#po-create-grid").jsGrid({
     
     onItemDeleted: function(args) {
     	delete po_items_inserted[args.item["po-row-id"]];
-    	refreshButtons();
+    	refreshPOButtons();
     },
     
     controller: {
@@ -364,180 +277,87 @@ $("#po-create-grid").jsGrid({
 		}
 	]
 });
-
-function getMakersLOV(){
-	var query = "select * from maker";
-	var data = [];
-	var d = {};
-	d["id"] = 0;
-	d["text"] = "";
-	data.push(d);
-	alasql(query).forEach(function(maker){
-		d = {};
-		d["id"] = maker.id;
-		d["text"] = maker.text;
-		data.push(d);
-	});
-	return data;
-}
-
-function getCategoriesLOV(){
-	var query = "select * from kind";
-	var data = [];
-	var d = {};
-	d["id"] = 0;
-	d["text"] = "";
-	data.push(d);
-	alasql(query).forEach(function(maker){
-		d = {};
-		d["id"] = maker.id;
-		d["text"] = maker.text;
-		data.push(d);
-	});
-	return data;
-}
-
-function getProductCode(category, make, detail){
-	var query = "select code from products where category =" + category + " and make=" + make + " and detail='" + detail + "'";
-	console.log(query)
-	var rows = alasql(query);
-	if(rows.length == 1) {
-		return rows[0]["code"];
-	}
-	return "";
-}
-
-function getProductDetailLOV(args){
-	if(args) {
-		if(args.category && args.make) {
-			query = "select detail from products where category=" + args.category + " and make=" + args.make;
-		} else if(args.category && !args.make) {
-			query = "select distinct(detail) as detail from products where category=" + args.categorye;
-		} else query = "select distinct(detail) as detail from products where make=" + args.make;
+//--------------------------------------------------------------------- PO -------------------------------------------------------------
+function refreshPOButtons() {
+	if(Object.keys(po_items_inserted).length == 0) {
+		$("#po-create-btn").prop("disabled", true);
+		$("#po-cancel-btn").prop("disabled", true);
 	} else {
-		query = "select distinct(detail) as detail from products";
+		$("#po-create-btn").prop("disabled", false);
+		$("#po-cancel-btn").prop("disabled", false);
 	}
-
-	var rows = alasql(query);
-	var lov = [];
-	rows.forEach(function(r){
-		var l = {};
-		l["id"] = r["detail"];
-		l["text"] = r["detail"];
-		lov.push(l);
-	});
-	return lov;
 }
 
-function getProductsFromDB(){
-	
-	var query = "select * from products";
-	var product_rows = alasql(query);
-	query = "select * from maker";
-	var maker_map = {};
-	alasql(query).forEach(function(maker){
-		maker_map[maker.id] = maker.text;
-	});
-	query = "select * from kind";
-	var kind_map = {};
-	alasql(query).forEach(function(kind){
-		kind_map[kind.id] = kind.text;
-	});
-	
-	var data = [];
-	if (maker_map != undefined && kind_map != undefined
-			&& product_rows.length != 0 && maker_map.length != 0
-			&& kind_map.length != 0) {
+$("#po-cancel-btn").click(function(event){
+	po_max_insert_id=0;
+	po_items_inserted = {};
+	refreshPOButtons();
+	resetPOGrids();
+	$("#po-vendor-info-select").val(0);
+	$("#po-warehouse-info-select").val(0);
+});
 
-		product_rows.forEach(function(product) {
-			var d = {};
-			d["id"] = product.id;
-			d["pcode"] = product.code;
-			d["detail"] = product.detail;
-			d["make"] = product.make;
-			d["category"] = product.category;
-			data.push(d);
+$("#po-create-btn").click(function(event){
+	console.log(po_items_inserted);
+	if(Object.keys(po_items_inserted).length==0){
+		alert("PO cannot be created.");
+	}
+	createPO(po_items_inserted);
+	resetPOGrids();
+	$("#po-vendor-info-select").val(0);
+	$("#po-vendor-info div.panel-body").hide();
+	$("#po-warehouse-info-select").val(0);
+	$("#po-warehouse-info div.panel-body").hide();
+});
+
+function createPO(po_items_inserted) {
+	console.log(po_items_inserted)
+	if(Object.keys(po_items_inserted).length > 0) {
+		var row = po_items_inserted[Object.keys(po_items_inserted)[0]];
+		console.log(row)
+		var status = row["status"];
+		var pvendor = row["pvendor"];
+		var pwarehouse = row["pwarehouse"];
+		
+		var orderQuery = "select max(id) as id from porders";
+		var orders = alasql(orderQuery);
+		var orderId = 0;
+		if(orders.length != 0 && orders[0].id !=undefined) orderId = orders[0].id;
+		orderId++;
+		var values = [];
+		values.push(orderId);
+		values.push("'PO-0000"+orderId+"'");
+		values.push(pvendor);
+		values.push(pwarehouse);
+		values.push(Number(status));
+		values.push("'" + (new Date()).toLocaleString() + "'");
+		var orderInsert = "INSERT INTO porders VALUES (" + values.join(",") + ")";
+		console.log(orderInsert)
+		alasql(orderInsert);
+		
+		// order-items
+		var poitems = alasql("select max(id) as id from poitems");
+		var poitemId = 0;
+		if(poitems.length != 0 && poitems[0].id !=undefined) poitemId = poitems[0].id;
+		Object.values(po_items_inserted).forEach(function(item){
+			poitemId++;
+			var values = [];
+			values.push(poitemId);
+			values.push("'PO-0000"+orderId+"'");
+			values.push("'" + item["pcode"] + "'");
+			values.push(item["pcat"]);
+			values.push(item["pmake"]);
+			values.push("'" + item["pdetail"] + "'");
+			values.push(item["pquant"]);
+			values.push(10); // status
+			values.push(0); // received
+			values.push("'" + (new Date()).toLocaleString() + "'");
+			var poitemInsert = "INSERT INTO poitems VALUES (" + values.join(",") + ")";
+			console.log(poitemInsert)
+			alasql(poitemInsert);
 		});
+		
+		toastr.clear();
+		toastr.success('PO created successfully.');
 	}
-    return data;
-}
-
-function notification(message) {
-	$("#notificationDialog").html("<span>" + message + "</span>")
-	$(function() {
-		$("#notificationDialog").dialog({
-			modal : true,
-			buttons : {
-				Ok : function() {
-					$(this).dialog("close");
-				}
-			}
-		});
-	});
-}
-
-function getVendorById(id) {
-	var rows = alasql("SELECT * FROM vendor where id =" + Number(id) + " order by id desc");
-	if (rows.length != 0) {
-		var d = {};
-		d["id"] = rows[0].id;
-		d["CODE"] = rows[0].vencode;
-		d["NAME"] = rows[0].name;
-		d["TEL"] = rows[0].tel;
-		d["Email"] = rows[0].email;
-		d["Address"] = rows[0].address;
-		return d;
-	}
-}
-
-function getVendorsLOV() {
-	var rows = alasql("SELECT id, name FROM vendor order by name");
-
-	var data = [];
-	var d = {};
-	d["id"] = 0;
-	d["text"] = "";
-	data.push(d);
-	if (rows.length != 0) {
-		rows.forEach(function(r) {
-			var d = {};
-			d["id"] = r.id;
-			d["text"] = r.name;
-			data.push(d);
-		});
-	}
-
-	return data;
-}
-
-function getWarehouseById(id) {
-	var rows = alasql("SELECT * FROM whouse where id =" + Number(id) + " order by id desc");
-	if (rows.length != 0) {
-		var d = {};
-		d["id"] = rows[0].id;
-		d["name"] = rows[0].name;
-		d["tel"] = rows[0].tel;
-		d["address"] = rows[0].addr;
-		return d;
-	}
-}
-
-function getWarehousesLOV() {
-	var rows = alasql("SELECT id, name FROM whouse order by name");
-
-	var data = [];
-	var d = {};
-	d["id"] = 0;
-	d["text"] = "";
-	data.push(d);
-	if (rows.length != 0) {
-		rows.forEach(function(r) {
-			var d = {};
-			d["id"] = r.id;
-			d["text"] = r.name;
-			data.push(d);
-		});
-	}
-
-	return data;
 }

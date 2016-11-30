@@ -114,10 +114,10 @@ DB.load = function() {
 	alasql('CREATE TABLE intrans_items(id INT IDENTITY, inoid STRING, initemid INT, transQty INT, lastupdate STRING);');
 	
 	alasql('DROP TABLE IF EXISTS sorders;');
-	alasql('CREATE TABLE sorders(id INT IDENTITY, oid STRING, otype INT, totype INT, toagent INT, fromtype INT, fromagent INT, status INT, lastupdate STRING);');
-	
+	alasql('CREATE TABLE sorders(id INT IDENTITY, soid STRING, warehouse INT, outlet INT, status INT, lastupdate STRING);');
+
 	alasql('DROP TABLE IF EXISTS soitems;');
-	alasql('CREATE TABLE soitems(id INT IDENTITY, oid STRING, pcode STRING, pcat INT, pmake INT, pdetail STRING, qty INT, status INT, shipped INT, lastupdate STRING);');
+	alasql('CREATE TABLE soitems(id INT IDENTITY, soid STRING, pcode STRING, pcat INT, pmake INT, pdetail STRING, qty INT, status INT, received INT, lastupdate STRING);');
 	
 	alasql('DROP TABLE IF EXISTS customer;');
 	alasql('CREATE TABLE customer(id INT IDENTITY, cname STRING, cemail STRING, ctel STRING, caddress STRING);');

@@ -92,8 +92,7 @@ function openPODetails(poid) {
 		minWidth : 1050
 	});
 	poOrderDetailsDlg.dialog("open");
-	$("#po-dlg-items").jsGrid("reset");
-	$("#po-dlg-items").jsGrid("render");
+	refreshPOGrids();
 }
 
 
@@ -138,21 +137,6 @@ $("#po-dlg-items").jsGrid({
         { name: "receivedqty", title: "Received QTY", type: "text",},
        ]
 });
-
-
-function resetPOGrids() {
-	$("#po-grid").jsGrid("loadData");
-	$("#po-grid").jsGrid("reset");
-}
-
-$('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-	  var target = $(e.target).attr("href") // activated tab
-	  if(target=="#tabcontent-overview") {
-			$("#orders-grid").jsGrid("render");
-	  } else  if(target=="#tabcontent-purchase") {
-		  $("#po-grid").jsGrid("render");
-	  }
-	});
 
 $("#po-orders-grid").jsGrid({
         width: "100%",
@@ -208,7 +192,6 @@ $("#po-orders-grid").jsGrid({
             { name: "status", title: "STATUS", type: "select", items: getStatusLOV("ORDER"), valueField: "id", textField: "text",
 
             	itemTemplate: function(value, item) {
-            		console.log(item)
             		var str = "";
             		this.items.forEach(function(r){
             			if(value == r.id) {
@@ -239,132 +222,8 @@ $("#po-orders-grid").jsGrid({
             {type: "control",
             	deleteButton: false,
             	itemTemplate: function(value, item) {
-            		/*if(item.status === 1 || item.status === 2 || item.status === 3 || item.status === 4) {
-            			return this._createEditButton(item);
-            		}
-            		return "";*/
-            		console.log(item)
             		return this._createEditButton(item);
             	}
             }
         ]
     });
-
-function getStatusLOV(type) {
-	var rows = alasql("SELECT id, text FROM status where type='" + type + "' order by id");
-
-	var data = [];
-	var d = {};
-	d["id"] = 0;
-	d["text"] = "";
-	data.push(d);
-	if (rows.length != 0) {
-		rows.forEach(function(r) {
-			var d = {};
-			d["id"] = r.id;
-			d["text"] = r.text;
-			data.push(d);
-		});
-	}
-	console.log(data)
-	return data;
-}
-
-function getVendorsLOV() {
-	var rows = alasql("SELECT id, name FROM vendor order by name");
-
-	var data = [];
-	var d = {};
-	d["id"] = 0;
-	d["text"] = "";
-	data.push(d);
-	if (rows.length != 0) {
-		rows.forEach(function(r) {
-			var d = {};
-			d["id"] = r.id;
-			d["text"] = r.name;
-			data.push(d);
-		});
-	}
-
-	return data;
-}
-
-function getWarehousesLOV() {
-	var rows = alasql("SELECT id, name FROM whouse order by name");
-
-	var data = [];
-	var d = {};
-	d["id"] = 0;
-	d["text"] = "";
-	data.push(d);
-	if (rows.length != 0) {
-		rows.forEach(function(r) {
-			var d = {};
-			d["id"] = r.id;
-			d["text"] = r.name;
-			data.push(d);
-		});
-	}
-
-	return data;
-}
-
-
-function getMakersLOV(){
-	var query = "select * from maker";
-	var data = [];
-	var d = {};
-	d["id"] = 0;
-	d["text"] = "";
-	data.push(d);
-	alasql(query).forEach(function(maker){
-		d = {};
-		d["id"] = maker.id;
-		d["text"] = maker.text;
-		data.push(d);
-	});
-	return data;
-}
-
-function getCategoriesLOV(){
-	var query = "select * from kind";
-	var data = [];
-	var d = {};
-	d["id"] = 0;
-	d["text"] = "";
-	data.push(d);
-	alasql(query).forEach(function(maker){
-		d = {};
-		d["id"] = maker.id;
-		d["text"] = maker.text;
-		data.push(d);
-	});
-	return data;
-}
-
-function getWarehouseById(id) {
-	var rows = alasql("SELECT * FROM whouse where id =" + Number(id) + " order by id desc");
-	if (rows.length != 0) {
-		var d = {};
-		d["id"] = rows[0].id;
-		d["name"] = rows[0].name;
-		d["tel"] = rows[0].tel;
-		d["address"] = rows[0].addr;
-		return d;
-	}
-}
-
-function getVendorById(id) {
-	var rows = alasql("SELECT * FROM vendor where id =" + Number(id) + " order by id desc");
-	if (rows.length != 0) {
-		var d = {};
-		d["id"] = rows[0].id;
-		d["CODE"] = rows[0].vencode;
-		d["NAME"] = rows[0].name;
-		d["TEL"] = rows[0].tel;
-		d["Email"] = rows[0].email;
-		d["Address"] = rows[0].address;
-		return d;
-	}
-}
