@@ -76,32 +76,58 @@
 		<!-- /.container-fluid -->
 	</nav>
 
-	<div class="container">
-		<ul class="nav nav-tabs">
+	<div class="container-fluid">
+		<ul class="nav nav-tabs" style="margin-left: 200px">
 			<li id="li-overview" class="active"><a id="tab-inventory"
 				href="#tabcontent-inventory" data-toggle="tab">Inventory Stock</a></li>
 			<li id="li-goodsissue"><a id="tab-goodsissue"
 				href="#tabcontent-goodsissue" data-toggle="tab">Goods Issue</a></li>
-			<li id="li-goodsreceive"><a id="tab-goodsreceive" href="#tabcontent-goodsreceive"
-				data-toggle="tab">Goods Received</a></li>
-			<li id="li-settings" class="pull-right" style="left:50px"><a id="tab-settings" href="#tabcontent-settings"
-				data-toggle="tab">Stock Settings</a></li>
+			<li id="li-goodsreceive"><a id="tab-goodsreceive"
+				href="#tabcontent-goodsreceive" data-toggle="tab">Goods Received</a></li>
+			<li id="li-settings" style="left: 940px"><a id="tab-settings"
+				href="#tabcontent-settings" data-toggle="tab">Stock Settings</a></li>
 		</ul>
 		<div class="tab-content">
 			<div id="tabcontent-inventory" class="tab-pane active">
-				<div class="panel panel-primary" style="width:1250px;">
-					<div class="panel-body" style="background-color:whitesmoke">
-						<div class="panel panel-info"> <div class="panel-body" style="background-color:whitesmoke">
+				<div class="panel panel-primary"
+					style="width: 1450px; margin-left: 200px">
+					<div class="panel-body" style="background-color: whitesmoke">
+						<div class="panel panel-info">
+							<div class="panel-body" style="background-color: whitesmoke">
 								<div class="row" style="float: right">
 									<div class="col-lg-12">
-										<div class="button-group">
-											<button type="button"
-												class="btn btn-default btn-sm dropdown-toggle"
+										<div class="btn-group pull-right">
+											<a class="btn btn-default"><span
+												class="glyphicon glyphicon-share" style="margin-right: 4px"></span>Share</a>
+											<a class="btn btn-default"><span
+												class="glyphicon glyphicon-print" style="margin-right: 4px"></span>Print</a>
+											<a class="btn btn-default" onclick=open_dlg_overview_email()><span
+												class="glyphicon glyphicon-envelope"
+												style="margin-right: 4px"></span>Email</a>
+										</div>
+										<div class="btn-group pull-right">
+											<button type="button" class="btn btn-default dropdown-toggle"
+												data-toggle="dropdown" aria-haspopup="true"
+												aria-expanded="false">
+												<span class="fa fa-download"> </span> Export <span
+													class="caret"></span>
+											</button>
+											<ul class="dropdown-menu" style="background: #171048">
+												<li style="width: 96px"><a href="#"><span
+														class="fa fa-file-excel-o"> </span> CSV</a></li>
+												<li style="width: 96px"><a href="#"><span
+														class="fa fa-file-pdf-o"> </span> PDF</a></li>
+												<li style="width: 96px"><a href="#"><span
+														class="fa fa-file-code-o"> </span> JSON</a></li>
+											</ul>
+										</div>
+										<div class="btn-group pull-right">
+											<button type="button" class="btn btn-default dropdown-toggle"
 												data-toggle="dropdown">
 												<span class="glyphicon glyphicon-cog"></span> Hide Columns<span
 													class="caret"></span>
 											</button>
-											<ul class="dropdown-menu" style="background:#171048">
+											<ul class="dropdown-menu" style="background: #171048">
 												<li><a href="#" class="small" data-value="pcat"
 													tabIndex="-1"><input type="checkbox" checked />CATEGORY</a></li>
 												<li><a href="#" class="small" data-value="pmake"
@@ -112,25 +138,102 @@
 													tabIndex="-1"><input type="checkbox" checked />WAREHOUSE</a></li>
 												<li><a href="#" class="small" data-value="pprice"
 													tabIndex="-1"><input type="checkbox" checked />PRICE</a></li>
+												<li><a href="#" class="small" data-value="reorderPoint"
+													tabIndex="-1"><input type="checkbox" checked />REORDER
+														POINT</a></li>
+												<li><a href="#" class="small" data-value="stocklevel"
+													tabIndex="-1"><input type="checkbox" checked />STOCK
+														STATUS</a></li>
 											</ul>
 										</div>
 									</div>
 								</div>
-								<div style="float: right;margin:3px">
-									<a href=""><span class="glyphicon glyphicon-share">Share </span></a>
-								</div >
-								<div style="float: right; margin:3px">
-									<a href=""><span class="glyphicon glyphicon-save">Download </span></a>
-								</div>
 								<div>
 									<label>LIST OF INVENTORY</label>
 								</div>
-
+								<hr />
+								<div class="row" style="float: right">
+									<div class="btn-group pull-right">
+										<button id='inven-grp-po' class="btn btn-primary"
+											onclick=openInventoryPO(true)>
+											<span class="glyphicon glyphicon-plus"
+												style="margin-right: 4px"></span>Create PO
+										</button>
+									</div>
+								</div>
 							</div>
 						</div>
 						<div id="inventory-items"></div>
 					</div>
 				</div>
+				<div id="dlg-inventory-create-po" style="width: 300px">
+					<div class="panel panel-default">
+						<div class="panel-body">
+							<div class="panel panel-primary">
+								<div class="panel-body">
+									<div id="po-vendor-info" class="panel panel-info">
+										<div class="panel-heading">
+											<label> Vendor: </label> <select id="po-vendor-info-select"
+												class="btn btn-default dropdown-toggle"></select>
+										</div>
+										<div class="panel-body">
+											<p>
+												CODE: <span id="po-vendor-info-code"></span>
+											</p>
+											<p>
+												Name: <span id="po-vendor-info-name"></span>
+											</p>
+											<p>
+												Address: <span id="po-vendor-info-address"></span>
+											</p>
+											<br />
+											<p>
+												Phone: <span id="po-vendor-info-tel"></span>
+											</p>
+											<p>
+												Email: <span id="po-vendor-info-email"></span>
+											</p>
+										</div>
+									</div>
+									<div id="po-warehouse-info" class="panel panel-info">
+										<div class="panel-heading">
+											<label>Warehouse:</label> <select
+												id="po-warehouse-info-select"
+												class="btn btn-default dropdown-toggle"></select>
+										</div>
+										<div class="panel-body">
+											<p>
+												Name: <span id="po-warehouse-info-name"></span>
+											</p>
+											<p>
+												Address: <span id="po-warehouse-info-address"></span>
+											</p>
+											<br />
+											<p>
+												Phone: <span id="po-warehouse-info-tel"></span>
+											</p>
+											<p>
+												Email: <span id="po-warehouse-info-email"></span>
+											</p>
+										</div>
+									</div>
+
+									<label style="float: right; margin: 5px"><span
+										style="color: #3A83D5">Date:</span> <span
+										class="label label-default" id="po-date"></span></label>
+								</div>
+							</div>
+							<div id="po-create-grid"></div>
+							<div id="btns-po-create">
+								<button id="po-cancel-btn" class="btn btn-default"
+									style="float: right; margin: 5px" disabled>Cancel</button>
+								<button id="po-create-btn" class="btn btn-success"
+									style="float: right; margin: 5px" disabled>Create</button>
+							</div>
+						</div>
+					</div>
+				</div>
+
 			</div>
 			<div id="tabcontent-goodsissue" class="tab-pane">
 				<div class="panel panel-primary">
@@ -208,9 +311,11 @@
 						<div class="panel panel-primary">
 							<div class="panel-body">
 								<div style="margin: 2px">
-									<label>Generate Purchase Order: </label> 
-									<input type="radio" id="auto-po-on" class="auto-po" value=1><label for="auto-po-on">AUTO </label>
-									<input type="radio" id="auto-po-off" class="auto-po" value=0><label for="auto-po-off">MANUAL </label>
+									<label>Generate Purchase Order: </label> <input type="radio"
+										id="auto-po-on" class="auto-po" value=1><label
+										for="auto-po-on">AUTO </label> <input type="radio"
+										id="auto-po-off" class="auto-po" value=0><label
+										for="auto-po-off">MANUAL </label>
 									<hr />
 								</div>
 								<div>
@@ -220,19 +325,38 @@
 											for="cstock-gnl">GENERAL </label> <input type="radio"
 											id="cstock-spc" class="cstock-set"><label
 											for="cstock-spc">SPECIFIC </label>
-									<hr />
+										<hr />
 									</div>
-									<div id="cstock-gnl-items" class="panel panel-info" style="width:30%">
+									<div id="cstock-gnl-items" class="panel panel-info"
+										style="width: 30%">
 										<div class="panel-body">
-											<ul style="list-style:none">
-												<li><input type="radio" class="cstock-gnl-radio" id="year" value=3><input type="text" style="margin:5px;width:80px" class="cstock-gnl-text" id="year" value=0 disabled><span> year (s) sales</span></li>
-												<li><input type="radio" class="cstock-gnl-radio" id="month" value=2><input type="text" style="margin:5px;width:80px" class="cstock-gnl-text" id="month" value=0 disabled><span> month (s) sales</span></li>
-												<li><input type="radio" class="cstock-gnl-radio" id="day" value=1><input type="text" style="margin:5px;width:80px" class="cstock-gnl-text" id="day" value=0 disabled><span> day (s) sales</span></li>
-												<li><input type="radio" class="cstock-gnl-radio" id="value" checked value=0><input type="text" style="margin:5px;width:80px" class="cstock-gnl-text" id="value" value=0><span> value </span></li>
+											<ul style="list-style: none">
+												<li><input type="radio" class="cstock-gnl-radio"
+													id="year" value=3><input type="text"
+													style="margin: 5px; width: 80px" class="cstock-gnl-text"
+													id="year" value=0 disabled><span> year (s)
+														sales</span></li>
+												<li><input type="radio" class="cstock-gnl-radio"
+													id="month" value=2><input type="text"
+													style="margin: 5px; width: 80px" class="cstock-gnl-text"
+													id="month" value=0 disabled><span> month (s)
+														sales</span></li>
+												<li><input type="radio" class="cstock-gnl-radio"
+													id="day" value=1><input type="text"
+													style="margin: 5px; width: 80px" class="cstock-gnl-text"
+													id="day" value=0 disabled><span> day (s)
+														sales</span></li>
+												<li><input type="radio" class="cstock-gnl-radio"
+													id="value" checked value=0><input type="text"
+													style="margin: 5px; width: 80px" class="cstock-gnl-text"
+													id="value" value=0><span> value </span></li>
 											</ul>
 										</div>
-										<div class="panel-footer" style="height:50px">
-											<button type="button" id="btn-cstock-gnl" class="btn btn-success pull-right"><span class="glyphicon glyphicon-ok"> Save</span></button>
+										<div class="panel-footer" style="height: 50px">
+											<button type="button" id="btn-cstock-gnl"
+												class="btn btn-success pull-right">
+												<span class="glyphicon glyphicon-ok"> Save</span>
+											</button>
 										</div>
 									</div>
 									<div id="cstock-spc-items" style="display: none"></div>
@@ -244,7 +368,8 @@
 
 			</div>
 		</div>
-			</div>
+	</div>
+	<div id="notification-dlg"><div class="text-center" style="margin:10px"><span class="glyphicon glyphicon-warning-sign label label-default" style="font-size:30px;color:yellow;"> </span></div><div><span class="text"></span></div></div>
 	<nav class="sidebar">
 		<ul class="menu">
 			<li id="sidebar-home"><a href="index.html">Home</a></li>
@@ -255,7 +380,9 @@
 			<li id="sidebar-users"><a href="users.html">Users</a></li>
 		</ul>
 	</nav>
+	<script src="js/inventory-common.js"></script>
 	<script src="js/inventory.js"></script>
+	<script src="js/inventory-po-create.js"></script>
 	<script src="js/gr-inventory.js"></script>
 		<script src="js/inventory-settings.js"></script>
 	<script src="lib/nav-sidebar.js"></script>

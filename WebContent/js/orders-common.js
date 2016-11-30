@@ -27,8 +27,6 @@ function refreshSOGrids() {
 	$("#so-create-grid").jsGrid("render");
 }
 
-
-
 function getMakersLOV(){
 	var query = "select * from maker";
 	var data = [];
@@ -225,3 +223,37 @@ function getStatusLOV(type) {
 	console.log(data)
 	return data;
 }
+
+
+//------------------------------------------------------------------------------------------------------------------------------------------------
+function open_dlg_overview_email() {
+	dlg_overview_email.dialog("open");
+}
+
+var dlg_overview_email = $("#dlg-overview-email").dialog(
+		{
+			autoOpen : false,
+			width : 400,
+			modal : true,
+			closeOnEscape : true,
+			buttons : {
+				Send : function() {
+					$(this).dialog("close");
+				},
+				Cancel : function() {
+					$(this).dialog("close");
+				}
+			},
+			open : function(event) {
+
+				$('.ui-dialog-buttonpane').find('button:contains("Send")')
+						.removeClass("ui-button ui-corner-all ui-widget")
+						.addClass('btn btn-primary');
+				$('.ui-dialog-buttonpane').find('button:contains("Cancel")')
+				.removeClass("ui-button ui-corner-all ui-widget")
+				.addClass('btn btn-default');
+			},
+			close : function(event) {
+
+			}
+		});

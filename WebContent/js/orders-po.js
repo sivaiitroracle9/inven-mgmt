@@ -9,7 +9,6 @@ var poOrderDetailsDlg = $("#po-order-details-dlg").dialog({
         }
     },
 	open: function(event) {
-
 		$('.ui-dialog-buttonpane').find('button:contains("Ok")').removeClass("ui-button ui-corner-all ui-widget").addClass('btn btn-default');
 	 }
 });

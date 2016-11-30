@@ -29,7 +29,7 @@ $("#goodsreceive-orderid-update-btn").click(function(){
     		var intrans = alasql("select max(id) as id from intrans_items");
     		if(intrans.length == 1 && intrans[0].id!=undefined) intransitem = intrans[0].id;
     		intransitem++;
-    		var query = "INSERT INTO intrans_items VALUES("+ intransitem + ",'" + upitem.poid +"'," + upitem.id +"," + Number(upitem.receivedQty) +")";
+    		var query = "INSERT INTO intrans_items VALUES("+ intransitem + ",'" + upitem.poid +"'," + upitem.id +"," + Number(upitem.receivedQty) +",'" + (new Date()).toLocaleString() + "')";
     		console.log(query)
     		alasql(query);
     		

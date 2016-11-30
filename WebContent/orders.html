@@ -84,12 +84,75 @@
 				<div class="tab-content">
 					<div id="tabcontent-po-overview"" class="tab-pane active" style="margin-top:10px">
 						<div class="panel panel-default">
+							<div class="panel-heading">
+								<label>LIST OF PURCHASE ORDERS</label>
+								<div class="btn-group pull-right">
+									<a class="btn btn-default"><span
+										class="glyphicon glyphicon-share" style="margin-right:4px"></span>Share</a> <a
+										class="btn btn-default"><span class="glyphicon glyphicon-print" style="margin-right:4px"></span>Print</a> <a class="btn btn-default" onclick=open_dlg_overview_email()><span
+										class="glyphicon glyphicon-envelope" style="margin-right:4px"></span>Email</a>
+								</div>
+								<div class="btn-group pull-right">
+									<button type="button" class="btn btn-default dropdown-toggle"
+										data-toggle="dropdown" aria-haspopup="true"
+										aria-expanded="false">
+										<span class="fa fa-download"> </span> Export <span
+											class="caret"></span>
+									</button>
+									<ul class="dropdown-menu" style="background: #171048">
+										<li style="width: 96px"><a href="#"><span
+												class="fa fa-file-excel-o"> </span> CSV</a></li>
+										<li style="width: 96px"><a href="#"><span
+												class="fa fa-file-pdf-o"> </span> PDF</a></li>
+										<li style="width: 96px"><a href="#"><span
+												class="fa fa-file-code-o"> </span> JSON</a></li>
+									</ul>
+								</div>
+								<div class="btn-group pull-right">
+									<button type="button" class="btn btn-default dropdown-toggle"
+										data-toggle="dropdown" aria-haspopup="true"
+										aria-expanded="false">
+										<span class="fa fa-upload"> </span> Import <span class="caret"></span>
+									</button>
+									<ul class="dropdown-menu" style="background: #171048">
+										<li style="width: 96px"><a href="#" onclick=importFile()><span
+												class="fa fa-file-excel-o"> </span> CSV</a></li>
+										<li style="width: 96px"><a href="#" onclick=importFile()><span
+												class="fa fa-file-pdf-o"> </span> PDF</a></li>
+										<li style="width: 96px"><a href="#" onclick=importFile()><span
+												class="fa fa-file-code-o"> </span> JSON</a></li>
+										<li style="width: 96px; display: none"><input
+											id="input-products-file" type="file"></li>
+									</ul>
+								</div>
+							</div>
 							<div class="panel-body">
 								<div id="po-orders-grid"></div>
 							</div>
 							<div id="po-order-details-dlg" style="width: 300px">
 								<div class="panel panel-primary">
 									<div class="panel-body">
+										<div class="btn-group pull-right">
+											<a class="btn btn-default"><span class="glyphicon glyphicon-share" style="margin-right:4px"></span>Share</a> 
+											<a class="btn btn-default"><span class="glyphicon glyphicon-print" style="margin-right:4px"></span>Print</a> 
+											<a class="btn btn-default" onclick=open_dlg_overview_email()><span class="glyphicon glyphicon-envelope" style="margin-right:4px"></span>Email</a>
+										</div>
+										<div class="btn-group pull-right">
+											<button type="button" class="btn btn-default dropdown-toggle"
+												data-toggle="dropdown" aria-haspopup="true"
+												aria-expanded="false">
+												<span class="fa fa-download" style="margin-right:4px"> </span> Export <span
+													class="caret"></span>
+											</button>
+											<ul class="dropdown-menu" style="background: #171048">
+												<li style="width: 96px"><a href="#"><span
+														class="fa fa-file-excel-o"> </span> CSV</a></li>
+												<li style="width: 96px"><a href="#"><span
+														class="fa fa-file-pdf-o"> </span> PDF</a></li>
+												<li style="width: 96px"><a href="#"><span
+														class="fa fa-file-code-o"> </span> JSON</a></li>
+											</ul>
+										</div>
 										<div>
 											<span style="font-weight: bold" class="pull-left">STATUS
 												: <span id="od-dlg-status"></span>
@@ -240,25 +303,90 @@
 				<div class="tab-content">
 					<div id="tabcontent-so-overview" " class="tab-pane active"
 						style="margin-top: 10px">
-												<div class="panel panel-default">
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<label>LIST OF SALE ORDERS</label>
+								<div class="btn-group pull-right">
+									<a class="btn btn-default"><span
+										class="glyphicon glyphicon-share" style="margin-right:4px"></span>Share</a> <a
+										class="btn btn-default"><span
+										class="glyphicon glyphicon-print" style="margin-right:4px"></span>Print</a>
+									<a class="btn btn-default" onclick=open_dlg_overview_email()><span
+										class="glyphicon glyphicon-envelope" style="margin-right:4px"></span>Email</a>
+								</div>
+								<div class="btn-group pull-right">
+									<button type="button" class="btn btn-default dropdown-toggle"
+										data-toggle="dropdown" aria-haspopup="true"
+										aria-expanded="false">
+										<span class="fa fa-download"> </span> Export <span
+											class="caret"></span>
+									</button>
+									<ul class="dropdown-menu" style="background: #171048">
+										<li style="width: 96px"><a href="#"><span
+												class="fa fa-file-excel-o"> </span> CSV</a></li>
+										<li style="width: 96px"><a href="#"><span
+												class="fa fa-file-pdf-o"> </span> PDF</a></li>
+										<li style="width: 96px"><a href="#"><span
+												class="fa fa-file-code-o"> </span> JSON</a></li>
+									</ul>
+								</div>
+								<div class="btn-group pull-right">
+									<button type="button" class="btn btn-default dropdown-toggle"
+										data-toggle="dropdown" aria-haspopup="true"
+										aria-expanded="false">
+										<span class="fa fa-upload"> </span> Import <span class="caret"></span>
+									</button>
+									<ul class="dropdown-menu" style="background: #171048">
+										<li style="width: 96px"><a href="#" onclick=importFile()><span
+												class="fa fa-file-excel-o"> </span> CSV</a></li>
+										<li style="width: 96px"><a href="#" onclick=importFile()><span
+												class="fa fa-file-pdf-o"> </span> PDF</a></li>
+										<li style="width: 96px"><a href="#" onclick=importFile()><span
+												class="fa fa-file-code-o"> </span> JSON</a></li>
+										<li style="width: 96px; display: none"><input
+											id="input-products-file" type="file"></li>
+									</ul>
+								</div>
+							</div>
 							<div class="panel-body">
 								<div id="so-orders-grid"></div>
 							</div>
 							<div id="so-order-details-dlg" style="width: 300px">
 								<div class="panel panel-primary">
 									<div class="panel-body">
+									<div class="btn-group pull-right">
+											<a class="btn btn-default"><span
+												class="glyphicon glyphicon-share" style="margin-right:4px"> </span>Share</a> <a
+												class="btn btn-default"><span class="glyphicon glyphicon-print" style="margin-right:4px"> </span>Print</a> <a class="btn btn-default" onclick=open_dlg_overview_email()><span
+												class="glyphicon glyphicon-envelope" style="margin-right:4px" > </span>Email</a>
+										</div>
+										<div class="btn-group pull-right">
+											<button type="button" class="btn btn-default dropdown-toggle"
+												data-toggle="dropdown" aria-haspopup="true"
+												aria-expanded="false">
+												<span class="fa fa-download"> </span> Export <span
+													class="caret"></span>
+											</button>
+											<ul class="dropdown-menu" style="background: #171048">
+												<li style="width: 96px"><a href="#"><span
+														class="fa fa-file-excel-o"> </span> CSV</a></li>
+												<li style="width: 96px"><a href="#"><span
+														class="fa fa-file-pdf-o"> </span> PDF</a></li>
+												<li style="width: 96px"><a href="#"><span
+														class="fa fa-file-code-o"> </span> JSON</a></li>
+											</ul>
+										</div>
 										<div>
 											<span style="font-weight: bold" class="pull-left">STATUS
-												: <span id="od-dlg-status"></span>
+												: <span id="so-dlg-status"></span>
 											</span> <span style="font-weight: bold" class="pull-left">ORDER
-												TYPE : <span id="od-dlg-type"></span>
+												TYPE : <span id="so-dlg-type"></span>
 											</span> <span style="font-weight: bold" class="pull-right">LAST
-												UPDATE : <span id="od-dlg-lastupdate"
+												UPDATE : <span id="so-dlg-lastupdate"
 												class="label label-default"></span>
 											</span>
 										</div>
-										<br />
-										<br />
+										<br /> <br />
 										<div>
 											<div id="so-dlg-from-info" class="panel panel-info pull-left">
 												<div class="panel-heading">
@@ -413,6 +541,15 @@
 		</div>
 	</div>
 	<div id="notificationDialog"></div>
+	<div id="dlg-overview-email">
+		<form action="" class="form-group">
+			<label for="dlg-overview-email-to">To</label><input class="form-control" id="dlg-overview-email-to" type="email">
+			<label for="dlg-overview-email-from">From</label><input class="form-control" id="dlg-overview-email-from" type="email">
+			<label for="dlg-overview-email-subject">Subject</label><input class="form-control" id="dlg-overview-email-subject" type="email">
+			<label for="dlg-overview-email-body">Content</label><textarea class="form-control" style="width:360px"></textarea>
+		</form>
+	</div>
+								
 	
 	<script src="js/orders-common.js"></script>
 	<script src="js/orders-po.js"></script>
