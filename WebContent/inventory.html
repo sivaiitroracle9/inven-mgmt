@@ -77,7 +77,7 @@
 	</nav>
 
 	<div class="container-fluid">
-		<ul class="nav nav-tabs" style="margin-left: 100px">
+		<ul class="nav nav-tabs" style="margin-left: 10px">
 			<li id="li-overview" class="active"><a id="tab-inventory"
 				href="#tabcontent-inventory" data-toggle="tab">Inventory Stock</a></li>
 			<li id="li-goodsissue"><a id="tab-goodsissue"
@@ -89,15 +89,24 @@
 		</ul>
 		<div class="tab-content">
 			<div id="tabcontent-inventory" class="tab-pane active">
-				<div id="inventory-bar-chart" class="panel panel-default"  style="float:right;width:380px;margin-top:250px;">
+				<div id="inventory-bar-chart" class="panel panel-default"  style="float:right;width:410px;margin-top:250px;">
 					<div class="panel-header" style="background-color: whitesmoke;">
 						<label>Warehouse:</label><select style="width:110px;height:29px"></select>
 						<label>Product:</label><select style="width:110px;height:29px"></select>
+						<div class="btn-group">
+							<label for="from" class="pull-left">From</label>
+							<input  class="pull-left" type="text" id="from" name="from" style="width:75px;margin:2px;">
+							<label for="to" class="pull-left">to</label>
+							<input  class="pull-left" type="text" id="to" name="to" style="width:75px;margin:2px;">
+							<a class="btn btn-default" style="background:#bdc3c7">DD</a>
+							<a class="btn btn-default" style="background:#bdc3c7">MM</a>
+							<a class="btn btn-default" style="background:#bdc3c7">YYYY</a>
+						</div>
 					</div>
 					<div class="panel-body" style="background-color: whitesmoke;"></div>
 				</div>
 				<div class="panel panel-primary"
-					style="width: 1450px; margin-left: 40px">
+					style="width: 1450px; margin-left: 10px">
 					<div class="panel-body" style="background-color: whitesmoke;">
 						<div class="panel panel-info">
 							<div class="panel-body" style="background-color: whitesmoke; height:120px">
@@ -403,9 +412,42 @@
 		<script src="js/inventory-settings.js"></script>
 	<script src="lib/nav-sidebar.js"></script>
 	<script type="text/javascript">
+		
+		var f = new Date();
+		$( "#from" ).val(f.getDate() + "/")
+	
 		function logout() {
 			$(location).attr('href', 'login.html');
 		}
+		var dateFormat = "mm/dd/yy",
+	      from = $( "#from" )
+	        .datepicker({
+	          defaultDate: "+1w",
+	          changeMonth: true,
+	          numberOfMonths: 3
+	        })
+	        .on( "change", function() {
+	          to.datepicker( "option", "minDate", getDate( this ) );
+	        }),
+	      to = $( "#to" ).datepicker({
+	        defaultDate: "+1w",
+	        changeMonth: true,
+	        numberOfMonths: 3
+	      })
+	      .on( "change", function() {
+	        from.datepicker( "option", "maxDate", getDate( this ) );
+	      });
+	 
+	    function getDate( element ) {
+	      var date;
+	      try {
+	        date = $.datepicker.parseDate( dateFormat, element.value );
+	      } catch( error ) {
+	        date = null;
+	      }
+	 
+	      return date;
+	    }
 		</script>
 </body>
 </html>
