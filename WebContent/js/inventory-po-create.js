@@ -4,6 +4,13 @@ var poOrderDetailsDlg = $("#dlg-inventory-create-po").dialog({
     width: 800,
     modal: true,
     closeOnEscape: true,
+    title: "Create purchase order",
+    close: function(){
+    	refreshPOButtons();
+    	refreshPOGrids();
+    	$("#po-vendor-info-select").val(0);
+    	$("#po-warehouse-info-select").val(0);
+    }
 });
 
 var notificationDlg = $("#notification-dlg").dialog({
@@ -11,6 +18,7 @@ var notificationDlg = $("#notification-dlg").dialog({
     width: 300,
     modal: true,
     closeOnEscape: true,
+    title: "Alert",
     buttons: {
         Ok: function() {
             $(this).dialog("close");
@@ -67,8 +75,10 @@ var po_max_insert_id = 0;
 //------------------------------------------------------------------------------- PO -------------------------------------------------------------------------------------
 $("#po-create-grid").jsGrid({
 	width: "100%",
+	height: "300px",
 	inserting: true,
 	autoload: true,
+	editing: true,
 	pageSize: 10,
 	pageButtonCount: 5,
 	confirmDeleting: false,
@@ -136,8 +146,8 @@ $("#po-create-grid").jsGrid({
     },
     
 	fields: [
-		{name: "pcode", inserting: true, title: "PROD CODE"	},
-		{name: "pcat", title: "PROD CATEGORY", type: "select", items:getCategoriesLOV(), valueField: "id", textField: "text", 
+		{name: "pcode", inserting: true, title: "PROD CODE", editing:false},
+		{name: "pcat", title: "PROD CATEGORY", type: "select", items:getCategoriesLOV(), valueField: "id", textField: "text", editing:false,
 			
 			validate:{validator: "min", 
 				message: function(value, item) {
@@ -201,7 +211,7 @@ $("#po-create-grid").jsGrid({
 		    }
 		},
 		
-		{name: "pmake", title: "PROD MAKER", type: "select", items:[], valueField: "id", textField: "text", insertcss: "prod-make-insert",
+		{name: "pmake", title: "PROD MAKER", type: "select", items:[], valueField: "id", textField: "text", insertcss: "prod-make-insert", editing:false,
 			
 			selectedIndex: 0,
 			validate:{validator: "min", 
@@ -254,8 +264,7 @@ $("#po-create-grid").jsGrid({
 		    	return text;
 		    }
 		},
-		
-		{name: "pdetail", title: "PROD DETAIL", type: "select", items:[], valueField: "id", textField: "text", insertcss: "prod-detail-insert",
+		{name: "pdetail", title: "PROD DETAIL", type: "select", items:[], valueField: "id", textField: "text", insertcss: "prod-detail-insert", editing:false,
 			validate:{validator: "min", 
 				message: function(value, item) {
 					return "Invalid PROD DETAIL";
@@ -275,23 +284,23 @@ $("#po-create-grid").jsGrid({
 				return this.insertControl.val();
 		    },
 		},	
-		{name: "pquant", title: "QTY", type: "text", validate:{validator: function(value, item) {
+		{name: "pquant", title: "QTY", type: "text",
+			validate:{
+				validator: function(value, item) {
 					if(Number(value) === parseInt(value, 10) && Number(value) > 0) return true;
 					else false;
-			}, message: function(value, item) {
-				return "Invalid QTY = " + value;
+				}, 
+				message: function(value, item) {
+					return "Invalid QTY = " + value;
+				},
+				param: [1]
 			},
-			param: [1]
-		},
-		
-		itemTemplate: function(value, item) {
-			return parseInt(value, 10);
-		}	
+			itemTemplate: function(value, item) {
+				return parseInt(value, 10);
+			}
 		
 		},
-		{ type: "control",
-		  editButton: false,
-		}
+		{ type: "control",	}
 	]
 });
 //--------------------------------------------------------------------- PO -------------------------------------------------------------

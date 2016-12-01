@@ -35,6 +35,7 @@ function getStockLevelLOV() {
 	data.push({"id":1,"text":"Sufficient Stock"});
 	data.push({"id":2,"text":"Low Stock"});
 	data.push({"id":3,"text":"Out of Stock"});
+	data.push({"id":4,"text":"Low / Out of Stock"});
 	return data;
 }
 
@@ -154,4 +155,47 @@ function getProductDetailLOV(args){
 		lov.push(l);
 	});
 	return lov;
+}
+
+function open_dlg_overview_email() {
+	dlg_overview_email.dialog("open");
+}
+
+var dlg_overview_email = $("#dlg-overview-email").dialog(
+		{
+			autoOpen : false,
+			width : 400,
+			modal : true,
+			closeOnEscape : true,
+			title: "Compose Email",
+			buttons : {
+				Send : function() {
+					$(this).dialog("close");
+				},
+				Cancel : function() {
+					$(this).dialog("close");
+				}
+			},
+			open : function(event) {
+
+				$('.ui-dialog-buttonpane').find('button:contains("Send")')
+						.removeClass("ui-button ui-corner-all ui-widget")
+						.addClass('btn btn-primary');
+				$('.ui-dialog-buttonpane').find('button:contains("Cancel")')
+				.removeClass("ui-button ui-corner-all ui-widget")
+				.addClass('btn btn-default');
+			},
+			close : function(event) {
+
+			}
+});
+
+function pageData(data, pageIndex, pageSize) {
+	var pageData;
+	if(pageIndex!= undefined && pageSize!= undefined && pageIndex > 0) {
+		pageData = data.slice((pageIndex - 1)*pageSize, pageIndex*pageSize)	
+	} else {
+		pageData = data;
+	}
+	return pageData;
 }

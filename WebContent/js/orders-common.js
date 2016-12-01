@@ -236,6 +236,7 @@ var dlg_overview_email = $("#dlg-overview-email").dialog(
 			width : 400,
 			modal : true,
 			closeOnEscape : true,
+			title: "Compose Email",
 			buttons : {
 				Send : function() {
 					$(this).dialog("close");
@@ -256,4 +257,4 @@ var dlg_overview_email = $("#dlg-overview-email").dialog(
 			close : function(event) {
 
 			}
-		});
+});

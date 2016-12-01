@@ -414,6 +414,7 @@ var showProdDetailsDialog = function(dialogType, product) {
 			"open");
 };
 
+var products_items_selected = {};
 $("#productsGird").jsGrid({
     width: "100%",
     autoload: true,
@@ -437,19 +438,29 @@ $("#productsGird").jsGrid({
     
     controller: {
         loadData: function(filter) {
-        	console.log(filter)
         	var filtered = $.grep(getProductsFromDB(), function(product) {
-                return (!filter["CODE"] || product["CODE"].indexOf(filter["CODE"]) == 0)
-            	&& (!filter["CATEGORY"] || product["CATEGORY"]==filter["CATEGORY"])
-            	&& (!filter["MAKER"] || product["MAKER"]==filter["MAKER"])
-            	&& (!filter["Detail"] || product["Detail"].indexOf(filter["Detail"]) > -1)
-                && (!filter["Price"] || product["Price"] == filter["Price"])
-                && (!filter["Unit"] || product["Unit"].indexOf(filter["Unit"]) == 0);
+                return (!filter["code"] || product["code"].indexOf(filter["code"]) == 0)
+            	&& (!filter["category"] || filter["category"] == 0 || product["category"]==filter["category"])
+            	&& (!filter["maker"] || filter["maker"] == 0 || product["maker"]==filter["maker"])
+            	&& (!filter["detail"] || product["detail"].indexOf(filter["detail"]) > -1)
+                && (!filter.price || !filter.price.text 
+						|| (filter.price.text && Number(filter.price.op)===0 && Number(filter.price.text)== Number(product["price"]))
+						|| (filter.price.text && Number(filter.price.op)===1 && Number(filter.price.text) < Number(product["price"]))
+						|| (filter.price.text && Number(filter.price.op)===2 && Number(filter.price.text) > Number(product["price"]))
+						|| (filter.price.text && Number(filter.price.op)===3 && Number(filter.price.text) <= Number(product["price"]))
+						|| (filter.price.text && Number(filter.price.op)===4 && Number(filter.price.text) >= Number(product["price"]))
+					)
+                && (!filter["unit"] || product["unit"].indexOf(filter["unit"]) == 0);
         	});
         	
         	if(filter.sortField != undefined && filter.sortOrder != undefined)
         		filtered = sortProducts(filtered, filter.sortField, filter.sortOrder);
 
+        	products_items_selected = {};
+    		filtered.forEach(function(d){
+    			products_items_selected[d.id] = d;
+    		});
+        	
             return {data: pageData(filtered, filter.pageIndex, filter.pageSize), itemsCount: filtered.length};
         },
         
@@ -465,27 +476,94 @@ $("#productsGird").jsGrid({
     },
     
     fields: [
-        { name: "CODE", type: "text", width: 150,
+		 { name: "pckb", title: "", type: "checkbox", align: "center", filtering:false, sorting:false, width:20, css:"prodpckbheader",
+			 headerTemplate: function(value, item) {
+				 return $("<input id='prod-pckb-header' checked>").attr("type", "checkbox").change(function(){
+					 if($(this).is(":checked")){
+						 $("input.prod-pckb-item").each(function(){
+							$(this).prop('checked', true); 
+						 });
+						 $("#productsGird").data("JSGrid").data.forEach(function(d){
+							 products_items_selected[d.id] = item;
+				    	 });
+					 } else {
+						 $("input.prod-pckb-item").each(function(){
+ 							$(this).prop('checked', false); 
+ 						 });
+						 products_items_selected = {};
+					 }
+				 });
+			 },
+		 
+    		 itemTemplate: function(value, item) {
+                 return $("<input class='prod-pckb-item' id='prod-pckb-item-'" + item.pstockid + " checked>").attr("type", "checkbox").change(function(){
+                	 var id = Number($(this).attr("id").slice(15));
+                	 if($(this).is(":checked")){
+                		 products_items_selected[id] = item;
+                		 if($("#productsGird").data("JSGrid").data.length === Object.keys(products_items_selected).length) {
+                			 $("input#prod-pckb-header").prop('checked', true);
+                		 }
+                	 } else {
+                		 delete products_items_selected[id + 1];
+                		 $("input#prod-pckb-header").prop('checked', false);
+                	 }
+                 });
+             },
+    	 },
+		 
+         { name: "pimg", title: "", type: "text", editing:false, width:70, sorting:false, filtering: false, css:"prodimgheader",
+    		
+    		 itemTemplate: function(value, item) {
+                 return "<img style='width:40px;height:40px' src='img/" + item.id + ".jpg'>"
+                 },
+         },
+        { name: "code", title:"CODE", type: "text", width: 150,
         	headerTemplate: function() {
         		return $("<span>CODE</span><span style='float:right' class='glyphicon glyphicon-sort'>");
         	}
         
         },
-        { name: "Detail", type: "text", width: 150, 
+        { name: "detail", title:"DETAIL", type: "text", width: 150, 
         	headerTemplate: function() {
         		return $("<span>Detail</span><span style='float:right' class='glyphicon glyphicon-sort'>");
         	}
         },
-        { name: "MAKER", type: "select", items: getMakersFromDB(), valueField: "id", textField: "text", sorting: false, },
-        { name: "CATEGORY", type: "select", items: getCategoriesFromDB(), valueField: "id", textField: "text", sorting: false, },
+        { name: "maker", title:"MAKER", type: "select", items: getMakersFromDB(), valueField: "id", textField: "text", sorting: false, },
+        { name: "category", title:"CATEGORY", type: "select", items: getCategoriesFromDB(), valueField: "id", textField: "text", sorting: false, },
         
-        { name: "Price", type: "text", width: 150, 
+        { name: "price", title:"PRICE", type: "text", width: 150, 
         	headerTemplate: function() {
         		return $("<span>Price</span><span style='float:right' class='glyphicon glyphicon-sort'>");
-        	}
+        	},
+         	filterTemplate: function() {
+         			var operator = $("<select style='width:55px'>").on('change', function (e) {
+         				$("#productsGird").jsGrid("search", $("#inventory-items").jsGrid("getFilter"));
+     				});
+         			$("<option selected>").val(0).text("=").appendTo(operator);
+         			$("<option>").val(1).text(">").appendTo(operator);
+         			$("<option>").val(2).text("<").appendTo(operator);
+         			$("<option>").val(3).text(">=").appendTo(operator);
+         			$("<option>").val(4).text("<=").appendTo(operator);
+         			
+         			this._operatorPicker = operator;
+         			this._textPicker = $("<input style='width:76px' type='text'>")
+         				.on('keypress', function (e) {
+         		         if(e.which === 13){
+         		        	$("#productsGird").jsGrid("search", $("#productsGird").jsGrid("getFilter"));
+         		         }
+         				});
+               return $("<div>").append(this._operatorPicker).append(this._textPicker);
+           },
+        
+           filterValue: function() {
+        	   return {
+        		   text: this._textPicker.val(),
+        		   op: this._operatorPicker.val(),
+        	   };
+           }
         },
         
-        { name: "Unit", type: "text", width: 150, 
+        { name: "unit", title:"UNIT", type: "text", width: 150, 
         	headerTemplate: function() {
         		return $("<span>Unit</span><span style='float:right' class='glyphicon glyphicon-sort'>");
         	}
@@ -613,12 +691,12 @@ function getProductsFromDB(){
 		product_rows.forEach(function(product) {
 			var d = {};
 			d["id"] = product.id;
-			d["CODE"] = product.code;
-			d["Detail"] = product.detail;
-			d["MAKER"] = product.make;
-			d["CATEGORY"] = product.category;
-			d["Price"] = product.price;
-			d["Unit"] = product.unit;
+			d["code"] = product.code;
+			d["detail"] = product.detail;
+			d["maker"] = product.make;
+			d["category"] = product.category;
+			d["price"] = product.price;
+			d["unit"] = product.unit;
 			data.push(d);
 		});
 	}

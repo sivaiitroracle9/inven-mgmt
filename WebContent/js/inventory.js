@@ -89,12 +89,13 @@ var inventory_items_selected = {};
 $("#inventory-items").jsGrid({
 	width:"1400px",
 	filtering: true,
-    sorting: true,
+	sorting: true,
     autoload: true,
     visible:true,
     paging: true,
-    pageSize: 20,
+    pageSize: 15,
     pageButtonCount: 10,
+    pageLoading:true,
     
     rowClick: function(args){
 
@@ -102,10 +103,8 @@ $("#inventory-items").jsGrid({
     
     controller: {
     	loadData: function(filter) {
-    		
     		console.log(filter)
-    		
-    		var products = alasql("select stock.id as pstockid, stock.cstock as cstock, stock.cstock_type as cstock_type, products.id as id, stock.whouse as whouse, stock.balance as qty, products.code as code, " +
+    		var products = alasql("select stock.id as pstockid, products.id as prodid, stock.cstock as cstock, stock.cstock_type as cstock_type, products.id as id, stock.whouse as whouse, stock.balance as qty, products.code as code, " +
     				"products.category as category, products.detail as detail, products.make as make, products.price as price, products.unit as unit" +
     				" from products JOIN stock ON products.id=stock.item");
     		
@@ -113,11 +112,13 @@ $("#inventory-items").jsGrid({
     		products.forEach(function(prd){
     			var iitem = {};
     			iitem.pckb = true;
-    			iitem.pstockid = prd.pstockid;
+    			iitem.pstockid = prd.pstockid;  			
+    			iitem.prodid = prd.prodid;
     			iitem.cstock_type = prd.cstock_type;
     			iitem.whouse = prd.whouse;
     			iitem.pcat = prd.category;
     			iitem.pcode = prd.code;
+    			iitem.plocId = "SL-00" + iitem.whouse + "-" + iitem.pcode;
     			iitem.pmake = prd.make;
     			iitem.pdetail = prd.detail;
     			iitem.pprice = prd.price;
@@ -135,28 +136,48 @@ $("#inventory-items").jsGrid({
     			return ((!filter["whouse"] || filter["whouse"]===0 || filter["whouse"] === iitem["whouse"])
     					&& (!filter["pcat"] || filter["pcat"]===0 || filter["pcat"] === iitem["pcat"])
     					&& (!filter["pcode"] || filter["pcode"]==="" || iitem["pcode"].indexOf(filter["pcode"]))!=-1
-    					&& (!filter["pmake"] || filter["pmake"]===0 || filter["pmake"] === iitem["pmake"])
+    					&& (!filter["plocId"] || filter["plocId"]==="" || iitem["plocId"].indexOf(filter["plocId"]))!=-1
     					&& (!filter["pdetail"]  || filter["pdetail"]==="" || iitem["pdetail"].indexOf(filter["pdetail"]))!=-1
-    					&& (!filter["inStock"] || filter["inStock"]==="" || Number(filter["inStock"]) === iitem["inStock"])
-    					&& (!filter["reorderPoint"] || filter["reorderPoint"] === iitem["reorderPoint"])
-    					&& (!filter["pprice"] || filter["pprice"] === iitem["pprice"])
-    					&& (!filter["stocklevel"] || filter["stocklevel"] === iitem["stocklevel"]));
-/*    			var sel_pprice = $("#sel-pprice").val();
-    			return ((!filter["whouse"] || filter["whouse"]===0 || filter["whouse"] === iitem["whouse"])
-    					&& (!filter["pcat"] || filter["pcat"]===0 || filter["pcat"] === iitem["pcat"])
-    					&& (!filter["pcode"] || filter["pcode"]==="" || iitem["pcode"].indexOf(filter["pcode"]))!=-1
     					&& (!filter["pmake"] || filter["pmake"]===0 || filter["pmake"] === iitem["pmake"])
-    					&& (!filter["pdetail"]  || filter["pdetail"]==="" || iitem["pdetail"].indexOf(filter["pdetail"]))!=-1
-    					&& (!filter["inStock"] || filter["inStock"]==="" || Number(filter["inStock"]) === iitem["inStock"])
-    					&& (!filter["reorderPoint"] || filter["reorderPoint"] === iitem["reorderPoint"])
-    					&& (!filter["pprice"] || (sel_pprice==0 && Number(filter["pprice"]) === Number(iitem["pprice"])) 
-    							|| (sel_pprice==1 && Number(filter["pprice"]) < Number(iitem["pprice"]))
-    							|| (sel_pprice==2 && Number(filter["pprice"]) > Number(iitem["pprice"]))
-    							|| (sel_pprice==3 && Number(filter["pprice"]) <= Number(iitem["pprice"]))
-    							|| (sel_pprice==4 && Number(filter["pprice"]) >= Number(iitem["pprice"])))
-    					&& (!filter["stocklevel"] || filter["stocklevel"] === iitem["stocklevel"]));*/
+    					&& (!filter.inStock || !filter.inStock.text 
+    						|| (filter.inStock.text && Number(filter.inStock.op)===0 && Number(filter.inStock.text)== Number(iitem["inStock"]))
+    						|| (filter.inStock.text && Number(filter.inStock.op)===1 && Number(filter.inStock.text) < Number(iitem["inStock"]))
+    						|| (filter.inStock.text && Number(filter.inStock.op)===2 && Number(filter.inStock.text) > Number(iitem["inStock"]))
+    						|| (filter.inStock.text && Number(filter.inStock.op)===3 && Number(filter.inStock.text) <= Number(iitem["inStock"]))
+    						|| (filter.inStock.text && Number(filter.inStock.op)===4 && Number(filter.inStock.text) >= Number(iitem["inStock"]))
+    					) && (!filter.reorderPoint || !filter.reorderPoint.text 
+    						|| (filter.reorderPoint.text && Number(filter.reorderPoint.op)===0 && Number(filter.reorderPoint.text)== Number(iitem["reorderPoint"]))
+    						|| (filter.reorderPoint.text && Number(filter.reorderPoint.op)===1 && Number(filter.reorderPoint.text) < Number(iitem["reorderPoint"]))
+    						|| (filter.reorderPoint.text && Number(filter.reorderPoint.op)===2 && Number(filter.reorderPoint.text) > Number(iitem["reorderPoint"]))
+    						|| (filter.reorderPoint.text && Number(filter.reorderPoint.op)===3 && Number(filter.reorderPoint.text) <= Number(iitem["reorderPoint"]))
+    						|| (filter.reorderPoint.text && Number(filter.reorderPoint.op)===4 && Number(filter.reorderPoint.text) >= Number(iitem["reorderPoint"]))
+    					) && (!filter.pprice || !filter.pprice.text 
+    						|| (filter.pprice.text && Number(filter.pprice.op)===0 && Number(filter.pprice.text)== Number(iitem["pprice"]))
+    						|| (filter.pprice.text && Number(filter.pprice.op)===1 && Number(filter.pprice.text) < Number(iitem["pprice"]))
+    						|| (filter.pprice.text && Number(filter.pprice.op)===2 && Number(filter.pprice.text) > Number(iitem["pprice"]))
+    						|| (filter.pprice.text && Number(filter.pprice.op)===3 && Number(filter.pprice.text) <= Number(iitem["pprice"]))
+    						|| (filter.pprice.text && Number(filter.pprice.op)===4 && Number(filter.pprice.text) >= Number(iitem["pprice"]))
+    					) && (!filter["stocklevel"] || filter["stocklevel"] === iitem["stocklevel"] || (filter["stocklevel"]===4 && (iitem["stocklevel"]===2 || iitem["stocklevel"] === 3))));
     		});
     		
+    		if(filter.sortField != undefined && filter.sortOrder != undefined) {
+        		filtered.sort(function(x1, x2){
+        			var x11 = x1[filter.sortField], x21 = x2[filter.sortField];
+        			if(filter.sortField === "pprice" || filter.sortField === "inStock" || filter.sortField === "reorderPoint") {
+        				x11 = Number(x11);
+        				x21 = Number(x21);
+        			}
+        			
+        			if(x11 === x21) return 0;
+        			
+        			if(filter.sortOrder == "asc") {
+        				return x11 > x21 ? 1 : -1;
+        			} else if(filter.sortOrder == "desc") {
+        				return x11 < x21 ? 1 : -1;
+        			}	
+        		});
+    		}
+
     		inventory_items_selected = {};
     		filtered.forEach(function(d){
     			inventory_items_selected[d.pstockid] = d;
@@ -164,7 +185,7 @@ $("#inventory-items").jsGrid({
     		
     		toggleGroupPO();
     		
-    		return filtered;
+    		return  {data: pageData(filtered, filter.pageIndex, filter.pageSize), itemsCount: filtered.length};;
     	},
     	
     },
@@ -205,18 +226,28 @@ $("#inventory-items").jsGrid({
 	                 });
 	             },
 	    	 },
-    		 
-             { name: "pcode", title: "PROD CODE", type: "text", editing:false, width:150, 
+	         { name: "pimg", title: "IMG", type: "text", editing:false, width:70, sorting:false, filtering: false, css:"pimgheader",
+	     		
+	    		 itemTemplate: function(value, item) {
+	                 return "<img style='width:40px;height:40px' src='img/" + item.prodid + ".jpg'>";
+	             },
+	         },
+             { name: "pcode", title: "PROD CODE", type: "text", editing:false, width:120, sorting:true,
 	    		 headerTemplate: function() {
 	         		return $("<span>" + this.title + "</span><span style='float:right' class='glyphicon glyphicon-sort'>");
 	         	}	 
              },
-             { name: "pcat", title: "CATEGORY", type: "select", items:getCategoriesLOV(), valueField: "id", textField: "text", width:150, 
+             { name: "pcat", title: "CATEGORY", type: "select", items:getCategoriesLOV(), valueField: "id", textField: "text", width:120, 
             	 headerTemplate: function() {
  	         		return $("<span>" + this.title + "</span><span style='float:right' class='glyphicon glyphicon-sort'>");
  	         	}	 
              },
-             { name: "pmake", title: "MAKER", type: "select", items:getMakersLOV(), valueField: "id", textField: "text", width:150, 
+             { name: "plocId", title: "SHELF", type: "text", editing:false, width:120, sorting:true,
+            	 headerTemplate: function() {
+ 	         		return $("<span>" + this.title + "</span><span style='float:right' class='glyphicon glyphicon-sort'>");
+ 	         	}	 
+             },
+             { name: "pmake", title: "MAKER", type: "select", items:getMakersLOV(), valueField: "id", textField: "text", width:120, 
             	 headerTemplate: function() {
  	         		return $("<span>" + this.title + "</span><span style='float:right' class='glyphicon glyphicon-sort'>");
  	         	}	 
@@ -226,52 +257,116 @@ $("#inventory-items").jsGrid({
  	         		return $("<span>" + this.title + "</span><span style='float:right' class='glyphicon glyphicon-sort'>");
  	         	}	 
              },
-             { name: "whouse", title: "WAREHOUSE", type: "select", items:getWarehousesLOV(), valueField: "id", textField: "text", width:150, 
+             { name: "whouse", title: "WAREHOUSE", type: "select", items:getWarehousesLOV(), valueField: "id", textField: "text", width:120, 
             	 headerTemplate: function() {
  	         		return $("<span>" + this.title + "</span><span style='float:right' class='glyphicon glyphicon-sort'>");
  	         	}	 
              },
-             { name: "pprice", title: "PRICE ", type: "number", filtering: false, width:150, 
+             { name: "pprice", title: "PRICE ", type:"number", width:120, 
             	 headerTemplate: function() {
  	         		return $("<span>" + this.title + "</span><span style='float:right' class='glyphicon glyphicon-sort'>");
  	         	 },
-/* 	         	 filterTemplate: function() {
- 	         		var operator = "<select id='sel-pprice' style='float:left;width:60px'><option value='0'>=</option>" +
- 	         				"<option value='1'>></option>" +
- 	         				"<option value='2'><</option>" +
- 	         				"<option value='3'>>=</option>" +
- 	         				"<option value='4'><=</option></select>" +
- 	         				"<input id='in-pprice' style='width:76px' type='text'>";
- 	         		 return operator;
- 	         	 },
- 	         	filterValue: function(){
- 	         		 console.log($("#in-pprice").val());
- 	         		console.log(this.filterControl.val())
- 	         		 return Number($("#in-pprice").val());
- 	         	 }*/
+ 	         	filterTemplate: function() {
+ 	         			var operator = $("<select style='width:55px'>").on('change', function (e) {
+	 	         		    	$("#inventory-items").jsGrid("search", $("#inventory-items").jsGrid("getFilter"));
+	         				});
+ 	         			$("<option selected>").val(0).text("=").appendTo(operator);
+ 	         			$("<option>").val(1).text(">").appendTo(operator);
+ 	         			$("<option>").val(2).text("<").appendTo(operator);
+ 	         			$("<option>").val(3).text(">=").appendTo(operator);
+ 	         			$("<option>").val(4).text("<=").appendTo(operator);
+ 	         			
+ 	         			this._operatorPicker = operator;
+ 	         			this._textPicker = $("<input style='width:46px' type='text'>")
+ 	         				.on('keypress', function (e) {
+	 	         		         if(e.which === 13){
+	 	         		        	$("#inventory-items").jsGrid("search", $("#inventory-items").jsGrid("getFilter"));
+	 	         		         }
+ 	         				});
+	 	               return $("<div>").append(this._operatorPicker).append(this._textPicker);
+	 	           },
+	 	        
+ 	           filterValue: function() {
+ 	        	   return {
+ 	        		   text: this._textPicker.val(),
+ 	        		   op: this._operatorPicker.val(),
+ 	        	   };
+ 	           }
              },   
-             { name: "inStock", title: "In Stock QTY", type: "text", width:150, 
+             { name: "inStock", title: "In Stock QTY", type: "text", width:120, 
             	 headerTemplate: function() {
  	         		return $("<span>" + this.title + "</span><span style='float:right' class='glyphicon glyphicon-sort'>");
- 	         	}	 
+ 	         	},
+ 	         	filterTemplate: function() {
+	         			var operator = $("<select style='width:55px'>").on('change', function (e) {
+ 	         		    	$("#inventory-items").jsGrid("search", $("#inventory-items").jsGrid("getFilter"));
+         				});
+	         			$("<option selected>").val(0).text("=").appendTo(operator);
+	         			$("<option>").val(1).text(">").appendTo(operator);
+	         			$("<option>").val(2).text("<").appendTo(operator);
+	         			$("<option>").val(3).text(">=").appendTo(operator);
+	         			$("<option>").val(4).text("<=").appendTo(operator);
+	         			
+	         			this._operatorPicker = operator;
+	         			this._textPicker = $("<input style='width:46px' type='text'>")
+	         				.on('keypress', function (e) {
+ 	         		         if(e.which === 13){
+ 	         		        	$("#inventory-items").jsGrid("search", $("#inventory-items").jsGrid("getFilter"));
+ 	         		         }
+	         				});
+ 	               return $("<div>").append(this._operatorPicker).append(this._textPicker);
+ 	           },
+ 	        
+	           filterValue: function() {
+	        	   return {
+	        		   text: this._textPicker.val(),
+	        		   op: this._operatorPicker.val(),
+	        	   };
+	           }
              },
-             { name: "reorderPoint", title: "Reorder Point", type: "text", width:150, 
+             { name: "reorderPoint", title: "Reorder Point", type: "text", width:120, 
             	 headerTemplate: function() {
  	         		return $("<span>" + this.title + "</span><span style='float:right' class='glyphicon glyphicon-sort'>");
- 	         	}	 
+ 	         	},
+ 	         	filterTemplate: function() {
+	         			var operator = $("<select style='width:55px'>").on('change', function (e) {
+ 	         		    	$("#inventory-items").jsGrid("search", $("#inventory-items").jsGrid("getFilter"));
+         				});
+	         			$("<option selected>").val(0).text("=").appendTo(operator);
+	         			$("<option>").val(1).text(">").appendTo(operator);
+	         			$("<option>").val(2).text("<").appendTo(operator);
+	         			$("<option>").val(3).text(">=").appendTo(operator);
+	         			$("<option>").val(4).text("<=").appendTo(operator);
+	         			
+	         			this._operatorPicker = operator;
+	         			this._textPicker = $("<input style='width:46px' type='text'>")
+	         				.on('keypress', function (e) {
+ 	         		         if(e.which === 13){
+ 	         		        	$("#inventory-items").jsGrid("search", $("#inventory-items").jsGrid("getFilter"));
+ 	         		         }
+	         				});
+ 	               return $("<div>").append(this._operatorPicker).append(this._textPicker);
+ 	           },
+ 	        
+	           filterValue: function() {
+	        	   return {
+	        		   text: this._textPicker.val(),
+	        		   op: this._operatorPicker.val(),
+	        	   };
+	           }
              },
-             { name: "stocklevel", title: "STOCK. STATUS", type: "select", items:getStockLevelLOV(), valueField: "id", textField: "text", width:150, 
+             { name: "stocklevel", title: "STOCK. STATUS", type: "select", items:getStockLevelLOV(), valueField: "id", textField: "text", width:120, 
             	 headerTemplate: function() {
  	         		return $("<span>" + this.title + "</span><span style='float:right' class='glyphicon glyphicon-sort'>");
  	         	 },
             	 itemTemplate: function(value, item) {
 	        		 if(value === 1) {
 	        			return "<label class='label label-success pull-left'>" + this.items[value].text + "</label>";
-	        		 } else if(value === 2) {
+	        		 } else if(value === 2 || value === 4) {
 	        			 return "<label class='label label-warning pull-left'>" + this.items[value].text + "</label>" + 
 	        			 "<a onclick='openInventoryPO(false," + item.pstockid + ")'><span class='label label-primary pull-right' style='border-radius:50%;margin-left:20px'>" +
 	        			 "<span class='glyphicon glyphicon-plus'></span></span></a>";
-	        		 } else if(value === 3) {
+	        		 } else if(value === 3 || value === 4) {
 	        			 return "<label class='label label-danger pull-left'>" + this.items[value].text + "</label>" + 
 	        			 "<a onclick='openInventoryPO(false," + item.pstockid + ")'><span class='label label-primary pull-right' style='border-radius:50%;margin-left:20px'>" +
 	        			 "<span class='glyphicon glyphicon-plus'></span></span></a>";
@@ -362,3 +457,4 @@ function toggleGroupPO(){
 	if(Object.keys(inventory_items_selected).length!=0) $("#inven-grp-po").prop("disabled", false);
 	else $("#inven-grp-po").prop("disabled", true);
 }
+
