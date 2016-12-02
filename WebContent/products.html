@@ -97,7 +97,7 @@
 								<span class="fa fa-download"> </span> Export <span class="caret"></span>
 							</button>
 							<ul class="dropdown-menu" style="background:#171048">
-								<li style="width:96px"><a href="#"><span class="fa fa-file-excel-o"> </span> CSV</a></li>
+								<li style="width:96px"><a href="#" onclick="exportProductsCSV()"><span class="fa fa-file-excel-o"> </span> CSV</a></li>
 								<li style="width:96px"><a href="#"><span class="fa fa-file-pdf-o"> </span> PDF</a></li>
 								<li style="width:96px"><a href="#"><span class="fa fa-file-code-o"> </span> JSON</a></li>
 							</ul>
@@ -109,9 +109,9 @@
 								<span class="fa fa-upload"> </span> Import <span class="caret"></span>
 							</button>
 							<ul class="dropdown-menu" style="background:#171048">
-								<li style="width:96px"><a href="#" onclick=importFile()><span class="fa fa-file-excel-o"> </span> CSV</a></li>
-								<li style="width:96px"><a href="#" onclick=importFile()><span class="fa fa-file-pdf-o"> </span> PDF</a></li>
-								<li style="width:96px"><a href="#" onclick=importFile()><span class="fa fa-file-code-o"> </span> JSON</a></li>
+								<li style="width:96px"><a href="#" onclick=importProductsFile()><span class="fa fa-file-excel-o"> </span> CSV</a></li>
+								<li style="width:96px"><a href="#" onclick=importProductsFile()><span class="fa fa-file-pdf-o"> </span> PDF</a></li>
+								<li style="width:96px"><a href="#" onclick=importProductsFile()><span class="fa fa-file-code-o"> </span> JSON</a></li>
 								<li style="width:96px; display:none"><input id="input-products-file" type="file"></li>
 							</ul>
 						</div>
@@ -141,7 +141,7 @@
 								<span class="fa fa-download"> </span> Export <span class="caret"></span>
 							</button>
 							<ul class="dropdown-menu" style="background:#171048">
-								<li style="width:96px"><a href="#"><span class="fa fa-file-excel-o"> </span> CSV</a></li>
+								<li style="width:96px"><a href="#" onclick="exportCategoriesCSV()"><span class="fa fa-file-excel-o"> </span> CSV</a></li>
 								<li style="width:96px"><a href="#"><span class="fa fa-file-pdf-o"> </span> PDF</a></li>
 								<li style="width:96px"><a href="#"><span class="fa fa-file-code-o"> </span> JSON</a></li>
 							</ul>
@@ -153,10 +153,11 @@
 								<span class="fa fa-upload"> </span> Import <span class="caret"></span>
 							</button>
 							<ul class="dropdown-menu" style="background:#171048">
-								<li style="width:96px"><a href="#" onclick=importFile()><span class="fa fa-file-excel-o"> </span> CSV</a></li>
-								<li style="width:96px"><a href="#" onclick=importFile()><span class="fa fa-file-pdf-o"> </span> PDF</a></li>
-								<li style="width:96px"><a href="#" onclick=importFile()><span class="fa fa-file-code-o"> </span> JSON</a></li>
-								<li style="width:96px; display:none"><input id="input-products-file" type="file"></li>
+								<li style="width:96px"><a href="#" onclick=importCategoriesFile()><span class="fa fa-file-excel-o"> </span> CSV</a></li>
+								<li style="width:96px"><a href="#" onclick=importCategoriesFile()><span class="fa fa-file-pdf-o"> </span> PDF</a></li>
+								<li style="width:96px"><a href="#" onclick=importCategoriesFile()><span class="fa fa-file-code-o"> </span> JSON</a></li>
+								<li style="width:96px; display:none">
+								<input id="input-categories-file" type="file"></li>
 							</ul>
 						</div>
 					</div>
@@ -184,7 +185,7 @@
 								<span class="fa fa-download"> </span> Export <span class="caret"></span>
 							</button>
 							<ul class="dropdown-menu" style="background:#171048">
-								<li style="width:96px"><a href="#"><span class="fa fa-file-excel-o"> </span> CSV</a></li>
+								<li style="width:96px"><a href="#" onclick="exportMakersCSV()"><span class="fa fa-file-excel-o"> </span> CSV</a></li>
 								<li style="width:96px"><a href="#"><span class="fa fa-file-pdf-o"> </span> PDF</a></li>
 								<li style="width:96px"><a href="#"><span class="fa fa-file-code-o"> </span> JSON</a></li>
 							</ul>
@@ -196,10 +197,10 @@
 								<span class="fa fa-upload"> </span> Import <span class="caret"></span>
 							</button>
 							<ul class="dropdown-menu" style="background:#171048">
-								<li style="width:96px"><a href="#" onclick=importFile()><span class="fa fa-file-excel-o"> </span> CSV</a></li>
-								<li style="width:96px"><a href="#" onclick=importFile()><span class="fa fa-file-pdf-o"> </span> PDF</a></li>
-								<li style="width:96px"><a href="#" onclick=importFile()><span class="fa fa-file-code-o"> </span> JSON</a></li>
-								<li style="width:96px; display:none"><input id="input-products-file" type="file"></li>
+								<li style="width:96px"><a href="#" onclick=importMakersFile()><span class="fa fa-file-excel-o"> </span> CSV</a></li>
+								<li style="width:96px"><a href="#" onclick=importMakersFile()><span class="fa fa-file-pdf-o"> </span> PDF</a></li>
+								<li style="width:96px"><a href="#" onclick=importMakersFile()><span class="fa fa-file-code-o"> </span> JSON</a></li>
+								<li style="width:96px; display:none"><input id="input-makers-file" type="file" value=""></li>
 							</ul>
 						</div>
 					</div>
@@ -259,7 +260,16 @@
 	        <p><label>Maker: <input type="text" class="form-control" id="make_maker" name="category"></label></p>
 	    </form>
 	</div>
-
+	<div id="dlg-import-products" title="Import Products">
+		<div id="import-products-grid"></div>
+	</div>
+	<div id="dlg-import-categories" title="Import Categories">
+		<div id="import-categories-grid"></div>
+	</div>
+	<div id="dlg-import-makers" title="Import Makers">
+		<div id="import-makers-grid"></div>
+	</div>
+	<script src="js/products-common.js"></script>
 	<script src="js/products.js"></script>
 	<nav class="sidebar">
 		<ul class="menu">
@@ -274,8 +284,14 @@
 	</nav>
 	<script src="lib/nav-sidebar.js"></script>
 	<script type="text/javascript">
-		function importFile(filehandle){
+		function importProductsFile(filehandle){
 			$("#input-products-file").click();
+		}
+		function importCategoriesFile(filehandle){
+			$("#input-categories-file").click();
+		}
+		function importMakersFile(filehandle){
+			$("#input-makers-file").click();
 		}
 	</script>
 	

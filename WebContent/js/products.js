@@ -35,73 +35,9 @@ var showMakeDetailsDialog = function(dialogType, maker) {
     	saveMakeClient(maker, dialogType === "Add");
     };
     console.log(maker)
-    $("#make_maker").val(maker["makertext"])
+    $("#make_maker").val(maker["text"])
     makerDialog.dialog("option", "title", dialogType + " Maker").dialog("open");
 };
-
-var saveMakeClient = function(maker, isNew) {
-	
-	var dbmaker = {};
-	var id = 0;
-	if(isNew) dbmaker = maker;
-	else id = maker["id"];
-	
-	$.extend(dbmaker, {
-    	text: $("#make_maker").val(),
-    });
-
-    isNew ? addMaker(dbmaker) : updateMaker(id, dbmaker);
-    makerDialog.dialog("close");
-    resetMakerGrid();
-};
-
-function resetMakerGrid(){
-	$("#makersGird").data("JSGrid").fields[1].items = getMakersTbl(true);
-	$("#makersGird").jsGrid("render");
-	$("#makersGird").jsGrid("loadData");
-}
-
-function addMaker(maker) {
-	var rows = alasql("select max(id) as id from maker");
-	var values = [];
-	if (rows.length == 1 && rows[0].id != undefined)
-		values.push(Number(rows[0].id) + 1);
-	else
-		values.push(Number(1));
-
-	Object.keys(maker).forEach(function(key) {
-		if(key == "text")
-			values[1] = maker[key];
-	});
-	alasql("INSERT INTO maker VALUES(?,?)", values);
-}
-
-function updateMaker(id, maker) {
-	var query = "update maker set text='" + maker["text"] + "' where id = " + id;
-	console.log(query)
-	alasql(query);
-}
-
-function getMakersTbl(select) {
-	var data = [];
-	getMakersFromDB().forEach(function(r) {
-
-		if(select == true) {
-			var d = {};
-			d["id"] = r["id"];
-			d["maker"] = r["text"];
-			data.push(d);
-		} else if(r["id"]!=0) {
-			var d = {};
-			d["makercode"] = r["id"];
-			d["id"] = r["id"];
-			d["maker"] = r["id"];
-			d["makertext"] = r["text"];
-			data.push(d);
-		}
-	});
-	return data;
-}
 
 $("#makersGird").jsGrid({
     width: "100%",
@@ -121,17 +57,45 @@ $("#makersGird").jsGrid({
    
     controller: {
         loadData: function(filter) {
-
-        	var filtered = $.grep(getMakersTbl(false), function(maker) {
-                return (filter["maker"] == 0 || maker["id"] == filter["maker"]);
+        	var data = [];
+        	var rows = alasql("select * from maker");
+        	if(rows!=undefined && rows.length!=0) {
+        		rows.forEach(function(r){
+        			var d = {};
+        			d["id"] = r.id;
+        			d["text"] = r.text;
+        			data.push(d);
+        		});
+        	}
+        	var filtered = $.grep(data, function(maker) {
+                return (!filter["id"] || maker["id"]==filter["id"]) 
+                	&& (!filter["text"] || maker["text"].indexOf(filter["text"]) >= 0);
         	});
         	
+        	
+    		if(filter.sortField != undefined && filter.sortOrder != undefined) {
+        		filtered.sort(function(x1, x2){
+        			var x11 = x1[filter.sortField], x21 = x2[filter.sortField];
+        			if(filter.sortField === "id") {
+        				x11 = Number(x11);
+        				x21 = Number(x21);
+        			}
+        			
+        			if(x11 === x21) return 0;
+        			
+        			if(filter.sortOrder == "asc") {
+        				return x11 > x21 ? 1 : -1;
+        			} else if(filter.sortOrder == "desc") {
+        				return x11 < x21 ? 1 : -1;
+        			}	
+        		});
+    		}
+    		
             return {data: pageData(filtered, filter.pageIndex, filter.pageSize), itemsCount: filtered.length};
         },
         
         deleteItem: function(item) {
-        	deleteProduct(item);
-        	resetMakerGrid();
+        	deleteMaker(item);
         },
         updateItem: function(item) {
         	showMakeDetailsDialog("Edit", item);
@@ -140,8 +104,17 @@ $("#makersGird").jsGrid({
     },
     
     fields: [
-        { name:"makercode", title: "MAKER CODE", type: "text", sorting: false, filtering: false  },
-        { name:"maker", title: "MAKER", type: "select", items: getMakersTbl(true), valueField: "id", textField: "maker", sorting: false, insertcss: "make-insert"},
+        { name:"id", title: "ID", type: "text", 
+        	headerTemplate: function() {
+        		return $("<span>" + this.title + "</span><span style='float:right' class='glyphicon glyphicon-sort'>");
+        	}
+        },
+        { name:"text", title: "MAKER", type: "text", insertcss: "make-insert",
+        	headerTemplate: function() {
+        		return $("<span>" + this.title + "</span><span style='float:right' class='glyphicon glyphicon-sort'>");
+        	}	
+        },
+        
     	{
         	type: "control", 
         	deleteButton: false,
@@ -209,67 +182,9 @@ var showCatDetailsDialog = function(dialogType, category) {
     	saveCatClient(category, dialogType === "Add");
     };
 
+    $("#cat_cat").val(category["text"]);
     categoryDialog.dialog("option", "title", dialogType + " Category").dialog("open");
 };
-
-var saveCatClient = function(category, isNew) {
-	
-	var dbcategory = {};
-	var id = 0;
-	if(isNew) dbcategory = category;
-	else id = category["id"];
-	
-	$.extend(dbcategory, {
-    	text: $("#cat_cat").val(),
-    });
-
-    isNew ? addCategory(dbcategory) : updateCategory(id, dbcategory);
-    categoryDialog.dialog("close");
-	$("#categoriesGird").data("JSGrid").fields[1].items = getCategoriesTbl(true);
-	$("#categoriesGird").jsGrid("render");
-	$("#categoriesGird").jsGrid("loadData");
-};
-
-function addCategory(category) {
-	var rows = alasql("select max(id) as id from kind");
-	var values = [];
-	if (rows.length == 1 && rows[0].id != undefined)
-		values.push(Number(rows[0].id) + 1);
-	else
-		values.push(Number(1));
-
-	Object.keys(category).forEach(function(key) {
-		if(key == "text")
-			values[1] = category[key];
-	});
-	alasql("INSERT INTO kind VALUES(?,?)", values);
-}
-
-function updateCategory(id, category) {
-	var query = "update kind set text=" + maker + "where id = " + id;
-	console.log(query)
-	alasql(query);
-}
-
-function getCategoriesTbl(select) {
-	var data = [];
-	getCategoriesFromDB().forEach(function(r) {
-
-		if(select == true) {
-			var d = {};
-			d["ID"] = r["id"];
-			d["CAT"] = r["text"];
-			data.push(d);
-		} else if(r["id"]!=0) {
-			var d = {};
-			d["CAT CODE"] = r["id"];
-			d["ID"] = r["id"];
-			d["CATEGORY"] = r["id"];
-			data.push(d);
-		}
-	});
-	return data;
-}
 
 $("#categoriesGird").jsGrid({
     width: "100%",
@@ -283,36 +198,65 @@ $("#categoriesGird").jsGrid({
 	
     rowClick: function(args) {},
     
-    rowDoubleClick: function(args) {
-    	showCatDetailsDialog("Edit", args.item);
-    },
-    
     deleteConfirm: "Do you want to delete it ?",
     
     controller: {
         loadData: function(filter) {
-        	var filtered = $.grep(getCategoriesTbl(false), function(category) {
-                return (filter["CATEGORY"] == 0 || category["ID"] == filter["CATEGORY"]);
+        	var data = [];
+        	var rows = alasql("select * from kind");
+        	if(rows!=undefined && rows.length!=0) {
+        		rows.forEach(function(r){
+        			var d = {};
+        			d["id"] = r.id;
+        			d["text"] = r.text;
+        			data.push(d);
+        		});
+        	}
+        	var filtered = $.grep(data, function(category) {
+        		return (!filter["id"] || category["id"]==filter["id"]) && (!filter["text"] || category["text"].indexOf(filter["text"]) >= 0);
         	});
+        	
+    		if(filter.sortField != undefined && filter.sortOrder != undefined) {
+        		filtered.sort(function(x1, x2){
+        			var x11 = x1[filter.sortField], x21 = x2[filter.sortField];
+        			if(filter.sortField === "id") {
+        				x11 = Number(x11);
+        				x21 = Number(x21);
+        			}
+        			
+        			if(x11 === x21) return 0;
+        			
+        			if(filter.sortOrder == "asc") {
+        				return x11 > x21 ? 1 : -1;
+        			} else if(filter.sortOrder == "desc") {
+        				return x11 < x21 ? 1 : -1;
+        			}	
+        		});
+    		}
         	
             return {data: pageData(filtered, filter.pageIndex, filter.pageSize), itemsCount: filtered.length};
         },
         
         deleteItem: function(item) {
-        	deleteProduct(item);
-        	$("#categoriesGird").jsGrid("reset");
+        	deleteCategory(item);
         },
         updateItem: function(item) {
         	showCatDetailsDialog("Edit", item);
-        	$("#categoriesGird").jsGrid("reset");
         },
 
     },
     
     fields: [
-        { name: "CAT CODE", type: "text", sorting: false, filtering: false },
-        
-        { name: "CATEGORY", type: "select", items: getCategoriesTbl(true), valueField: "ID", textField: "CAT", sorting: false,},
+        { name: "id", title:"ID", type: "text",
+        	headerTemplate: function() {
+        		return $("<span>" + this.title + "</span><span style='float:right' class='glyphicon glyphicon-sort'>");
+        	}	
+        },
+        { name: "text", title:"CATEGORY", type: "text",
+        	headerTemplate: function() {
+        		return $("<span>" + this.title + "</span><span style='float:right' class='glyphicon glyphicon-sort'>");
+        	}	
+        },
     	{
         	type: "control", 
         	deleteButton: false,
@@ -537,7 +481,7 @@ $("#productsGird").jsGrid({
         	},
          	filterTemplate: function() {
          			var operator = $("<select style='width:55px'>").on('change', function (e) {
-         				$("#productsGird").jsGrid("search", $("#inventory-items").jsGrid("getFilter"));
+         				$("#productsGird").jsGrid("search", $("#productsGird").jsGrid("getFilter"));
      				});
          			$("<option selected>").val(0).text("=").appendTo(operator);
          			$("<option>").val(1).text(">").appendTo(operator);
@@ -604,178 +548,6 @@ $("#productsGird").jsGrid({
     ]
 });
 
-function updateProduct(id, product) {
-	var query = "update products set ";
-	
-	var set = [];
-	Object.keys(product).forEach(function(key){
-		if(key == "code" || key == "detail" || key == "unit")
-			set.push(key + "='" + product[key] +"'");
-		else set.push(key + "=" + product[key]);
-	});
-	
-	query += set.join(", ");
-	query += " where id=" + id;
-	console.log(query)
-	alasql(query);
-}
-
-var saveProdClient = function(product, isNew) {
-	
-	var dbproduct = {};
-	var id = 0;
-	if(isNew) dbproduct = product;
-	else id = product["id"];
-	
-	$.extend(dbproduct, {
-    	code: $("#prod_code").val(),
-    	category: Number($("#prod_cat").val()),
-    	detail: $("#prod_detail").val(),
-    	make: Number($("#prod_maker").val()),
-    	price: Number($("#prod_price").val()),
-    	unit: $("#prod_unit").val(),
-    });
-
-    isNew ? addProduct(dbproduct) : updateProduct(id, dbproduct);
-    productDialog.dialog("close");
-	$("#productsGird").jsGrid("reset");
-	$("#productsGird").jsGrid("render");
-	location.reload();
-};
-
-function addProduct(product) {
-	var rows = alasql("select max(id) as id from products");
-	var values = [];
-	if (rows.length == 1 && rows[0].id != undefined)
-		values.push(Number(rows[0].id) + 1);
-	else
-		values.push(Number(1));
-
-	Object.keys(product).forEach(function(key) {
-		if(key == "code")
-			values[1] = product[key];
-		else if(key == "category")
-			values[2] = product[key];
-		else if(key == "detail")
-			values[3] = product[key];
-		else if(key == "make")
-			values[4] = product[key];
-		else if(key == "price")
-			values[5] = product[key];
-		if(key == "unit")
-			values[6] = product[key];
-	});
-	alasql("INSERT INTO products VALUES(?,?,?,?,?,?,?)", values);
-}
-
-function getProductsFromDB(){
-	
-	var query = "select * from products";
-	var product_rows = alasql(query);
-	query = "select * from maker";
-	var maker_map = {};
-	alasql(query).forEach(function(maker){
-		maker_map[maker.id] = maker.text;
-	});
-	query = "select * from kind";
-	var kind_map = {};
-	alasql(query).forEach(function(kind){
-		kind_map[kind.id] = kind.text;
-	});
-	
-	var data = [];
-	if (maker_map != undefined && kind_map != undefined
-			&& product_rows.length != 0 && maker_map.length != 0
-			&& kind_map.length != 0) {
-
-		product_rows.forEach(function(product) {
-			var d = {};
-			d["id"] = product.id;
-			d["code"] = product.code;
-			d["detail"] = product.detail;
-			d["maker"] = product.make;
-			d["category"] = product.category;
-			d["price"] = product.price;
-			d["unit"] = product.unit;
-			data.push(d);
-		});
-	}
-    return data;
-}
-
-function getMakersFromDB(){
-	var query = "select * from maker";
-	var data = [];
-	var d = {};
-	d["id"] = 0;
-	d["text"] = "";
-	data.push(d);
-	alasql(query).forEach(function(maker){
-		d = {};
-		d["id"] = maker.id;
-		d["text"] = maker.text;
-		data.push(d);
-	});
-	return data;
-}
-
-function getCategoriesFromDB(){
-	var query = "select * from kind";
-	var data = [];
-	var d = {};
-	d["id"] = 0;
-	d["text"] = "";
-	data.push(d);
-	alasql(query).forEach(function(maker){
-		d = {};
-		d["id"] = maker.id;
-		d["text"] = maker.text;
-		data.push(d);
-	});
-	return data;
-}
-
-function deleteProduct(product) {
-	alasql("delete from products where id = " + product.id);
-}
-
-function sortCategories(data, field, sortOrder){
-	if(sortOrder == "asc") {
-	    return data.sort(function(a, b) {
-	        var x = a[field]; var y = b[field];
-	        return ((x < y) ? -1 : ((x > y) ? 1 : 0));
-	    });
-	} else {
-	    return data.sort(function(a, b) {
-	        var x = a[field]; var y = b[field];
-	        return ((x < y) ? 1 : ((x > y) ? -1 : 0));
-	    });
-	}
-}
-
-function sortProducts(data, field, sortOrder){
-	if(sortOrder == "asc") {
-	    return data.sort(function(a, b) {
-	        var x = a[field]; var y = b[field];
-	        return ((x < y) ? -1 : ((x > y) ? 1 : 0));
-	    });
-	} else {
-	    return data.sort(function(a, b) {
-	        var x = a[field]; var y = b[field];
-	        return ((x < y) ? 1 : ((x > y) ? -1 : 0));
-	    });
-	}
-}
-
-function pageData(data, pageIndex, pageSize) {
-	var pageData;
-	if(pageIndex!= undefined && pageSize!= undefined && pageIndex > 0) {
-		pageData = data.slice((pageIndex - 1)*pageSize, pageIndex*pageSize)	
-	} else {
-		pageData = data;
-	}
-	return pageData;
-}
 
 $('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
 	var target = $(e.target).attr("href")
@@ -859,7 +631,202 @@ $("div#prod_maker-input-dlg a#save-new-maker").click(function(){
 	$("div#prod_maker-select-dlg").show();
 	$("div#prod_maker-input-dlg").hide();
 });
+
 $("div#prod_maker-input-dlg a#remove-new-maker").click(function(){
 	$("div#prod_maker-select-dlg").show();
 	$("div#prod_maker-input-dlg").hide();
+});
+
+$("#import-products-grid").jsGrid({
+    height: "500px",
+    width: "810px",
+    autoload: true,
+    editing: true,
+    
+    onItemDeleted: function(){
+    	$("#import-products-grid").jsGrid("render");
+    },
+    controller: {
+        loadData: function() {
+        	return Object.values(import_products);
+        },
+        
+        deleteItem: function(item) {
+        	delete import_products[item["row-id"]];
+        	var snum = 0;
+        	Object.values(import_products).forEach(function(d){
+        		d["snum"] = ++snum;
+        	});
+        },
+        updateItem: function(item) {
+        	import_products[item["row-id"]] = item;
+    		$("#productsGird").jsGrid("render");
+        },
+
+    },
+    
+    fields: [
+    	{ name: "snum", title:"", type:"number", width:"30px", editing:false},
+        { name: "code", title:"CODE", type: "text", width:"70px",},
+        { name: "detail", title:"DETAIL", type: "text", width:"150px", },
+        { name: "maker", title:"MAKER", type: "text", width:"150px",},
+        { name: "category", title:"CATEGORY", type: "text", width:"150px",},
+        { name: "price", title:"PRICE", type: "text", width:"100px",},
+        { name: "unit", title:"UNIT", type: "text",width:"50px",},
+    	{ type: "control", },
+    ]
+});
+
+var importProdDialog = $("#dlg-import-products").dialog({
+    autoOpen: false,
+    width: 850,
+    modal: true,
+    closeOnEscape: true,
+    buttons: {
+        Import: function() {
+        	importProducts();
+        	importProdDialog.dialog("close");
+        },
+        Cancel: function() {
+        	importProdDialog.dialog("close");
+        }
+    },
+	open: function(event) {
+    	$("#import-products-grid").jsGrid("loadData");
+    	$("#import-products-grid").jsGrid("render");
+		$('.ui-dialog-buttonpane').find('button:contains("Import")')
+			.removeClass("ui-button ui-corner-all ui-widget")
+			.addClass('btn btn-primary');
+		$('.ui-dialog-buttonpane').find('button:contains("Cancel")').removeClass("ui-button ui-corner-all ui-widget").addClass('btn btn-warning');
+	 },
+    close: function() {
+    	import_products = {};
+    	$("#input-products-file").val("");
+    }
+});
+
+$("#import-categories-grid").jsGrid({
+    height: "500px",
+    width: "200px",
+    autoload: true,
+    editing: true,
+    
+    onItemDeleted: function(){
+    	$("#import-categories-grid").jsGrid("render");
+    },
+    controller: {
+        loadData: function() {
+        	return Object.values(import_categories);
+        },
+        
+        deleteItem: function(item) {
+        	delete import_categories[item["row-id"]];
+        	var snum = 0;
+        	Object.values(import_categories).forEach(function(d){
+        		d["snum"] = ++snum;
+        	});
+        },
+        updateItem: function(item) {
+        	import_categories[item["row-id"]] = item;
+        	$("#import-categories-grid").jsGrid("render");
+        },
+
+    },
+    
+    fields: [
+    	{ name: "snum", title:"", type:"number", width:"30px", editing:false},
+        { name: "text", title:"CATEGORY", type: "text", width:"100px", },
+    	{ type: "control", },
+    ]
+});
+
+var importCatDialog = $("#dlg-import-categories").dialog({
+    autoOpen: false,
+    width: 220,
+    modal: true,
+    closeOnEscape: true,
+    buttons: {
+        Import: function() {
+        	importCategories();
+        	importCatDialog.dialog("close");
+        },
+        Cancel: function() {
+        	importCatDialog.dialog("close");
+        }
+    },
+	open: function(event) {
+		$("#import-categories-grid").jsGrid("loadData");
+		$("#import-categories-grid").jsGrid("render");
+		$('.ui-dialog-buttonpane').find('button:contains("Import")')
+			.removeClass("ui-button ui-corner-all ui-widget")
+			.addClass('btn btn-primary');
+		$('.ui-dialog-buttonpane').find('button:contains("Cancel")').removeClass("ui-button ui-corner-all ui-widget").addClass('btn btn-warning');
+	 },
+    close: function() {
+    	import_categories = {};
+    	$("#input-categories-file").val("");
+    }
+});
+
+$("#import-makers-grid").jsGrid({
+    height: "500px",
+    width: "200px",
+    autoload: true,
+    editing: true,
+    
+    onItemDeleted: function(){
+    	$("#import-makers-grid").jsGrid("render");
+    },
+    controller: {
+        loadData: function() {
+        	return Object.values(import_makers);
+        },
+        
+        deleteItem: function(item) {
+        	delete import_makers[item["row-id"]];
+        	var snum = 0;
+        	Object.values(import_makers).forEach(function(d){
+        		d["snum"] = ++snum;
+        	});
+        },
+        updateItem: function(item) {
+        	import_makers[item["row-id"]] = item;
+        	$("#import-makers-grid").jsGrid("render");
+        },
+
+    },
+    
+    fields: [
+    	{ name: "snum", title:"", type:"number", width:"30px", editing:false},
+        { name: "text", title:"MAKER", type: "text", width:"100px", },
+    	{ type: "control", },
+    ]
+});
+
+var importMakerDialog = $("#dlg-import-makers").dialog({
+    autoOpen: false,
+    width: 220,
+    modal: true,
+    closeOnEscape: true,
+    buttons: {
+        Import: function() {
+        	importMakers();
+        	importMakerDialog.dialog("close");
+        },
+        Cancel: function() {
+        	importMakerDialog.dialog("close");
+        }
+    },
+	open: function(event) {
+		$("#import-makers-grid").jsGrid("loadData");
+		$("#import-makers-grid").jsGrid("render");
+		$('.ui-dialog-buttonpane').find('button:contains("Import")')
+			.removeClass("ui-button ui-corner-all ui-widget")
+			.addClass('btn btn-primary');
+		$('.ui-dialog-buttonpane').find('button:contains("Cancel")').removeClass("ui-button ui-corner-all ui-widget").addClass('btn btn-warning');
+	 },
+    close: function() {
+    	import_makers = {};
+    	$("#input-makers-file").val("");
+    }
 });

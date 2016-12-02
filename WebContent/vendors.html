@@ -86,7 +86,7 @@
 						<span class="fa fa-download"> </span> Export <span class="caret"></span>
 					</button>
 					<ul class="dropdown-menu" style="background:#171048">
-						<li style="width: 96px"><a href="#"><span
+						<li style="width: 96px"><a href="#" onclick="vendorExportCSV()"><span
 								class="fa fa-file-excel-o"> </span> CSV</a></li>
 						<li style="width: 96px"><a href="#"><span
 								class="fa fa-file-pdf-o"> </span> PDF</a></li>
@@ -107,7 +107,7 @@
 						<li style="width: 96px"><a href="#" onclick=importFile() style="#3c765e;"><span
 								class="fa fa-file-code-o"> </span> JSON</a></li>
 						<li style="width: 96px; display: none"><input
-							id="input-products-file" type="file"></li>
+							id="input-vendors-file" type="file"></li>
 					</ul>
 				</div>
 			</div>
@@ -126,7 +126,9 @@
 	        <p><label>Address: <input id="ven_addr" type="text" class="form-control"/></label></p>
 	    </form>
 	</div>
-
+	<div id="dlg-import-vendors" title="Import Makers">
+		<div id="import-vendors-grid"></div>
+	</div>
 	<nav class="sidebar">
 		<ul class="menu">
 			<li><a href="index.html">Home</a></li>
@@ -141,8 +143,8 @@
 	<script src="js/vendors.js"></script>
 	<script src="lib/nav-sidebar.js"></script>
 		<script type="text/javascript">
-		function importFile(filehandle){
-			$("#input-products-file").click();
+		function importFile(){
+			$("#input-vendors-file").click();
 		}
 	</script>
 </body>
