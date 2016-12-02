@@ -90,8 +90,9 @@ $("#jsGrid").jsGrid({
         	var filtered = $.grep(getVendorsFromDB(), function(vendor) {
                 return (!filter["CODE"] || vendor["CODE"].indexOf(filter["CODE"]) > -1)
             	&& (!filter["NAME"] || vendor["NAME"].indexOf(filter["NAME"]) > -1)
-            	&& (!filter["TEL"] || vendor["TEL"].indexOf(filter["TEL"]) > -1)
-            	&& (!filter["Email"] || vendor["Email"].indexOf(filter["Email"]) > -1);
+            	&& (!filter["TEL"] || String(vendor["TEL"]).indexOf(filter["TEL"]) > -1)
+            	&& (!filter["Email"] || vendor["Email"].indexOf(filter["Email"]) > -1)
+                && (!filter["Address"] || vendor["Address"].indexOf(filter["Address"]) > -1);
         	});
         	
         	if(filter.sortField != undefined && filter.sortOrder != undefined)
@@ -171,10 +172,6 @@ $("#jsGrid").jsGrid({
             
     ]
 });
-
-$("#vendorImportGrid").jsGrid({
-	
-})
 
 function updateVendor(id, vendor) {
 	var query = "update vendor set ";
