@@ -73,7 +73,7 @@ $("#cstock-spc-items").jsGrid({
          { name: "pdetail", title: "DETAIL", type: "text",editing:false},
          { name: "pprice", title: "PRICE ", type: "number", filtering: false,editing:false},   
          { name: "inStock", title: "In Stock QTY", type: "number",editing:false},
-         { name: "cstock", title: "THRESHOLD", type: "number"},
+         { name: "cstock", title: "REORDER POINT", type: "number"},
          { type: "control", deleteButton: false,}
        ]
 });
@@ -157,6 +157,11 @@ $("input.auto-po").change(function() {
 		});
 		alasql("UPDATE stock set autopo = " + $(this).val());
 	}
+	
+	if($("input#auto-po-on").is(":checked")) {
+		$("div#auto-po-on-div").show();
+		refreshVendorPrefGrids();
+	} else $("div#auto-po-on-div").hide();
 });
 
 $("input.cstock-set").change(function() {
@@ -171,7 +176,6 @@ $("input.cstock-set").change(function() {
 });
 
 $("input.cstock-gnl-radio").change(function() {
-
 	var $current = $(this);
 	$("input.cstock-gnl-text#" + $current.attr("id")).prop("disabled", false);
 	$("input.cstock-gnl-radio").each(function() {

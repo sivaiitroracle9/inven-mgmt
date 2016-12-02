@@ -252,7 +252,7 @@
 					</div>
 				</div>
 			</div>
-			<div id="tabcontent-goodsissue" class="tab-pane">
+			<div id="tabcontent-goodsissue" class="tab-pane" style="width: 1450px; margin-left: 10px">
 				<div class="panel panel-primary">
 					<div class="panel-body">
 						<div>
@@ -283,7 +283,7 @@
 				</div>
 
 			</div>
-			<div id="tabcontent-goodsreceive" class="tab-pane">
+			<div id="tabcontent-goodsreceive" class="tab-pane" style="width: 1450px; margin-left: 10px">
 
 				<div class="panel panel-primary">
 					<div class="panel-body">
@@ -327,17 +327,43 @@
 					<div id="tabcontent-criticalstock-settings" class="tab-pane active">
 						<div class="panel panel-primary">
 							<div class="panel-body">
-								<div style="margin: 2px">
-									<label>Generate Purchase Order: </label> <input type="radio"
-										id="auto-po-on" class="auto-po" value=1><label
-										for="auto-po-on">AUTO </label> <input type="radio"
-										id="auto-po-off" class="auto-po" value=0><label
-										for="auto-po-off">MANUAL </label>
-									<hr />
+								<div>
+									<div style="margin: 2px">
+										<label>Generate Purchase Order: </label> <input type="radio"
+											id="auto-po-on" class="auto-po" value=1><label
+											for="auto-po-on">AUTO </label> <input type="radio"
+											id="auto-po-off" class="auto-po" value=0><label
+											for="auto-po-off">MANUAL </label>
+										<hr />
+									</div>
+									<div id="auto-po-on-div" style="display: none">
+										<label>SET <span style='color: blue'>PREFERED VENDOR </span> for AUTOMATIC Purchase Order Generation:</label>
+										<div id="venpref-4"></div>
+<!-- 										<ul class="nav nav-tabs" style="margin-left: 10px">
+											<li id="li-venpref-whouse" class="active"><a
+												id="tab-venpref-whouse" href="#tabcontent-venpref-whouse"
+												data-toggle="tab">Warehouse</a></li>
+											<li id="li-venpref-category"><a id="tab-venpref-category"
+												href="#tabcontent-venpref-category" data-toggle="tab">Category</a></li>
+											<li id="li-venpref-product"><a id="tab-venpref-product"
+												href="#tabcontent-venpref-product" data-toggle="tab">Product</a></li>
+											<li id="li-venpref-sp-product"><a
+												id="tab-venpref-sp-product" href="#tabcontent-venpref-sp-product"
+												data-toggle="tab">More specfic setting</a></li>
+										</ul>
+										<div class="tab-content">
+											<div id="tabcontent-venpref-whouse" class="tab-pane active"><div id="venpref-1"></div></div>
+											<div id="tabcontent-venpref-category" class="tab-pane"><div id="venpref-2"></div></div>
+											<div id="tabcontent-venpref-product" class="tab-pane"><div id="venpref-3"></div></div>
+											<div id="tabcontent-venpref-sp-product" class="tab-pane"></div>
+										</div> -->
+
+									</div>
 								</div>
+
 								<div>
 									<div style="margin: 3px">
-										<label>Set Critical Stock values: </label> <input type="radio"
+										<label>SET REORDER POINT values: </label> <input type="radio"
 											id="cstock-gnl" class="cstock-set" checked><label
 											for="cstock-gnl">GENERAL </label> <input type="radio"
 											id="cstock-spc" class="cstock-set"><label
@@ -386,7 +412,12 @@
 			</div>
 		</div>
 	</div>
-	<div id="notification-dlg"><div class="text-center" style="margin:10px"><span class="glyphicon glyphicon-warning-sign label label-default" style="font-size:30px;color:yellow;"> </span></div><div><span class="text"></span></div></div>
+	<div id="notification-dlg">
+		<div class="text-center" style="margin:10px">
+			<span class="glyphicon glyphicon-warning-sign label label-default" style="font-size:30px;color:yellow;"> </span>
+		</div>
+		<div><span class="text"></span></div>
+	</div>
 		<div id="dlg-overview-email">
 		<form action="" class="form-group">
 			<label for="dlg-overview-email-to">To</label><input class="form-control" id="dlg-overview-email-to" type="email">
@@ -408,8 +439,10 @@
 	<script src="js/inventory-common.js"></script>
 	<script src="js/inventory.js"></script>
 	<script src="js/inventory-po-create.js"></script>
+	<script src="js/automatic-po.js"></script>
 	<script src="js/gr-inventory.js"></script>
-		<script src="js/inventory-settings.js"></script>
+	<script src="js/gi-inventory.js"></script>
+	<script src="js/inventory-settings.js"></script>
 	<script src="lib/nav-sidebar.js"></script>
 	<script type="text/javascript">
 		

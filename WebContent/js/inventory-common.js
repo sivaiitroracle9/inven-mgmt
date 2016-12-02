@@ -105,6 +105,18 @@ function getVendorById(id) {
 	}
 }
 
+function getWarehouseById(id) {
+	var rows = alasql("SELECT * FROM whouse where id =" + Number(id) + " order by id desc");
+	if (rows.length != 0) {
+		var d = {};
+		d["id"] = rows[0].id;
+		d["name"] = rows[0].name;
+		d["tel"] = rows[0].tel;
+		d["address"] = rows[0].addr;
+		return d;
+	}
+}
+
 function getVendorsLOV() {
 	var rows = alasql("SELECT id, name FROM vendor order by name");
 

@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------- PO -------------------------------------------------------------
-$("#o-date").text((new Date()).toLocaleString());
+$("#po-date").text((new Date()).toLocaleString());
 getVendorsLOV().forEach(function(lov){
 	var option = $("<option>");
 	option.val(lov.id);

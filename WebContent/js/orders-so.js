@@ -10,7 +10,9 @@ var soOrderDetailsDlg = $("#so-order-details-dlg").dialog({
     },
 	open: function(event) {
 
-		$('.ui-dialog-buttonpane').find('button:contains("Ok")').removeClass("ui-button ui-corner-all ui-widget").addClass('btn btn-default');
+		$('.ui-dialog-buttonpane').find('button:contains("Ok")')
+			.removeClass("ui-button ui-corner-all ui-widget")
+			.addClass('btn btn-default');
 	 }
 });
 
@@ -165,7 +167,7 @@ $("#so-orders-grid").jsGrid({
         				var d = {};
         				d["id"] = or["id"];
         				d["onumber"] = or["soid"];
-        				d["vendor"] = or["vendor"];
+        				d["outlet"] = or["outlet"];
         				d["whouse"] = or["warehouse"];
         				d["status"] = or["status"];
         				d["lastupdate"] = or["lastupdate"];
