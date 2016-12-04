@@ -105,10 +105,12 @@ $("#so-create-grid").jsGrid({
     	} else {
     		++so_max_insert_id;
         	args.item["pcode"] = getProductCode(args.item["pcat"], args.item["pmake"], args.item["pdetail"]);
+        	args.item["pid"] = getProductId(args.item["pcat"], args.item["pmake"], args.item["pdetail"]);
         	
         	var dbitem = {};
         	dbitem["status"] = 1;
         	dbitem["so-row-id"] = so_max_insert_id;
+        	dbitem["pid"] = args.item["pid"];
         	dbitem["pcode"] = args.item["pcode"];
         	dbitem["pcat"] = args.item["pcat"];
         	dbitem["pmake"] = args.item["pmake"];
@@ -302,12 +304,15 @@ $("#so-create-grid").jsGrid({
 	]
 });
 
-
-$("#so-cancel-btn").click(function(event){
+function clearVariables() {
 	so_max_insert_id=0;
 	so_items_inserted = {};
+}
+
+$("#so-cancel-btn").click(function(event){
+	clearVariables();
 	refreshSOButtons();
-	resetSOGrids();
+	refreshSOGrids();
 	$("#so-vendor-info-select").val(0);
 	$("#so-warehouse-info-select").val(0);
 });
@@ -318,7 +323,8 @@ $("#so-create-btn").click(function(event){
 		alert("so cannot be created.");
 	}
 	createSO(so_items_inserted);
-	resetSOGrids();
+	refreshSOGrids();
+	clearVariables();
 	$("#so-vendor-info-select").val(0);
 	$("#so-vendor-info div.panel-body").hide();
 	$("#so-warehouse-info-select").val(0);
@@ -361,6 +367,7 @@ function createSO(so_items_inserted) {
 			var values = [];
 			values.push(soitemId);
 			values.push("'SO-0000"+orderId+"'");
+			values.push(item["pid"]);
 			values.push("'" + item["pcode"] + "'");
 			values.push(item["pcat"]);
 			values.push(item["pmake"]);

@@ -96,11 +96,11 @@ function getVendorById(id) {
 	if (rows.length != 0) {
 		var d = {};
 		d["id"] = rows[0].id;
-		d["CODE"] = rows[0].vencode;
-		d["NAME"] = rows[0].name;
-		d["TEL"] = rows[0].tel;
-		d["Email"] = rows[0].email;
-		d["Address"] = rows[0].address;
+		d["code"] = rows[0].vencode;
+		d["name"] = rows[0].name;
+		d["tel"] = rows[0].tel;
+		d["email"] = rows[0].email;
+		d["address"] = rows[0].address;
 		return d;
 	}
 }

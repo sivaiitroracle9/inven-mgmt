@@ -63,6 +63,7 @@ function openSODetails(soid) {
 	$("#so-whouse-dlg-name").text(whouse["name"]);
 	$("#so-whouse-dlg-address").text(whouse["address"]);
 	$("#so-whouse-dlg-tel").text(whouse["tel"]);
+	$("#so-whouse-dlg-email").text(whouse["email"]);
 
 	var outlet = getVendorById(Number(outletId));
 	$("#so-outlet-dlg-code").text(outlet["code"]);
@@ -79,13 +80,15 @@ function openSODetails(soid) {
 	if (soitems != undefined && soitems.length > 0) {
 		soitems.forEach(function(soitem) {
 			var item = {};
+			item.pid = soitem.pid;
 			item.pcode = soitem.pcode;
 			item.pcat = soitem.pcat;
 			item.pmake = soitem.pmake;
 			item.pdetail = soitem.pdetail;
 			item.qty = soitem.qty;
 			item.status = soitem.status;
-			item.receivedqty = soitem.received;
+			item.issuedQty = soitem.issued;
+			item.toissueQty = soitem.qty - soitem.issued;
 			od_dlg_so_item.push(item);
 		});
 	}
@@ -111,11 +114,20 @@ $("#so-dlg-items").jsGrid({
     	
     },
     fields: [
+        { name: "pimg", title: "", type: "text",
+        	itemTemplate: function(value, item){
+        		if(item!= undefined && item.pid!=undefined) {
+        			return "<img src='img/"+ item.pid + ".jpg' style='width:40px;height:40px'>";
+        		}
+        	}
+        },
         { name: "pcode", title: "PROD CODE", type: "text",},
         { name: "pcat", title: "CATEGORY", type: "select", items:getCategoriesLOV(), valueField: "id", textField: "text",},
         { name: "pmake", title: "MAKER", type: "select", items:getMakersLOV(), valueField: "id", textField: "text",},
         { name: "pdetail", title: "DETAIL", type: "text",},
-        { name: "qty", title: "QTY", type: "text",},
+        { name: "qty", title: "ORDERED. QTY", type: "number",},        
+        { name: "issuedQty", title: "ISSUED QTY", type: "number",},
+        { name: "toissueQty", title: "BALANCE TO ISSUE", type: "number", width:100},
         { name: "status", title: "STATUS", type: "select", items: getStatusLOV("ORDERITEM"), valueField: "id", textField: "text",
         	itemTemplate: function(value, item) {
         		var str = "";
@@ -133,8 +145,6 @@ $("#so-dlg-items").jsGrid({
         		return str;
         	},	
         },
-        
-        { name: "receivedqty", title: "Received QTY", type: "text",},
        ]
 });
 
@@ -150,11 +160,6 @@ $("#so-orders-grid").jsGrid({
         },
         
         onItemUpdated: function(args){
-        	alasql("update orders set status =" + args.item.status + " where id =" + args.item.id + ";");
-        	if(args.item.status === 2) {
-        		toastr.clear();
-        		toastr.success("Order sent to Vendor.")
-        	}
         },
         
         controller: {
@@ -174,7 +179,6 @@ $("#so-orders-grid").jsGrid({
         				data.push(d);
         			});
         		}
-        		console.log(data)
         		return data;
         	},
         },
@@ -192,7 +196,6 @@ $("#so-orders-grid").jsGrid({
             { name: "status", title: "STATUS", type: "select", items: getStatusLOV("ORDER"), valueField: "id", textField: "text",
 
             	itemTemplate: function(value, item) {
-            		console.log(item)
             		var str = "";
             		this.items.forEach(function(r){
             			if(value == r.id) {
@@ -220,10 +223,10 @@ $("#so-orders-grid").jsGrid({
             	
             },
             { name: "lastupdate", title: "LAST UPDATE", type: "text", filtering: false, editing: false,},
+            { name: "lastupdatedUser", title: "LAST UPDATED BY", type: "text", filtering: false, editing: false,},
             {type: "control",
             	deleteButton: false,
             	itemTemplate: function(value, item) {
-            		console.log(item)
             		return this._createEditButton(item);
             	}
             }

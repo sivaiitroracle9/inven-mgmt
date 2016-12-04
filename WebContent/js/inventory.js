@@ -364,11 +364,13 @@ $("#inventory-items").jsGrid({
 	        			return "<label class='label label-success pull-left'>" + this.items[value].text + "</label>";
 	        		 } else if(value === 2 || value === 4) {
 	        			 return "<label class='label label-warning pull-left'>" + this.items[value].text + "</label>" + 
-	        			 "<a onclick='openInventoryPO(false," + item.pstockid + ")'><span class='label label-primary pull-right' style='border-radius:50%;margin-left:20px'>" +
+	        			 "<a onclick='openInventoryPO(false," + item.pstockid + ")'><span class='btn btn-primary pull-right' " +
+	        			 		"style='border-radius:50%;border-left-width: 0px;border-right-width: 0px;border-bottom-width: 0px;border-top-width: 0px;padding:3px;'>" +
 	        			 "<span class='glyphicon glyphicon-plus'></span></span></a>";
 	        		 } else if(value === 3 || value === 4) {
 	        			 return "<label class='label label-danger pull-left'>" + this.items[value].text + "</label>" + 
-	        			 "<a onclick='openInventoryPO(false," + item.pstockid + ")'><span class='label label-primary pull-right' style='border-radius:50%;margin-left:20px'>" +
+	        			 "<a onclick='openInventoryPO(false," + item.pstockid + ")'><span class='btn btn-primary pull-right' " +
+	        			 		"style='border-radius:50%;border-left-width: 0px;border-right-width: 0px;border-bottom-width: 0px;border-top-width: 0px;padding:3px;'>" +
 	        			 "<span class='glyphicon glyphicon-plus'></span></span></a>";
 	        		 } 
 	        	 },

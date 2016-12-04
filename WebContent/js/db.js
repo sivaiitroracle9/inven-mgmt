@@ -117,7 +117,7 @@ DB.load = function() {
 	alasql('CREATE TABLE sorders(id INT IDENTITY, soid STRING, warehouse INT, outlet INT, status INT, lastupdate STRING);');
 
 	alasql('DROP TABLE IF EXISTS soitems;');
-	alasql('CREATE TABLE soitems(id INT IDENTITY, soid STRING, pcode STRING, pcat INT, pmake INT, pdetail STRING, qty INT, status INT, received INT, lastupdate STRING);');
+	alasql('CREATE TABLE soitems(id INT IDENTITY, soid STRING, pid INT, pcode STRING, pcat INT, pmake INT, pdetail STRING, qty INT, status INT, issued INT, lastupdate STRING);');
 	
 	alasql('DROP TABLE IF EXISTS customer;');
 	alasql('CREATE TABLE customer(id INT IDENTITY, cname STRING, cemail STRING, ctel STRING, caddress STRING);');

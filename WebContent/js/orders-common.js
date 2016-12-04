@@ -69,6 +69,16 @@ function getProductCode(category, make, detail){
 	return "";
 }
 
+function getProductId(category, make, detail){
+	var query = "select id from products where category =" + category + " and make=" + make + " and detail='" + detail + "'";
+	console.log(query)
+	var rows = alasql(query);
+	if(rows.length == 1) {
+		return rows[0]["id"];
+	}
+	return "";
+}
+
 function getProductDetailLOV(args){
 	if(args) {
 		if(args.category && args.make) {
