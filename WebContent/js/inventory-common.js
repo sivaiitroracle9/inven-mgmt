@@ -1,3 +1,18 @@
+$('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+	  var target = $(e.target).attr("href") // activated tab
+	  if("#tabcontent-inventory" == target) {
+		 
+	  } else if("#tabcontent-goodsissue" == target) {
+		  refreshSOGrids();
+	  } else if("#tabcontent-goodsreceive" == target) {
+		  refreshPOGrids();
+	  } else if("#tabcontent-invencorrection" == target) {
+		  refreshInvenCorrectGrids();
+	  } else if("#tabcontent-settings" == target) {
+		 
+	  }
+});
+
 function refreshPOGrids() {
 	$("#po-orders-grid").jsGrid("reset");
 	$("#po-orders-grid").jsGrid("loadData");
@@ -8,6 +23,11 @@ function refreshPOGrids() {
 	$("#po-create-grid").jsGrid("render");
 }
 
+function refreshInvenCorrectGrids(){
+	$("#invencorrect-items").jsGrid("reset");
+	$("#invencorrect-items").jsGrid("loadData");
+	$("#invencorrect-items").jsGrid("render");
+}
 
 function loadStock(){
 	var products = alasql("select products.id as id, stock.whouse as whouse, stock.balance as qty, products.code as code, " +

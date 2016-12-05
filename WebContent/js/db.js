@@ -132,6 +132,9 @@ DB.load = function() {
 				}
 			});
 	
+	alasql('DROP TABLE IF EXISTS stockcorrection;');
+	alasql('CREATE TABLE stockcorrection(id INT IDENTITY, stockid INT, correctionQty INT, message STRING, lastupdate STRING);');
+	
 	alasql('DROP TABLE IF EXISTS notifications;');
 	alasql('CREATE TABLE notifications(id INT IDENTITY, type STRING, reference STRING, message STRING, link STRING, lastupdate STRING);');
 	

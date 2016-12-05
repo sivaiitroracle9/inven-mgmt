@@ -70,6 +70,9 @@
 				<ul class="nav navbar-nav navbar-right">
 					<li><a><span> Welcome <span id="username"></span></span></a></li>
 				</ul>
+				<ul class="nav navbar-nav navbar-right">
+					<li><a><span> Warehouse: <span id="defaultWhouse" style="margin:5px;"></span></span></a></li>
+				</ul>
 			</div>
 			<!-- /.navbar-collapse -->
 		</div>
@@ -84,6 +87,8 @@
 				href="#tabcontent-goodsissue" data-toggle="tab">Goods Issue</a></li>
 			<li id="li-goodsreceive"><a id="tab-goodsreceive"
 				href="#tabcontent-goodsreceive" data-toggle="tab">Goods Received</a></li>
+			<li id="li-invencorrection"><a id="tab-invencorrection"
+				href="#tabcontent-invencorrection" data-toggle="tab">Inventory Correction</a></li>
 			<li id="li-settings"><a id="tab-settings"
 				href="#tabcontent-settings" data-toggle="tab">Settings</a></li>
 		</ul>
@@ -299,6 +304,21 @@
 				</div>
 
 			</div>
+			<div id="tabcontent-invencorrection" class="tab-pane">
+				<div class="panel panel-primary"
+					style="width: 1850px; margin-left: 10px">
+					<div class="panel-heading" style="background-color: whitesmoke;color:green">
+						<label>STOCK ADJUSTMENT/CORRECTION</label>
+					</div>
+					<div class="panel-body" style="background-color: whitesmoke;">
+						<div id="invencorrect-items"></div>
+						<div id="invencorrect-dlg">
+							<label for="invencorrect-qty" class="">Adjust/Correct Qty:</label><input id="invencorrect-qty" class="form-control" type="number">
+							<label for="invencorrect-reason" class="">Reason for Adjustment/Correction:</label><textarea id="invencorrect-reason" class="form-control" ></textarea>
+						</div>
+					</div>
+				</div>
+			</div>
 			<div id="tabcontent-settings" class="tab-pane">
 				<br>
 				<ul class="nav nav-tabs">
@@ -422,6 +442,7 @@
 	</nav>
 	<script src="js/inventory-common.js"></script>
 	<script src="js/inventory.js"></script>
+		<script src="js/inventory-correction.js"></script>
 	<script src="js/inventory-po-create.js"></script>
 	<script src="js/automatic-po.js"></script>
 	<script src="js/gr-inventory.js"></script>

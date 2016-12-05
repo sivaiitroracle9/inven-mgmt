@@ -215,7 +215,7 @@ $("#inventory-items").jsGrid({
     fields: [
     		 { name: "pckb", title: "", type: "checkbox", align: "center", filtering:false, sorting:false, width:20, css:"pckbheader",
     			 headerTemplate: function(value, item) {
-    				 return $("<input id='pckb-header' checked>").attr("type", "checkbox").change(function(){
+    				 return $("<input id='pckb-header'>").attr("type", "checkbox").change(function(){
     					 if($(this).is(":checked")){
     						 $("input.pckb-item").each(function(){
     							$(this).prop('checked', true); 
@@ -233,7 +233,7 @@ $("#inventory-items").jsGrid({
     			 },
     		 
 	    		 itemTemplate: function(value, item) {
-	                 return $("<input class='pckb-item' id='pckb-item-'" + item.pstockid + " checked>").attr("type", "checkbox").change(function(){
+	                 return $("<input class='pckb-item' id='pckb-item-'" + item.pstockid + " >").attr("type", "checkbox").change(function(){
 	                	 var id = Number($(this).attr("id").slice(10));
 	                	 if($(this).is(":checked")){
 	                		 inventory_items_selected[item.pstockid] = item;
