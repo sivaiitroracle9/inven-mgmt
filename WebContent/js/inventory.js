@@ -285,7 +285,7 @@ $("#inventory-items").jsGrid({
  	         		return $("<span>" + this.title + "</span><span style='float:right' class='glyphicon glyphicon-sort'>");
  	         	}	 
              },
-             { name: "pprice", title: "PRICE ", type:"number", width:120,  align:"center",
+             { name: "pprice", title: "AVG. PRICE ", type:"number", width:120,  align:"center",
             	 headerTemplate: function() {
  	         		return $("<span>" + this.title + "</span><span style='float:right' class='glyphicon glyphicon-sort'>");
  	         	 },
