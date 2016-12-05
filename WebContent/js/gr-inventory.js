@@ -12,6 +12,9 @@ $('input#goodsreceive-orderid').keypress(function (e) {
 
 $("#goodsreceive-orderid-update-btn").click(function(){
 	if(Object.keys(gi_orderid_po_update_items).length > 0) {
+		
+		var orderId = Object.values(gi_orderid_po_update_items)[0].poid;
+		
 		Object.values(gi_orderid_po_update_items).forEach(function(upitem){
 			console.log(upitem)
 			
@@ -19,10 +22,10 @@ $("#goodsreceive-orderid-update-btn").click(function(){
     		var qty = rows[0].qty;
     		var received = rows[0].received + Number(upitem.receivedQty);
     		var status = 0;
-    		if(received == 0) status = 7;
-    		else if(qty > received) status = 8;
-    		else status = 9;
-    		alasql("update poitems set received=" + received + ", status=" + status + " where id = " + upitem.id);
+    		if(received == 0) status = 15; // NOT RECEIVED
+    		else if(qty > received) status = 16;
+    		else status = 17;
+    		alasql("update poitems set received=" + received + ", status=" + status + ", lastupdate='" + (new Date()).toLocaleString() + "' where id = " + upitem.id);
     		
     		// intrans-items
     		var intransitem = 0;
@@ -32,20 +35,6 @@ $("#goodsreceive-orderid-update-btn").click(function(){
     		var query = "INSERT INTO intrans_items VALUES("+ intransitem + ",'" + upitem.poid +"'," + upitem.id +"," + Number(upitem.receivedQty) +",'" + (new Date()).toLocaleString() + "')";
     		console.log(query)
     		alasql(query);
-    		
-    		// order status change
-    		var oitemsQty = alasql("select SUM(qty) as qty, SUM(received) as received from poitems where oid='" + upitem.poid +"'");
-    		console.log(oitemsQty)
-    		
-    		if(oitemsQty!=undefined && oitemsQty.length > 0 && oitemsQty[0].received!=0 && oitemsQty[0].qty > oitemsQty[0].received) {
-    			status = 3;
-    			alasql("update porders set status=" + status + " where poid = '" + upitem.poid + "'");
-    		}
-    		
-    		if(oitemsQty!=undefined && oitemsQty.length > 0 && oitemsQty[0].received !== 0 && oitemsQty[0].qty === oitemsQty[0].received) {
-    			status = 4;
-    			alasql("update porders set status=" + status + " where poid = '" + upitem.poid + "'");
-    		}
     		
     		// stock balance change.
 			var currOrders = alasql("select * from porders where poid='" + upitem.poid +"'");
@@ -57,11 +46,24 @@ $("#goodsreceive-orderid-update-btn").click(function(){
     			if(stocks.length != 0) nextID = stocks[0].id;
     			nextID++;
     			
-    			alasql("INSERT into stock VALUES(" + nextID + "," + currProduct[0].id + "," + currOrders[0].warehouse + "," + Number(upitem.receivedQty) + ")");
+    			alasql("INSERT into stock VALUES(" + nextID + "," + currProduct[0].id + "," + currOrders[0].warehouse + "," + Number(upitem.receivedQty) + ",0,0,0,0,0)");
     		} else {
     			alasql("UPDATE stock set balance=" + (currstock[0].balance + Number(upitem.receivedQty)) + " where item="+currProduct[0].id+" and whouse="+currOrders[0].warehouse);
     		}
 		});
+		
+		// order status change
+		var oitemsQty = alasql("select SUM(qty) as qty, SUM(received) as received from poitems where poid='" + orderId +"'");
+		console.log(oitemsQty)
+		if(oitemsQty!=undefined && oitemsQty.length > 0) {
+			var orderStatus = 4;
+			if(oitemsQty[0].received != 0 && oitemsQty[0].qty > oitemsQty[0].received) {
+				orderStatus = 5;
+			} else if(oitemsQty[0].qty === oitemsQty[0].received){
+				orderStatus = 6;
+			}
+			alasql("update porders set status=" + orderStatus + ", lastupdate='" + (new Date()).toLocaleString() + "' where poid = '" + orderId + "'");
+		}
 	}
 	
 	  gi_orderid_po_update_items = {};

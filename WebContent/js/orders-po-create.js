@@ -352,9 +352,10 @@ function createPO(po_items_inserted) {
 			values.push(item["pmake"]);
 			values.push("'" + item["pdetail"] + "'");
 			values.push(item["pquant"]);
-			values.push(10); // status
+			values.push(15); // status
 			values.push(0); // received
 			values.push("'" + (new Date()).toLocaleString() + "'");
+			values.push(0);
 			var poitemInsert = "INSERT INTO poitems VALUES (" + values.join(",") + ")";
 			console.log(poitemInsert)
 			alasql(poitemInsert);

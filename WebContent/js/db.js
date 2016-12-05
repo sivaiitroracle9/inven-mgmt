@@ -108,7 +108,7 @@ DB.load = function() {
 	alasql('CREATE TABLE porders(id INT IDENTITY, poid STRING, vendor INT, warehouse INT, status INT, lastupdate STRING);');
 
 	alasql('DROP TABLE IF EXISTS poitems;');
-	alasql('CREATE TABLE poitems(id INT IDENTITY, poid STRING, pid INT, pcode STRING, pcat INT, pmake INT, pdetail STRING, qty INT, status INT, received INT, lastupdate STRING);');
+	alasql('CREATE TABLE poitems(id INT IDENTITY, poid STRING, pid INT, pcode STRING, pcat INT, pmake INT, pdetail STRING, qty INT, status INT, received INT, lastupdate STRING, qprice INT);');
 	
 	alasql('DROP TABLE IF EXISTS intrans_items;');
 	alasql('CREATE TABLE intrans_items(id INT IDENTITY, inoid STRING, initemid INT, transQty INT, lastupdate STRING);');

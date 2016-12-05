@@ -3,7 +3,7 @@ var gi_so_items = [];
 var gi_so_update_items = {};
 $('input#goodsissue-orderid').keypress(function (e) {
 	  if (e.which == 13) {
-		  loadOrderWithItems($('input#goodsissue-orderid').val());
+		  loadSOrderWithItems($('input#goodsissue-orderid').val());
 		  
 		  gi_so_update_items = {};
 		  $("#goodsissue-orderid-update-btn").prop("disabled", true);
@@ -179,7 +179,7 @@ $("#gi-so-items").jsGrid({
        ]
 });
 
-function loadOrderWithItems(soid) {
+function loadSOrderWithItems(soid) {
 	
 	var orders = alasql("select id, status, warehouse, outlet from sorders where soid='" + soid + "'");
 

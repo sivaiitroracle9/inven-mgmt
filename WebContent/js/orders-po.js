@@ -60,6 +60,8 @@ function openPODetails(poid) {
 	if (poitems != undefined && poitems.length > 0) {
 		poitems.forEach(function(poitem) {
 			var item = {};
+			item.poid = poitem.poid;
+			item.pid = poitem.pid;
 			item.pcode = poitem.pcode;
 			item.pcat = poitem.pcat;
 			item.pmake = poitem.pmake;
@@ -67,6 +69,7 @@ function openPODetails(poid) {
 			item.qty = poitem.qty;
 			item.status = poitem.status;
 			item.receivedqty = poitem.received;
+			item.qprice = poitem.qprice;
 			od_dlg_po_item.push(item);
 		});
 	}
@@ -87,6 +90,11 @@ $("#po-dlg-items").jsGrid({
     sorting: false,
     autoload: true,
     
+    onItemUpdated: function(args){
+    	console.log(args.item)
+    	alasql("update poitems set qprice=" + Number(args.item.qprice) + "where poid='" + args.item.poid + "' and pid=" + args.item.pid)
+    },
+    
     controller: {
     	loadData: function() {
     		return od_dlg_po_item;
@@ -105,11 +113,11 @@ $("#po-dlg-items").jsGrid({
         		var str = "";
         		this.items.forEach(function(r){
         			if(value == r.id) {
-        				if(value == 7) { // NOT
+        				if(value == 15) { // NOT
         					str =  "<span style='font-weight:bold' class='label label-warning'>"+ r.text + "</span>";
-        				} else if(value == 8) {
-        					str =  "<span style='font-weight:bold' class='label label-info'>"+ r.text + "</span>";
-        				} else if(value == 9) {
+        				} else if(value == 16) {
+        					str =  "<span style='font-weight:bold' class='label label-default'>"+ r.text + "</span>";
+        				} else if(value == 17) {
         					str =  "<span style='font-weight:bold' class='label label-primary'>"+ r.text + "</span>";
         				}
             		}
@@ -117,9 +125,10 @@ $("#po-dlg-items").jsGrid({
         		return str;
         	},	
         },
-        {name:"paidprice", title:"PAID PIRCE (UNIT)", type: "number", width:80,
+        {name:"qprice", title:"Quoted PIRCE (UNIT)", type: "number", width:80,
         	itemTemplate: function(value, item){
         		if(value === 0) return "--";
+        		return value;
         	}
         },
         {type: "control",
@@ -216,9 +225,18 @@ $("#po-orders-grid").jsGrid({
             {type: "control",
             	deleteButton: false,
             	itemTemplate: function(value, item) {
-            		if(Number(item.status) != 4 && Number(item.status) != 5 )
+            		if(Number(item.status) != 4 && Number(item.status) != 5 && Number(item.status) != 6 && Number(item.status) != 8)
             			return this._createEditButton(item);
             	}
             }
         ]
     });
+
+function poUpdatePayment() {
+	var data = $("#po-dlg-items").data("JSGrid").data;
+	if(data.length > 0) {
+		var orderId = data[0].poid;
+		alasql("update porders set status=7, lastupdate='" + (new Date()).toLocaleString() + "' where poid='" + orderId + "'");
+		refreshPOGrids();
+	}
+}
