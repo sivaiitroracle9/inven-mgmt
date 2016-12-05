@@ -136,13 +136,12 @@
 											<a class="btn btn-default"><span class="glyphicon glyphicon-share" style="margin-right:4px"></span>Share</a> 
 											<a class="btn btn-default"><span class="glyphicon glyphicon-print" style="margin-right:4px"></span>Print</a> 
 											<a class="btn btn-default" onclick=open_dlg_overview_email()><span class="glyphicon glyphicon-envelope" style="margin-right:4px"></span>Email</a>
-										</div>
-										<div class="btn-group pull-right">
+
 											<button type="button" class="btn btn-default dropdown-toggle"
 												data-toggle="dropdown" aria-haspopup="true"
 												aria-expanded="false">
-												<span class="fa fa-download" style="margin-right:4px"> </span> Export <span
-													class="caret"></span>
+												<span class="fa fa-download" style="margin-right: 4px">
+												</span> Export <span class="caret"></span>
 											</button>
 											<ul class="dropdown-menu" style="background: #171048">
 												<li style="width: 96px"><a href="#"><span
@@ -151,14 +150,15 @@
 														class="fa fa-file-pdf-o"> </span> PDF</a></li>
 												<li style="width: 96px"><a href="#"><span
 														class="fa fa-file-code-o"> </span> JSON</a></li>
-											</ul>
-										</div>
-										<div>
-											<span style="font-weight: bold" class="pull-left">STATUS
+											</ul></div>
+										
+										<div class="pull-left">
+											<span style="font-weight: bold" >STATUS
 												: <span id="od-dlg-status"></span>
-											</span> <span style="font-weight: bold" class="pull-left">ORDER
+											</span> <span style="font-weight: bold;margin:4px">ORDER
 												TYPE : <span id="od-dlg-type"></span>
-											</span> <span style="font-weight: bold" class="pull-right">LAST
+											</span>
+											<span style="font-weight: bold" class="pull-left">LAST
 												UPDATE : <span id="od-dlg-lastupdate"
 												class="label label-default"></span>
 											</span>
@@ -185,7 +185,8 @@
 														Phone: <span id="po-vendor-dlg-tel"></span>
 													</p>
 													<p>
-														Email: <span id="po-vendor-dlg-email"></span>
+														Email: <span id="po-vendor-dlg-email"></span> 
+														<a onclick=open_dlg_overview_email('povendor') style="margin:4px"><span class="glyphicon glyphicon-envelope" style="margin-right:4px"> </span></a>
 													</p>
 												</div>
 											</div>
@@ -215,6 +216,15 @@
 								<div class="panel panel-primary">
 									<div class="panel-body">
 										<div id="po-dlg-items"></div>
+										<hr/>
+										<div class="pull-left">
+											<label for="poQuote-input" class="pull-left">Attach Procurement Quote: </label><input id="poQuote-input" type="file" class="pull-left">
+											<label for="invoice-input" class="pull-left">Attach Invoice: </label><input id="invoice-input" type="file" class="pull-left">
+										</div>
+
+										<div class="pull-right">
+											<button onclick="poMakePayment()" class="btn btn-warning">Make Payment.</button>
+										</div>
 									</div>
 								</div>
 							</div>

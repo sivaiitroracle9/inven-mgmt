@@ -92,7 +92,7 @@ $("#gi-so-items").jsGrid({
     	}
     },
     fields: [
-        { name: "pimg", title: "", type: "text", editing:false, filtering: false,
+        { name: "pimg", title: "", type: "text", editing:false, filtering: false, width:"100px",
         	itemTemplate: function(value, item){
         		if(item && item.pid) {
         			return "<img src='img/"+ item.pid + ".jpg' style='width:40px;height:40px'>";
@@ -104,11 +104,11 @@ $("#gi-so-items").jsGrid({
         		}
         	}
         },
-        { name: "pcode", title: "PROD CODE", type: "text", editing:false},
-        { name: "pcat", title: "CATEGORY", type: "select", items:getCategoriesLOV(), valueField: "id", textField: "text", filtering: false, editing:false},
-        { name: "pmake", title: "MAKER", type: "select", items:getMakersLOV(), valueField: "id", textField: "text", filtering: false, editing:false},
+        { name: "pcode", title: "PROD CODE", type: "text", editing:false,width:100,},
+        { name: "pcat", title: "CATEGORY", type: "select", items:getCategoriesLOV(), valueField: "id", textField: "text", width:100, filtering: false, editing:false},
+        { name: "pmake", title: "MAKER", type: "select", items:getMakersLOV(), valueField: "id", textField: "text", width:100, filtering: false, editing:false},
         { name: "pdetail", title: "DETAIL", type: "text",editing:false},
-        { name: "availableQty", title: "QTY AVAILABLE", type: "number", editing:false,
+        { name: "availableQty", title: "QTY AVAILABLE", type: "number", width:100, editing:false,
         	itemTemplate: function(value, item) {
         	  if ( item && item.availableQty === 0 ) {
         		  return "<span style='font-weight:bold' class='label label-danger pull-left'>NO STOCK</span>"+
@@ -134,35 +134,40 @@ $("#gi-so-items").jsGrid({
           	  }
         	}
         },
-        { name: "orderedQty", title: "QTY ORDERED.", type: "text", editing:false, filtering: false,
+        { name: "orderedQty", title: "QTY ORDERED.", type: "text", width:100, editing:false, filtering: false, align:"center",
         	itemTemplate: function(value, item) {
         		if(value == 0) return "--";
         		else return value;
         	}
         },   
         
-        { name: "issuedQty", title: "QTY ISSUED", type: "text", editing:false, filtering: false,
+        { name: "issuedQty", title: "QTY ISSUED", type: "text", width:100, editing:false, filtering: false, align:"center",
         	itemTemplate: function(value, item) {
         		if(value == 0) return "--";
         		else return value;
         	}
         }, 
         
-        { name: "issueQty", title: "ISSUE QTY", type: "text",filtering: false, 
+        { name: "issueQty", title: "ISSUE QTY", type: "text", width:100, filtering: false, align:"center",
         	itemTemplate: function(value, item) {
         		if(value == 0 && item.issueQty == 0) return "--";
         		else return value;
         	}
         },
         
-        { type: "control",
+        { type: "control", align:"center", width:100,
           deleteButton: false,
           itemTemplate: function(value, item) {
         	  var ret = $("<div>");
         	  if(item && item.orderedQty != 0 && item.orderedQty > item.issuedQty ) {
         		  (this._createEditButton(item)).appendTo(ret);
         		  if(item.availableQty < item.orderedQty - item.issuedQty) {
-        			  $("<span style='font-weight:bold' class='label label-warning'>").text("Low Stock").appendTo(ret);
+        			  $("<span style='font-weight:bold; margin-left:20px' class='label label-warning'>").text("Low Stock").appendTo(ret);
+        			  $("<input type='button' style='font-weight:bold; margin-left:20px' class='jsgrid-button jsgrid-insert-button' title='Request Stock'>")
+        			  .click(function(){
+        				  alasql("select * from notification where type='PROCUREMENT_REQUEST'")
+
+        			  }).appendTo(ret);
         		  }
         		  return ret;
         	  }

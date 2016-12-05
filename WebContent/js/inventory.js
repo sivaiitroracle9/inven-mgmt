@@ -87,13 +87,13 @@ var inventory_items_stock = [];
 var inventory_items_selected = {};
 
 $("#inventory-items").jsGrid({
-	width:"1400px",
+	width:"1800px",
 	filtering: true,
 	sorting: true,
     autoload: true,
     visible:true,
     paging: true,
-    pageSize: 15,
+    pageSize: 10,
     pageButtonCount: 10,
     pageLoading:true,
     
@@ -107,6 +107,8 @@ $("#inventory-items").jsGrid({
     		var products = alasql("select stock.id as pstockid, products.id as prodid, stock.cstock as cstock, stock.cstock_type as cstock_type, products.id as id, stock.whouse as whouse, stock.balance as qty, products.code as code, " +
     				"products.category as category, products.detail as detail, products.make as make, products.price as price, products.unit as unit" +
     				" from products JOIN stock ON products.id=stock.item");
+    		
+    		
     		
     		var inventory_items_stock = [];
     		products.forEach(function(prd){
@@ -122,7 +124,10 @@ $("#inventory-items").jsGrid({
     			iitem.pmake = prd.make;
     			iitem.pdetail = prd.detail;
     			iitem.pprice = prd.price;
-    			iitem.inStock = prd.qty;
+    			iitem.inWarehouse = prd.qty;
+    			iitem.reservedForIssue = getReservedQty(iitem.whouse, iitem.prodid);
+    			iitem.leadQty = getLeadQty(iitem.whouse, iitem.prodid);
+    			iitem.inStock = iitem.inWarehouse - iitem.reservedForIssue + iitem.leadQty;
     			iitem.reorderPoint = prd.cstock;
     			
     			iitem.stocklevel = 1;
@@ -145,7 +150,25 @@ $("#inventory-items").jsGrid({
     						|| (filter.inStock.text && Number(filter.inStock.op)===2 && Number(filter.inStock.text) > Number(iitem["inStock"]))
     						|| (filter.inStock.text && Number(filter.inStock.op)===3 && Number(filter.inStock.text) <= Number(iitem["inStock"]))
     						|| (filter.inStock.text && Number(filter.inStock.op)===4 && Number(filter.inStock.text) >= Number(iitem["inStock"]))
-    					) && (!filter.reorderPoint || !filter.reorderPoint.text 
+    					) && (!filter.inWarehouse || !filter.inWarehouse.text 
+        						|| (filter.inWarehouse.text && Number(filter.inWarehouse.op)===0 && Number(filter.inWarehouse.text)== Number(iitem["inWarehouse"]))
+        						|| (filter.inWarehouse.text && Number(filter.inWarehouse.op)===1 && Number(filter.inWarehouse.text) < Number(iitem["inWarehouse"]))
+        						|| (filter.inWarehouse.text && Number(filter.inWarehouse.op)===2 && Number(filter.inWarehouse.text) > Number(iitem["inWarehouse"]))
+        						|| (filter.inWarehouse.text && Number(filter.inWarehouse.op)===3 && Number(filter.inWarehouse.text) <= Number(iitem["inWarehouse"]))
+        						|| (filter.inWarehouse.text && Number(filter.inWarehouse.op)===4 && Number(filter.inWarehouse.text) >= Number(iitem["inWarehouse"]))
+        				) && (!filter.reservedForIssue || !filter.reservedForIssue.text 
+        						|| (filter.reservedForIssue.text && Number(filter.reservedForIssue.op)===0 && Number(filter.reservedForIssue.text)== Number(iitem["reservedForIssue"]))
+        						|| (filter.reservedForIssue.text && Number(filter.reservedForIssue.op)===1 && Number(filter.reservedForIssue.text) < Number(iitem["reservedForIssue"]))
+        						|| (filter.reservedForIssue.text && Number(filter.reservedForIssue.op)===2 && Number(filter.reservedForIssue.text) > Number(iitem["reservedForIssue"]))
+        						|| (filter.reservedForIssue.text && Number(filter.reservedForIssue.op)===3 && Number(filter.reservedForIssue.text) <= Number(iitem["reservedForIssue"]))
+        						|| (filter.reservedForIssue.text && Number(filter.reservedForIssue.op)===4 && Number(filter.reservedForIssue.text) >= Number(iitem["reservedForIssue"]))
+        				) && (!filter.leadQty || !filter.leadQty.text 
+        						|| (filter.leadQty.text && Number(filter.leadQty.op)===0 && Number(filter.leadQty.text)== Number(iitem["leadQty"]))
+        						|| (filter.leadQty.text && Number(filter.leadQty.op)===1 && Number(filter.leadQty.text) < Number(iitem["leadQty"]))
+        						|| (filter.leadQty.text && Number(filter.leadQty.op)===2 && Number(filter.leadQty.text) > Number(iitem["leadQty"]))
+        						|| (filter.leadQty.text && Number(filter.leadQty.op)===3 && Number(filter.leadQty.text) <= Number(iitem["leadQty"]))
+        						|| (filter.leadQty.text && Number(filter.leadQty.op)===4 && Number(filter.leadQty.text) >= Number(iitem["leadQty"]))
+        				) && (!filter.reorderPoint || !filter.reorderPoint.text 
     						|| (filter.reorderPoint.text && Number(filter.reorderPoint.op)===0 && Number(filter.reorderPoint.text)== Number(iitem["reorderPoint"]))
     						|| (filter.reorderPoint.text && Number(filter.reorderPoint.op)===1 && Number(filter.reorderPoint.text) < Number(iitem["reorderPoint"]))
     						|| (filter.reorderPoint.text && Number(filter.reorderPoint.op)===2 && Number(filter.reorderPoint.text) > Number(iitem["reorderPoint"]))
@@ -226,43 +249,43 @@ $("#inventory-items").jsGrid({
 	                 });
 	             },
 	    	 },
-	         { name: "pimg", title: "IMG", type: "text", editing:false, width:70, sorting:false, filtering: false, css:"pimgheader",
+	         { name: "pimg", title: "", type: "text", editing:false, width:70, sorting:false, filtering: false, css:"pimgheader", align:"center",
 	     		
 	    		 itemTemplate: function(value, item) {
 	                 return "<img style='width:40px;height:40px' src='img/" + item.prodid + ".jpg'>";
 	             },
 	         },
-             { name: "pcode", title: "PROD CODE", type: "text", editing:false, width:120, sorting:true,
+             { name: "pcode", title: "PROD CODE", type: "text", editing:false, width:120, sorting:true, align:"center",
 	    		 headerTemplate: function() {
 	         		return $("<span>" + this.title + "</span><span style='float:right' class='glyphicon glyphicon-sort'>");
 	         	}	 
              },
-             { name: "pcat", title: "CATEGORY", type: "select", items:getCategoriesLOV(), valueField: "id", textField: "text", width:120, 
+             { name: "pcat", title: "CATEGORY", type: "select", items:getCategoriesLOV(), valueField: "id", textField: "text", width:120, align:"center",
             	 headerTemplate: function() {
  	         		return $("<span>" + this.title + "</span><span style='float:right' class='glyphicon glyphicon-sort'>");
  	         	}	 
              },
-             { name: "plocId", title: "SHELF", type: "text", editing:false, width:120, sorting:true,
+             { name: "plocId", title: "SHELF", type: "text", editing:false, width:120, sorting:true, align:"center",
             	 headerTemplate: function() {
  	         		return $("<span>" + this.title + "</span><span style='float:right' class='glyphicon glyphicon-sort'>");
  	         	}	 
              },
-             { name: "pmake", title: "MAKER", type: "select", items:getMakersLOV(), valueField: "id", textField: "text", width:120, 
+             { name: "pmake", title: "MAKER", type: "select", items:getMakersLOV(), valueField: "id", textField: "text", width:120,  align:"center",
             	 headerTemplate: function() {
  	         		return $("<span>" + this.title + "</span><span style='float:right' class='glyphicon glyphicon-sort'>");
  	         	}	 
              },
-             { name: "pdetail", title: "DETAIL", type: "text", width:150, 
+             { name: "pdetail", title: "DETAIL", type: "text", width:150,  align:"center",
             	 headerTemplate: function() {
  	         		return $("<span>" + this.title + "</span><span style='float:right' class='glyphicon glyphicon-sort'>");
  	         	}	 
              },
-             { name: "whouse", title: "WAREHOUSE", type: "select", items:getWarehousesLOV(), valueField: "id", textField: "text", width:120, 
+             { name: "whouse", title: "WAREHOUSE", type: "select", items:getWarehousesLOV(), valueField: "id", textField: "text", width:120,  align:"center",
             	 headerTemplate: function() {
  	         		return $("<span>" + this.title + "</span><span style='float:right' class='glyphicon glyphicon-sort'>");
  	         	}	 
              },
-             { name: "pprice", title: "PRICE ", type:"number", width:120, 
+             { name: "pprice", title: "PRICE ", type:"number", width:120,  align:"center",
             	 headerTemplate: function() {
  	         		return $("<span>" + this.title + "</span><span style='float:right' class='glyphicon glyphicon-sort'>");
  	         	 },
@@ -292,8 +315,8 @@ $("#inventory-items").jsGrid({
  	        		   op: this._operatorPicker.val(),
  	        	   };
  	           }
-             },   
-             { name: "inStock", title: "In Stock QTY", type: "text", width:120, 
+             },
+             { name: "inWarehouse", title: "Qty in Warehouse", type: "text", width:120,  align:"center",
             	 headerTemplate: function() {
  	         		return $("<span>" + this.title + "</span><span style='float:right' class='glyphicon glyphicon-sort'>");
  	         	},
@@ -324,7 +347,7 @@ $("#inventory-items").jsGrid({
 	        	   };
 	           }
              },
-             { name: "reorderPoint", title: "Reorder Point", type: "text", width:120, 
+             { name: "reservedForIssue", title: "Reserved Qty \n (For Issue)", type: "text", width:120,  align:"center",
             	 headerTemplate: function() {
  	         		return $("<span>" + this.title + "</span><span style='float:right' class='glyphicon glyphicon-sort'>");
  	         	},
@@ -355,7 +378,100 @@ $("#inventory-items").jsGrid({
 	        	   };
 	           }
              },
-             { name: "stocklevel", title: "STOCK. STATUS", type: "select", items:getStockLevelLOV(), valueField: "id", textField: "text", width:120, 
+             { name: "leadQty", title: "Lead Qty\n(Procured)", type: "text", width:120,  align:"center",
+            	 headerTemplate: function() {
+ 	         		return $("<span>" + this.title + "</span><span style='float:right' class='glyphicon glyphicon-sort'>");
+ 	         	},
+ 	         	filterTemplate: function() {
+	         			var operator = $("<select style='width:55px'>").on('change', function (e) {
+ 	         		    	$("#inventory-items").jsGrid("search", $("#inventory-items").jsGrid("getFilter"));
+         				});
+	         			$("<option selected>").val(0).text("=").appendTo(operator);
+	         			$("<option>").val(1).text(">").appendTo(operator);
+	         			$("<option>").val(2).text("<").appendTo(operator);
+	         			$("<option>").val(3).text(">=").appendTo(operator);
+	         			$("<option>").val(4).text("<=").appendTo(operator);
+	         			
+	         			this._operatorPicker = operator;
+	         			this._textPicker = $("<input style='width:46px' type='text'>")
+	         				.on('keypress', function (e) {
+ 	         		         if(e.which === 13){
+ 	         		        	$("#inventory-items").jsGrid("search", $("#inventory-items").jsGrid("getFilter"));
+ 	         		         }
+	         				});
+ 	               return $("<div>").append(this._operatorPicker).append(this._textPicker);
+ 	           },
+ 	        
+	           filterValue: function() {
+	        	   return {
+	        		   text: this._textPicker.val(),
+	        		   op: this._operatorPicker.val(),
+	        	   };
+	           }
+             },
+             { name: "inStock", title: "Net Available QTY", type: "text", width:120,  align:"center",
+            	 headerTemplate: function() {
+  	         		return $("<span>" + this.title + "</span><span style='float:right' class='glyphicon glyphicon-sort'>");
+  	         	},
+  	         	filterTemplate: function() {
+ 	         			var operator = $("<select style='width:55px'>").on('change', function (e) {
+  	         		    	$("#inventory-items").jsGrid("search", $("#inventory-items").jsGrid("getFilter"));
+          				});
+ 	         			$("<option selected>").val(0).text("=").appendTo(operator);
+ 	         			$("<option>").val(1).text(">").appendTo(operator);
+ 	         			$("<option>").val(2).text("<").appendTo(operator);
+ 	         			$("<option>").val(3).text(">=").appendTo(operator);
+ 	         			$("<option>").val(4).text("<=").appendTo(operator);
+ 	         			
+ 	         			this._operatorPicker = operator;
+ 	         			this._textPicker = $("<input style='width:46px' type='text'>")
+ 	         				.on('keypress', function (e) {
+  	         		         if(e.which === 13){
+  	         		        	$("#inventory-items").jsGrid("search", $("#inventory-items").jsGrid("getFilter"));
+  	         		         }
+ 	         				});
+  	               return $("<div>").append(this._operatorPicker).append(this._textPicker);
+  	           },
+  	        
+ 	           filterValue: function() {
+ 	        	   return {
+ 	        		   text: this._textPicker.val(),
+ 	        		   op: this._operatorPicker.val(),
+ 	        	   };
+ 	           }
+              },
+             { name: "reorderPoint", title: "Reorder Point", type: "text", width:120,  align:"center",
+            	 headerTemplate: function() {
+ 	         		return $("<span>" + this.title + "</span><span style='float:right' class='glyphicon glyphicon-sort'>");
+ 	         	},
+ 	         	filterTemplate: function() {
+	         			var operator = $("<select style='width:55px'>").on('change', function (e) {
+ 	         		    	$("#inventory-items").jsGrid("search", $("#inventory-items").jsGrid("getFilter"));
+         				});
+	         			$("<option selected>").val(0).text("=").appendTo(operator);
+	         			$("<option>").val(1).text(">").appendTo(operator);
+	         			$("<option>").val(2).text("<").appendTo(operator);
+	         			$("<option>").val(3).text(">=").appendTo(operator);
+	         			$("<option>").val(4).text("<=").appendTo(operator);
+	         			
+	         			this._operatorPicker = operator;
+	         			this._textPicker = $("<input style='width:46px' type='text'>")
+	         				.on('keypress', function (e) {
+ 	         		         if(e.which === 13){
+ 	         		        	$("#inventory-items").jsGrid("search", $("#inventory-items").jsGrid("getFilter"));
+ 	         		         }
+	         				});
+ 	               return $("<div>").append(this._operatorPicker).append(this._textPicker);
+ 	           },
+ 	        
+	           filterValue: function() {
+	        	   return {
+	        		   text: this._textPicker.val(),
+	        		   op: this._operatorPicker.val(),
+	        	   };
+	           }
+             },
+             { name: "stocklevel", title: "STOCK. STATUS", type: "select", items:getStockLevelLOV(), valueField: "id", textField: "text", width:120,  align:"center",
             	 headerTemplate: function() {
  	         		return $("<span>" + this.title + "</span><span style='float:right' class='glyphicon glyphicon-sort'>");
  	         	 },
@@ -458,5 +574,33 @@ function restoreFilter(filter) {
 function toggleGroupPO(){
 	if(Object.keys(inventory_items_selected).length!=0) $("#inven-grp-po").prop("disabled", false);
 	else $("#inven-grp-po").prop("disabled", true);
+}
+
+function getReservedQty(whouse, pid) {
+	var rows = alasql("select sorders.soid, sorders.warehouse, soitems.pid, soitems.qty - soitems.issued as balance from sorders join soitems on sorders.soid=soitems.soid " +
+			"where warehouse=" + Number(whouse));
+	var balance = 0;
+	if(rows && rows.length!=0) {
+		rows.forEach(function(r){
+			if(r.pid === pid) {
+				balance += r.balance;
+			}
+		})
+	}
+	return balance;
+}
+
+function getLeadQty(whouse, pid) {
+	var rows = alasql("select porders.poid, porders.warehouse, poitems.pid, poitems.qty - poitems.received as balance from porders join poitems on porders.poid=poitems.poid " +
+			"where warehouse=" + Number(whouse));
+	var balance = 0;
+	if(rows && rows.length!=0) {
+		rows.forEach(function(r){
+			if(r.pid === pid) {
+				balance += r.balance;
+			}
+		})
+	}
+	return balance;
 }
 

@@ -215,17 +215,19 @@ function getWarehousesLOV() {
 }
 
 function getStatusLOV(type) {
-	var rows = alasql("SELECT id, text FROM status where type='" + type + "' order by id");
+	var rows = alasql("SELECT id, parent, text FROM status where type='" + type + "' order by id");
 
 	var data = [];
 	var d = {};
 	d["id"] = 0;
+	d["parent"] = 0;
 	d["text"] = "";
 	data.push(d);
 	if (rows.length != 0) {
 		rows.forEach(function(r) {
 			var d = {};
 			d["id"] = r.id;
+			d["parent"] = r.parent;
 			d["text"] = r.text;
 			data.push(d);
 		});
@@ -236,7 +238,14 @@ function getStatusLOV(type) {
 
 
 //------------------------------------------------------------------------------------------------------------------------------------------------
-function open_dlg_overview_email() {
+function open_dlg_overview_email(to) {
+	if(to === "povendor") {
+		$("#dlg-overview-email-to").val($("#po-vendor-dlg-email").text());
+		$("#dlg-overview-email-from").val("procurement@abc.com");
+	} else {
+		$("#dlg-overview-email-to").val("");
+		$("#dlg-overview-email-from").val("");
+	}
 	dlg_overview_email.dialog("open");
 }
 

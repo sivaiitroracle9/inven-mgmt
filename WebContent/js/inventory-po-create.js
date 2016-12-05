@@ -109,10 +109,12 @@ $("#po-create-grid").jsGrid({
     	} else {
     		++po_max_insert_id;
         	args.item["pcode"] = getProductCode(args.item["pcat"], args.item["pmake"], args.item["pdetail"]);
+        	args.item["pid"] = getProductId(args.item["pcat"], args.item["pmake"], args.item["pdetail"]);
         	
         	var dbitem = {};
         	dbitem["status"] = 1;
         	dbitem["po-row-id"] = po_max_insert_id;
+        	dbitem["pid"] = args.item["pid"];
         	dbitem["pcode"] = args.item["pcode"];
         	dbitem["pcat"] = args.item["pcat"];
         	dbitem["pmake"] = args.item["pmake"];
@@ -330,7 +332,9 @@ function openInventoryPO(multiple, itemId) {
 				    	poitem["pcat"] = item["pcat"];
 				    	poitem["pmake"] = item["pmake"];
 				    	poitem["pdetail"] = item["pdetail"];
-				    	poitem["pquant"] = (item["reorderPoint"] - item["inStock"]) < 0 ? 0 : (item["reorderPoint"] - item["inStock"]);
+				    	
+				    	poitem["pquant"] = item["inStock"] - item["reorderPoint"] < 0 ? Math.abs(item["inStock"] - item["reorderPoint"]): 0;
+
 				    	$("#po-warehouse-info-select").val(item["whouse"]).change();
 						$("#po-create-grid").jsGrid("insertItem", poitem);	
 					}
@@ -341,7 +345,7 @@ function openInventoryPO(multiple, itemId) {
 		}
 	} else {
 		poOrderDetailsDlg.dialog("open");
-		var rows = alasql("select stock.id as pstockid, stock.cstock as cstock, stock.cstock_type as cstock_type, products.id as id, stock.whouse as whouse, stock.balance as qty, products.code as code, " +
+		var rows = alasql("select stock.id as pstockid, stock.cstock as cstock, stock.cstock_type as cstock_type, products.id as prodid, stock.whouse as whouse, stock.balance as qty, products.code as code, " +
 				"products.category as category, products.detail as detail, products.make as make, products.price as price, products.unit as unit" +
 				" from products JOIN stock ON products.id=stock.item where stock.id = " + Number(itemId));
 		if(rows!=undefined && rows.length != 0) {
@@ -350,7 +354,11 @@ function openInventoryPO(multiple, itemId) {
 	    	poitem["pcat"] = item["category"];
 	    	poitem["pmake"] = item["make"];
 	    	poitem["pdetail"] = item["detail"];
-	    	poitem["pquant"] = item["cstock"] - item["qty"];
+	    	poitem.inWarehouse = item["qty"];
+	    	poitem.reorderPoint = item["cstock"];
+	    	poitem.reservedForIssue = getReservedQty(item.whouse, item.prodid);
+	    	poitem.inStock = poitem.inWarehouse - poitem.reservedForIssue;
+	    	poitem["pquant"] = poitem["inStock"] - poitem["reorderPoint"] < 0 ? Math.abs(poitem["inStock"] - poitem["reorderPoint"]): 0;
 	    	$("#po-warehouse-info-select").val(item["whouse"]).change();
 			$("#po-create-grid").jsGrid("insertItem", poitem);	
 		}
@@ -426,6 +434,7 @@ function createPO(po_items_inserted) {
 			var values = [];
 			values.push(poitemId);
 			values.push("'PO-0000"+orderId+"'");
+			values.push(item["pid"]);
 			values.push("'" + item["pcode"] + "'");
 			values.push(item["pcat"]);
 			values.push(item["pmake"]);

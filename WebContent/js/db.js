@@ -108,7 +108,7 @@ DB.load = function() {
 	alasql('CREATE TABLE porders(id INT IDENTITY, poid STRING, vendor INT, warehouse INT, status INT, lastupdate STRING);');
 
 	alasql('DROP TABLE IF EXISTS poitems;');
-	alasql('CREATE TABLE poitems(id INT IDENTITY, poid STRING, pcode STRING, pcat INT, pmake INT, pdetail STRING, qty INT, status INT, received INT, lastupdate STRING);');
+	alasql('CREATE TABLE poitems(id INT IDENTITY, poid STRING, pid INT, pcode STRING, pcat INT, pmake INT, pdetail STRING, qty INT, status INT, received INT, lastupdate STRING);');
 	
 	alasql('DROP TABLE IF EXISTS intrans_items;');
 	alasql('CREATE TABLE intrans_items(id INT IDENTITY, inoid STRING, initemid INT, transQty INT, lastupdate STRING);');
@@ -123,14 +123,20 @@ DB.load = function() {
 	alasql('CREATE TABLE customer(id INT IDENTITY, cname STRING, cemail STRING, ctel STRING, caddress STRING);');
 	
 	alasql('DROP TABLE IF EXISTS status;');
-	alasql('CREATE TABLE status(id INT IDENTITY, text STRING, type STRING);');
+	alasql('CREATE TABLE status(id INT IDENTITY, parent INT, text STRING, type STRING);');
 	var pstatus = alasql.promise('SELECT MATRIX * FROM CSV("data/STATUS-STATUS.csv", {headers: true})').then(
 			function(statuss) {
 				for (var i = 0; i < statuss.length; i++) {
 					var sttus = statuss[i];
-					alasql('INSERT INTO status VALUES(?,?,?);', sttus);
+					alasql('INSERT INTO status VALUES(?,?,?,?);', sttus);
 				}
 			});
+	
+	alasql('DROP TABLE IF EXISTS notifications;');
+	alasql('CREATE TABLE notifications(id INT IDENTITY, type STRING, reference STRING, message STRING, link STRING, lastupdate STRING);');
+	
+	alasql('DROP TABLE IF EXISTS procrequest;');
+	alasql('CREATE TABLE procrequest(id INT IDENTITY, soid STRING, soitem STRING, qty STRING, lastupdate STRING);');
 	
 	alasql('DROP TABLE IF EXISTS users;');
 	alasql('CREATE TABLE users(id INT IDENTITY, name STRING);');

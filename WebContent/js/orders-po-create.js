@@ -81,10 +81,12 @@ $("#po-create-grid").jsGrid({
     	} else {
     		++po_max_insert_id;
         	args.item["pcode"] = getProductCode(args.item["pcat"], args.item["pmake"], args.item["pdetail"]);
+        	args.item["pid"] = getProductId(args.item["pcat"], args.item["pmake"], args.item["pdetail"]);
         	
         	var dbitem = {};
         	dbitem["status"] = 1;
         	dbitem["po-row-id"] = po_max_insert_id;
+        	dbitem["pid"] = args.item["pid"];
         	dbitem["pcode"] = args.item["pcode"];
         	dbitem["pcat"] = args.item["pcat"];
         	dbitem["pmake"] = args.item["pmake"];
@@ -303,7 +305,7 @@ $("#po-create-btn").click(function(event){
 		alert("PO cannot be created.");
 	}
 	createPO(po_items_inserted);
-	resetPOGrids();
+	refreshPOGrids();
 	$("#po-vendor-info-select").val(0);
 	$("#po-vendor-info div.panel-body").hide();
 	$("#po-warehouse-info-select").val(0);
@@ -344,6 +346,7 @@ function createPO(po_items_inserted) {
 			var values = [];
 			values.push(poitemId);
 			values.push("'PO-0000"+orderId+"'");
+			values.push(item["pid"]);
 			values.push("'" + item["pcode"] + "'");
 			values.push(item["pcat"]);
 			values.push(item["pmake"]);

@@ -3,6 +3,7 @@ var poOrderDetailsDlg = $("#po-order-details-dlg").dialog({
     width: 400,
     modal: true,
     closeOnEscape: true,
+    title: "Purchase Order details",
     buttons: {
         Ok: function() {
             $(this).dialog("close");
@@ -29,27 +30,10 @@ function openPODetails(poid) {
 	$("#od-dlg-type").text("Purchase");
 	$("#od-dlg-type").addClass("label label-primary");
 
-	getStatusLOV("ORDER").forEach(function(lov) {
+	getStatusLOV("PO").forEach(function(lov) {
 		if (lov.id === status) {
-			if (status === 1) {
-				$("#od-dlg-status").addClass("label label-success");
-				$("#od-dlg-status").text(lov.text);
-			} else if (status === 2) {
-				$("#od-dlg-status").addClass("label label-default");
-				$("#od-dlg-status").text(lov.text);
-			} else if (status === 3) {
-				$("#od-dlg-status").addClass("label label-info");
-				$("#od-dlg-status").text(lov.text);
-			} else if (status === 4) {
-				$("#od-dlg-status").addClass("label label-primary");
-				$("#od-dlg-status").text(lov.text);
-			} else if (status === 5) {
-				$("#od-dlg-status").addClass("label label-danger");
-				$("#od-dlg-status").text(lov.text);
-			} else if (status === 6) {
-				$("#od-dlg-status").addClass("label label-warning");
-				$("#od-dlg-status").text(lov.text);
-			}
+			$("#od-dlg-status").addClass("label label-warning");
+			$("#od-dlg-status").text(lov.text);
 		}
 	});
 
@@ -99,7 +83,7 @@ function openPODetails(poid) {
 $("#po-dlg-items").jsGrid({
 	width:"100%",
 	filtering: false,
-    editing: false,
+    editing: true,
     sorting: false,
     autoload: true,
     
@@ -110,12 +94,13 @@ $("#po-dlg-items").jsGrid({
     	
     },
     fields: [
-        { name: "pcode", title: "PROD CODE", type: "text",},
-        { name: "pcat", title: "CATEGORY", type: "select", items:getCategoriesLOV(), valueField: "id", textField: "text",},
-        { name: "pmake", title: "MAKER", type: "select", items:getMakersLOV(), valueField: "id", textField: "text",},
-        { name: "pdetail", title: "DETAIL", type: "text",},
-        { name: "qty", title: "QTY", type: "text",},
-        { name: "status", title: "STATUS", type: "select", items: getStatusLOV("ORDERITEM"), valueField: "id", textField: "text",
+        { name: "pcode", title: "PROD CODE", type: "text",editing: false,},
+        { name: "pcat", title: "CATEGORY", type: "select", items:getCategoriesLOV(), valueField: "id", textField: "text",editing: false,},
+        { name: "pmake", title: "MAKER", type: "select", items:getMakersLOV(), valueField: "id", textField: "text",editing: false,},
+        { name: "pdetail", title: "DETAIL", type: "text",editing: false,},
+        { name: "qty", title: "ORDERED QTY", type: "text", width:80,editing: false,},
+        { name: "receivedqty", title: "Received QTY", type: "text",width:80,editing: false,},
+        { name: "status", title: "STATUS", type: "select", items: getStatusLOV("POITEM"), valueField: "id", textField: "text",editing: false,
         	itemTemplate: function(value, item) {
         		var str = "";
         		this.items.forEach(function(r){
@@ -132,8 +117,18 @@ $("#po-dlg-items").jsGrid({
         		return str;
         	},	
         },
-        
-        { name: "receivedqty", title: "Received QTY", type: "text",},
+        {name:"paidprice", title:"PAID PIRCE (UNIT)", type: "number", width:80,
+        	itemTemplate: function(value, item){
+        		if(value === 0) return "--";
+        	}
+        },
+        {type: "control",
+        	deleteButton: false,
+        	itemTemplate: function(value, item) {
+        		if(Number(item.status) != 4 && Number(item.status) != 5 )
+        			return this._createEditButton(item);
+        	}
+        }
        ]
 });
 
@@ -149,7 +144,10 @@ $("#po-orders-grid").jsGrid({
         },
         
         onItemUpdated: function(args){
-        	alasql("update orders set status =" + args.item.status + " where id =" + args.item.id + ";");
+        	console.log(args)
+        	var q = "update porders set status =" + Number(args.item.status) + " where id =" + args.item.id + ";";
+        	console.log(q)
+        	alasql(q);
         	if(args.item.status === 2) {
         		toastr.clear();
         		toastr.success("Order sent to Vendor.")
@@ -184,44 +182,42 @@ $("#po-orders-grid").jsGrid({
             		if(item!=undefined) {
                 		return "<a href='#' onclick=openPODetails(" + item.id + ")>" + value + "</a>";
             		}
+            	},
+            	editTemplate: function(value, item) {
+            		if(item!=undefined) {
+                		return "<a href='#' onclick=openPODetails(" + item.id + ")>" + value + "</a>";
+            		}
             	}
             },
             { name: "vendor", title: "VENDOR", type: "select", items: getVendorsLOV(), valueField: "id", textField: "text", editing: false,},
             { name: "whouse", title: "WAREHOUSE", type: "select", items: getWarehousesLOV(), valueField: "id", textField: "text", editing: false,},
-            { name: "status", title: "STATUS", type: "select", items: getStatusLOV("ORDER"), valueField: "id", textField: "text",
-
-            	itemTemplate: function(value, item) {
-            		var str = "";
-            		this.items.forEach(function(r){
-            			if(value == r.id) {
-
-            				if(value == 1) {
-            					str =  "<span style='font-weight:bold' class='label label-success'>"+ r.text + "</span>";
-            				} else if(value == 2) {
-            					str =  "<span style='font-weight:bold' class='label label-default'>"+ r.text + "</span>";
-            				} else if(value == 3) {
-            					str =  "<span style='font-weight:bold' class='label label-info'>"+ r.text + "</span>";
-            				}
-            				else if(value == 4) {
-            					str =  "<span style='font-weight:bold' class='label label-primary'>"+ r.text + "</span>";
-            				}
-            				else if(value == 5) {
-            					str =  "<span style='font-weight:bold' class='label label-danger'>"+ r.text + "</span>";
-            				}
-            				else if(value == 6) {
-            					str =  "<span style='font-weight:bold' class='label label-warning'>"+ r.text + "</span>";
-            				}
-                		}
+            { name: "status", title: "STATUS", type: "select", items: getStatusLOV("PO"), valueField: "id", textField: "text",
+            	
+            	editTemplate: function(value, item){
+            		var $select = $("<select>");
+            		getStatusLOV("PO").forEach(function(stl){
+            			if(stl.id === value) {
+                    		$("<option selected>").val(stl.id).text(stl.text).appendTo($select);
+            			} else if(stl.parent === value) {
+        	         		$("<option>").val(stl.id).text(stl.text).appendTo($select);
+            			}
             		});
-            		return str;
+            		this._selectPicker = $select;
+            		return $select;
             	},
+            	
+            	editValue: function(args){
+            		console.log(this._selectPicker.val())
+            		return Number(this._selectPicker.val());
+            	}
             	
             },
             { name: "lastupdate", title: "LAST UPDATE", type: "text", filtering: false, editing: false,},
             {type: "control",
             	deleteButton: false,
             	itemTemplate: function(value, item) {
-            		return this._createEditButton(item);
+            		if(Number(item.status) != 4 && Number(item.status) != 5 )
+            			return this._createEditButton(item);
             	}
             }
         ]

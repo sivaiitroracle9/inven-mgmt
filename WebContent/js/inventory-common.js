@@ -55,6 +55,16 @@ function getMakersLOV(){
 	return data;
 }
 
+function getProductId(category, make, detail){
+	var query = "select id from products where category =" + category + " and make=" + make + " and detail='" + detail + "'";
+	console.log(query)
+	var rows = alasql(query);
+	if(rows.length == 1) {
+		return rows[0]["id"];
+	}
+	return "";
+}
+
 function getCategoriesLOV(){
 	var query = "select * from kind";
 	var data = [];
