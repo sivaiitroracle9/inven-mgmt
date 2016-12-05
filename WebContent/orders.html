@@ -215,20 +215,27 @@
 								</div>
 								<div class="panel panel-primary">
 									<div class="panel-body">
+										<label>ATTACH REQUEST QUOTE FROM VENDOR.</label>
+										<div class="pull-right">
+											<label for="poQuote-input" class="pull-left">Attach Procurement Quote: </label><input id="poQuote-input" type="file"><br/>
+											<button id="po-quote-send-tovendor" onclick="" class="btn btn-info pull-right">Send to Vendor</button>											
+										</div>
+										<div>
+											
+										</div>
+									</div>
+								</div>
+								<div class="panel panel-primary">
+									<div class="panel-body">
 										<div id="po-dlg-items"></div>
 										<hr/>
-										<div class="pull-left">
-											<label for="poQuote-input" class="pull-left">Attach Procurement Quote: </label><input id="poQuote-input" type="file" class="pull-left">
+										<div id="po-payment-div">
 											<label for="invoice-input" class="pull-left">Attach Invoice: </label><input id="invoice-input" type="file" class="pull-left">
-										</div>
-
-										<div class="pull-right">
-											<button id="update-payment" onclick="poUpdatePayment()" class="btn btn-warning">Update Payment.</button>
+											<button id="update-payment" onclick="poUpdatePayment()" class="btn btn-warning">Payment Done</button>
 										</div>
 									</div>
 								</div>
 							</div>
-
 						</div>
 					</div>
 					<div id="tabcontent-po-create" " class="tab-pane"

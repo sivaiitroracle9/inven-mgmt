@@ -46,7 +46,7 @@ var invencorrectDlg = $("#invencorrect-dlg").dialog({
         }
     },
 	open: function(event) {
-		$('.ui-dialog-buttonpane').find('button:contains("Save")').removeClass("ui-button ui-corner-all ui-widget").addClass('btn btn-default');
+		$('.ui-dialog-buttonpane').find('button:contains("Save")').removeClass("ui-button ui-corner-all ui-widget").addClass('btn btn-primary');
 		$('.ui-dialog-buttonpane').find('button:contains("Cancel")').removeClass("ui-button ui-corner-all ui-widget").addClass('btn btn-default');
 	 }
 });
