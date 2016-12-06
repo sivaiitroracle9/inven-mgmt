@@ -332,10 +332,16 @@ function createPO(po_items_inserted) {
 		values.push(pvendor);
 		values.push(pwarehouse);
 		values.push(Number(status));
-		values.push("'" + (new Date()).toLocaleString() + "'");
+		var date = (new Date()).toLocaleString();
+		values.push("'" + date + "'");
+		values.push("''");
+		values.push("''");
 		var orderInsert = "INSERT INTO porders VALUES (" + values.join(",") + ")";
 		console.log(orderInsert)
 		alasql(orderInsert);
+
+		// order revision;
+		insertOrderRevision("PO-0000"+orderId, "PURCHASE", "--", "STATUS", "--", "NEW ORDER", date);
 		
 		// order-items
 		var poitems = alasql("select max(id) as id from poitems");
@@ -354,11 +360,17 @@ function createPO(po_items_inserted) {
 			values.push(item["pquant"]);
 			values.push(15); // status
 			values.push(0); // received
-			values.push("'" + (new Date()).toLocaleString() + "'");
+			values.push("'" + date + "'");
 			values.push(0);
 			var poitemInsert = "INSERT INTO poitems VALUES (" + values.join(",") + ")";
 			console.log(poitemInsert)
 			alasql(poitemInsert);
+			
+			// order revision;
+			insertOrderRevision("PO-0000"+orderId, "PURCHASE", item["pcode"], "QTY", "--", item["pquant"], date);
+			insertOrderRevision("PO-0000"+orderId, "PURCHASE", item["pcode"], "STATUS", "--", global_status_map[15], date);
+			insertOrderRevision("PO-0000"+orderId, "PURCHASE", item["pcode"], "RECEIVED", "--", 0, date);
+			insertOrderRevision("PO-0000"+orderId, "PURCHASE", item["pcode"], "QUOTE PRICE", "--", 0, date);
 		});
 		
 		toastr.clear();

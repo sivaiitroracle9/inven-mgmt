@@ -4,6 +4,8 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
 		  refreshPOGrids();
 	  } else if("#tabcontent-so-overview" == target || "#tabcontent-so" == target || "#tabcontent-so-create" == target) {
 		  refreshSOGrids();
+	  } else if("#tabcontent-revisions" == target) {
+		  refreshORGrids();
 	  }
 });
 
@@ -25,6 +27,12 @@ function refreshSOGrids() {
 	$("#so-dlg-items").jsGrid("loadData");
 	$("#so-dlg-itemss").jsGrid("render");
 	$("#so-create-grid").jsGrid("render");
+}
+
+function refreshORGrids(){
+	$("#order-revision").jsGrid("reset");
+	$("#order-revision").jsGrid("loadData");
+	$("#order-revision").jsGrid("render");
 }
 
 function getMakersLOV(){
@@ -236,6 +244,27 @@ function getStatusLOV(type) {
 	return data;
 }
 
+function getAllStatusLOV() {
+	var rows = alasql("SELECT id, parent, text FROM status order by id");
+
+	var data = [];
+	var d = {};
+	d["id"] = 0;
+	d["parent"] = 0;
+	d["text"] = "";
+	data.push(d);
+	if (rows.length != 0) {
+		rows.forEach(function(r) {
+			var d = {};
+			d["id"] = r.id;
+			d["parent"] = r.parent;
+			d["text"] = r.text;
+			data.push(d);
+		});
+	}
+	console.log(data)
+	return data;
+}
 
 //------------------------------------------------------------------------------------------------------------------------------------------------
 function open_dlg_overview_email(to) {
@@ -277,3 +306,52 @@ var dlg_overview_email = $("#dlg-overview-email").dialog(
 
 			}
 });
+
+function getNextInsertId(table) {
+	var rows = alasql("select max(id) as id from " + table + ";");
+	var maxID = 0;
+	if(rows && rows[0].id) maxID = rows[0].id;
+	return ++maxID;
+}
+
+function insertOrderRevision(onumber, otype, oitem, ofield, ofrom, oto, odate){
+	alasql("INSERT INTO order_revision VALUES(" + getNextInsertId("order_revision") + ",'" + onumber + "','" + otype + "','" + oitem + "','" + ofield + "','" + ofrom + "','" + oto +"','" + odate + "');" );
+}
+
+var global_status_map = {};
+getAllStatusLOV().forEach(function(d){
+	if(d!=0) {
+		global_status_map[d.id] = d.text;
+	}
+});
+
+function pageData(data, pageIndex, pageSize) {
+	var pageData;
+	if(pageIndex!= undefined && pageSize!= undefined && pageIndex > 0) {
+		pageData = data.slice((pageIndex - 1)*pageSize, pageIndex*pageSize)	
+	} else {
+		pageData = data;
+	}
+	return pageData;
+}
+
+function OROrderTypesLOV(){
+	var data = [];
+	data.push({id:"", text:""});
+	data.push({id:"PURCHASE", text:"PURCHASE"});
+	data.push({id:"SALES", text:"SALES"});
+	data.push({id:"STOCK TRANSFER", text:"STOCK TRANSFER"});
+	return data;
+}
+
+function OROrderFieldsLOV(){
+	var data = [];
+	data.push({id:"", text:""});
+	var rows = alasql("select distinct(ofield) as field from order_revision");
+	if(rows) {
+		rows.forEach(function(d){
+			data.push({id:d.field, text:d.field});
+		});
+	}
+	return data;
+}

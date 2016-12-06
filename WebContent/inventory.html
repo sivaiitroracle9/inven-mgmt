@@ -89,6 +89,8 @@
 				href="#tabcontent-goodsreceive" data-toggle="tab">Goods Received</a></li>
 			<li id="li-invencorrection"><a id="tab-invencorrection"
 				href="#tabcontent-invencorrection" data-toggle="tab">Inventory Correction</a></li>
+			<li id="li-addupdate"><a id="tab-addupdate"
+				href="#tabcontent-addupdate" data-toggle="tab">Add/Update Stock</a></li>
 			<li id="li-settings"><a id="tab-settings"
 				href="#tabcontent-settings" data-toggle="tab">Settings</a></li>
 		</ul>
@@ -306,11 +308,31 @@
 			</div>
 			<div id="tabcontent-invencorrection" class="tab-pane">
 				<div class="panel panel-primary"
-					style="width: 1850px; margin-left: 10px">
+					style="width: 1650px; margin-left: 10px">
 					<div class="panel-heading" style="background-color: whitesmoke;color:green">
 						<label>STOCK ADJUSTMENT/CORRECTION</label>
 					</div>
 					<div class="panel-body" style="background-color: whitesmoke;">
+						<div class="panel panel-success pull-right">
+							<div class="panel-heading"
+								style="background-color: whitesmoke; color: green">
+								<label>RECENT ADJUSTMENTS / CORRECTIONS</label>
+								<hr/>
+								<span id="recent-invencorrection-text"></span>
+							</div>
+							<div class="panel-body" style="background-color: whitesmoke;">
+								<table class="table-condensed">
+									<thead>
+										<tr>
+											<th>DATE</th>
+											<th>QTY</th>
+											<th>REASON</th>
+										</tr>
+									</thead>
+									<tbody id="recent-invencorrection"></tbody>
+								</table>
+							</div>
+						</div>
 						<div id="invencorrect-items"></div>
 						<div id="invencorrect-dlg">
 							<label for="invencorrect-qty" class="">Adjust/Correct Qty:</label><input id="invencorrect-qty" class="form-control" type="number">
@@ -318,6 +340,9 @@
 						</div>
 					</div>
 				</div>
+			</div>
+			<div id="tabcontent-addupdate" class="tab-pane" style="width: 1450px; margin-left: 10px">
+				<div class="panel panel-primary"></div>
 			</div>
 			<div id="tabcontent-settings" class="tab-pane">
 				<br>

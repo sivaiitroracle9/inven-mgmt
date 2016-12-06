@@ -1,7 +1,7 @@
 $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
 	  var target = $(e.target).attr("href") // activated tab
 	  if("#tabcontent-inventory" == target) {
-		 
+		  refreshInventoryGrid();
 	  } else if("#tabcontent-goodsissue" == target) {
 		  refreshSOGrids();
 	  } else if("#tabcontent-goodsreceive" == target) {
@@ -13,6 +13,15 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
 	  }
 });
 
+function refreshInventoryGrid(){
+	$("#inventory-items").jsGrid("reset");
+	$("#inventory-items").jsGrid("loadData");
+	$("#inventory-items").jsGrid("render");
+	$("#po-create-grid").jsGrid("reset");
+	$("#po-create-grid").jsGrid("loadData");
+	$("#po-create-grid").jsGrid("render");
+}
+
 function refreshPOGrids() {
 	$("#po-orders-grid").jsGrid("reset");
 	$("#po-orders-grid").jsGrid("loadData");
@@ -21,6 +30,16 @@ function refreshPOGrids() {
 	$("#po-dlg-items").jsGrid("loadData");
 	$("#po-dlg-items").jsGrid("render");
 	$("#po-create-grid").jsGrid("render");
+}
+
+function refreshSOGrids() {
+	$("#so-orders-grid").jsGrid("reset");
+	$("#so-orders-grid").jsGrid("loadData");
+	$("#so-orders-grid").jsGrid("render");
+	$("#so-dlg-items").jsGrid("reset");
+	$("#so-dlg-items").jsGrid("loadData");
+	$("#so-dlg-items").jsGrid("render");
+	$("#so-create-grid").jsGrid("render");
 }
 
 function refreshInvenCorrectGrids(){
@@ -240,4 +259,51 @@ function pageData(data, pageIndex, pageSize) {
 		pageData = data;
 	}
 	return pageData;
+}
+
+var global_warehouse_map = {};
+getWarehousesLOV().forEach(function(d){
+	if(d!=0) {
+		global_warehouse_map[d.id] = d.text;
+	}
+});
+
+var global_status_map = {};
+getAllStatusLOV().forEach(function(d){
+	if(d!=0) {
+		global_status_map[d.id] = d.text;
+	}
+});
+
+function getNextInsertId(table) {
+	var rows = alasql("select max(id) as id from " + table + ";");
+	var maxID = 0;
+	if(rows && rows[0].id) maxID = rows[0].id;
+	return ++maxID;
+}
+
+function getAllStatusLOV() {
+	var rows = alasql("SELECT id, parent, text FROM status order by id");
+
+	var data = [];
+	var d = {};
+	d["id"] = 0;
+	d["parent"] = 0;
+	d["text"] = "";
+	data.push(d);
+	if (rows.length != 0) {
+		rows.forEach(function(r) {
+			var d = {};
+			d["id"] = r.id;
+			d["parent"] = r.parent;
+			d["text"] = r.text;
+			data.push(d);
+		});
+	}
+	console.log(data)
+	return data;
+}
+
+function insertOrderRevision(onumber, otype, oitem, ofield, ofrom, oto, odate){
+	alasql("INSERT INTO order_revision VALUES(" + getNextInsertId("order_revision") + ",'" + onumber + "','" + otype + "','" + oitem + "','" + ofield + "','" + ofrom + "','" + oto +"','" + odate + "');" );
 }

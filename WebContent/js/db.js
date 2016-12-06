@@ -42,12 +42,12 @@ DB.load = function() {
 
 	// Inventories
 	alasql('DROP TABLE IF EXISTS stock;');
-	alasql('CREATE TABLE stock(id INT IDENTITY, item INT, whouse INT, balance INT, threshold INT, autopo INT, cstock INT, cstock_type INT, venpref INT);');
+	alasql('CREATE TABLE stock(id INT IDENTITY, item INT, whouse INT, balance INT, autopo INT, cstock INT, venpref INT, price INT);');
 	var pstock = alasql.promise('SELECT MATRIX * FROM CSV("data/STOCK-STOCK.csv", {headers: true})').then(
 			function(stocks) {
 				for (var i = 0; i < stocks.length; i++) {
 					var stock = stocks[i];
-					alasql('INSERT INTO stock VALUES(?,?,?,?,?,?,?,?,?);', stock);
+					alasql('INSERT INTO stock VALUES(?,?,?,?,?,?,?,?);', stock);
 				}
 			});
 
@@ -105,7 +105,7 @@ DB.load = function() {
 			});
 	
 	alasql('DROP TABLE IF EXISTS porders;');
-	alasql('CREATE TABLE porders(id INT IDENTITY, poid STRING, vendor INT, warehouse INT, status INT, lastupdate STRING);');
+	alasql('CREATE TABLE porders(id INT IDENTITY, poid STRING, vendor INT, warehouse INT, status INT, lastupdate STRING, poQuote STRING, poInvoice STRING);');
 
 	alasql('DROP TABLE IF EXISTS poitems;');
 	alasql('CREATE TABLE poitems(id INT IDENTITY, poid STRING, pid INT, pcode STRING, pcat INT, pmake INT, pdetail STRING, qty INT, status INT, received INT, lastupdate STRING, qprice INT);');
@@ -118,6 +118,9 @@ DB.load = function() {
 
 	alasql('DROP TABLE IF EXISTS soitems;');
 	alasql('CREATE TABLE soitems(id INT IDENTITY, soid STRING, pid INT, pcode STRING, pcat INT, pmake INT, pdetail STRING, qty INT, status INT, issued INT, lastupdate STRING);');
+	
+	alasql('DROP TABLE IF EXISTS order_revision;');
+	alasql('CREATE TABLE order_revision(id INT IDENTITY, oid STRING, otype STRING, oitem STRING, ofield STRING, ofrom STRING, oto STRING, odate STRING);');
 	
 	alasql('DROP TABLE IF EXISTS customer;');
 	alasql('CREATE TABLE customer(id INT IDENTITY, cname STRING, cemail STRING, ctel STRING, caddress STRING);');

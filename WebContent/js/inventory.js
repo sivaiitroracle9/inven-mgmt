@@ -79,10 +79,6 @@ $( '.dropdown-menu a' ).on( 'click', function( event ) {
 	   return false;
 });
 
-function refreshInventoryGrid(){
-	$("#inventory-items").jsGrid("render");
-}
-
 var inventory_items_stock = [];
 var inventory_items_selected = {};
 
@@ -105,7 +101,7 @@ $("#inventory-items").jsGrid({
     	loadData: function(filter) {
     		console.log(filter)
     		var products = alasql("select stock.id as pstockid, products.id as prodid, stock.cstock as cstock, stock.cstock_type as cstock_type, products.id as id, stock.whouse as whouse, stock.balance as qty, products.code as code, " +
-    				"products.category as category, products.detail as detail, products.make as make, products.price as price, products.unit as unit" +
+    				"products.category as category, products.detail as detail, products.make as make, stock.price as price, products.unit as unit" +
     				" from products JOIN stock ON products.id=stock.item");
     		
     		
@@ -208,7 +204,7 @@ $("#inventory-items").jsGrid({
     		
     		toggleGroupPO();
     		
-    		return  {data: pageData(filtered, filter.pageIndex, filter.pageSize), itemsCount: filtered.length};;
+    		return  {data: pageData(filtered, filter.pageIndex, filter.pageSize), itemsCount: filtered.length};
     	},
     	
     },

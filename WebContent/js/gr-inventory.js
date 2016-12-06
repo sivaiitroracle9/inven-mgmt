@@ -11,28 +11,33 @@ $('input#goodsreceive-orderid').keypress(function (e) {
 });
 
 $("#goodsreceive-orderid-update-btn").click(function(){
+	var date = (new Date()).toLocaleString();
 	if(Object.keys(gi_orderid_po_update_items).length > 0) {
 		
 		var orderId = Object.values(gi_orderid_po_update_items)[0].poid;
-		
 		Object.values(gi_orderid_po_update_items).forEach(function(upitem){
 			console.log(upitem)
 			
-    		var rows = alasql("select qty, received from poitems where id = " + upitem.id);
-    		var qty = rows[0].qty;
+    		var rows = alasql("select pid, qty, received, status, qprice from poitems where id = " + upitem.id);
+			var qprice = rows[0].qprice;
+			var qty = rows[0].qty;
     		var received = rows[0].received + Number(upitem.receivedQty);
+    		// record revision
+    		insertOrderRevision(upitem.poid, "PURCHASE", upitem.pcode, "RECEIVED", rows[0].received, received, date);
+    		
     		var status = 0;
     		if(received == 0) status = 15; // NOT RECEIVED
     		else if(qty > received) status = 16;
     		else status = 17;
-    		alasql("update poitems set received=" + received + ", status=" + status + ", lastupdate='" + (new Date()).toLocaleString() + "' where id = " + upitem.id);
+    		alasql("update poitems set received=" + received + ", status=" + status + ", lastupdate='" + date + "' where id = " + upitem.id);
+    		insertOrderRevision(upitem.poid, "PURCHASE", upitem.pcode, "STATUS", global_status_map[rows[0].status], global_status_map[status], date);
     		
     		// intrans-items
     		var intransitem = 0;
     		var intrans = alasql("select max(id) as id from intrans_items");
     		if(intrans.length == 1 && intrans[0].id!=undefined) intransitem = intrans[0].id;
     		intransitem++;
-    		var query = "INSERT INTO intrans_items VALUES("+ intransitem + ",'" + upitem.poid +"'," + upitem.id +"," + Number(upitem.receivedQty) +",'" + (new Date()).toLocaleString() + "')";
+    		var query = "INSERT INTO intrans_items VALUES("+ intransitem + ",'" + upitem.poid +"'," + upitem.id +"," + Number(upitem.receivedQty) +",'" + date + "')";
     		console.log(query)
     		alasql(query);
     		
@@ -46,14 +51,18 @@ $("#goodsreceive-orderid-update-btn").click(function(){
     			if(stocks.length != 0) nextID = stocks[0].id;
     			nextID++;
     			
-    			alasql("INSERT into stock VALUES(" + nextID + "," + currProduct[0].id + "," + currOrders[0].warehouse + "," + Number(upitem.receivedQty) + ",0,0,0,0,0)");
+    			alasql("INSERT into stock VALUES(" + nextID + "," + currProduct[0].id + "," + currOrders[0].warehouse + "," + Number(upitem.receivedQty) + ",0,0,0," + Number(qprice) + ")");
     		} else {
-    			alasql("UPDATE stock set balance=" + (currstock[0].balance + Number(upitem.receivedQty)) + " where item="+currProduct[0].id+" and whouse="+currOrders[0].warehouse);
+    			var newavgprice = ((currstock[0].balance)*(currstock[0].price)) + (Number(upitem.receivedQty) * Number(qprice));
+    			var newbalance = (currstock[0].balance + Number(upitem.receivedQty));
+    			newavgprice = newavgprice/newbalance;
+    			alasql("UPDATE stock set balance=" + newbalance + ", price=" + newavgprice + " where item="+currProduct[0].id+" and whouse="+currOrders[0].warehouse);
     		}
 		});
 		
 		// order status change
 		var oitemsQty = alasql("select SUM(qty) as qty, SUM(received) as received from poitems where poid='" + orderId +"'");
+		var porder = alasql("select status from porders where poid='" + orderId +"'");
 		console.log(oitemsQty)
 		if(oitemsQty!=undefined && oitemsQty.length > 0) {
 			var orderStatus = 4;
@@ -62,7 +71,10 @@ $("#goodsreceive-orderid-update-btn").click(function(){
 			} else if(oitemsQty[0].qty === oitemsQty[0].received){
 				orderStatus = 6;
 			}
-			alasql("update porders set status=" + orderStatus + ", lastupdate='" + (new Date()).toLocaleString() + "' where poid = '" + orderId + "'");
+			if(porder.status != orderStatus) {
+				alasql("update porders set status=" + orderStatus + ", lastupdate='" + date + "' where poid = '" + orderId + "'");
+	    		insertOrderRevision(orderId, "PURCHASE", "--", "STATUS", global_status_map[porder[0].status], global_status_map[orderStatus], date);	
+			}
 		}
 	}
 	

@@ -1,3 +1,12 @@
+init();
+var invenCorrectItems = {};
+var inventory_items_stock = [];
+var inventory_items_selected = {};
+
+function init() {
+	loadFullAdjustmentData();
+}
+
 $( '.dropdown-menu a' ).on( 'click', function( event ) {
 
 	   var $target = $( event.currentTarget ),
@@ -26,9 +35,6 @@ $( '.dropdown-menu a' ).on( 'click', function( event ) {
 	   refreshInventoryGrid();
 	   return false;
 });
-
-
-var invenCorrectItems = {};
 
 var invencorrectDlg = $("#invencorrect-dlg").dialog({
     autoOpen: false,
@@ -66,9 +72,6 @@ function updateStockCorrection(item){
 function refreshInventoryGrid(){
 	$("#invencorrect-items").jsGrid("render");
 }
-
-var inventory_items_stock = [];
-var inventory_items_selected = {};
 
 $("#invencorrect-items").jsGrid({
 	width:"1250px",
@@ -372,4 +375,69 @@ function getNextInsertId(table) {
 	var maxID = 0;
 	if(rows && rows.length>0 && rows[0].id) maxID = rows[0].id;
 	return ++maxID;
+}
+
+
+$("#invencorrect-items").on({
+    mouseenter: function(){
+  	    var rows;
+    	var item;
+    	if(!$(this).hasClass("jsgrid-header-row") && !$(this).hasClass("jsgrid-filter-row")) {
+    		item = $(this).data("JSGridItem");
+            $("#recent-invencorrection").html("");
+            if(item) {
+                $("#recent-invencorrection-text").html("for <span style='color:blue'>" + item.pcode + "</span> in <span style='color:blue'>" 
+                		+ global_warehouse_map[item.whouse] + "</span> warehouse");
+                rows = alasql("select lastupdate, correctionQty, message from stockcorrection where stockid = " + item.pstockid);	
+            }
+
+            if(rows && rows.length > 0) {
+            	rows.forEach(function(r){
+            		var $tr = $("<tr>");
+            		$("<td>").text(r.lastupdate).appendTo($tr);
+            		$("<td>").text(r.correctionQty).appendTo($tr);
+            		$("<td>").text(r.message).appendTo($tr);
+            		$tr.appendTo($("#recent-invencorrection"));
+            	});
+            } else {
+            	var $tr = $("<tr>");
+        		$("<td>").text("No data available.").appendTo($tr);
+        		$tr.appendTo($("#recent-invencorrection"));
+            }
+    	}
+        
+    },
+    mouseleave: function(){
+    	loadFullAdjustmentData();
+    }
+}, "tr");
+
+function loadFullAdjustmentData() {
+	$("#recent-invencorrection-text").text("for the products shown.");
+	$("#recent-invencorrection").html("");
+	var stockIDs = [];
+	
+	if($("#invencorrect-items").data("JSGrid")) {
+    	var gData = $("#invencorrect-items").data("JSGrid").data;
+    	gData.forEach(function(r){
+    		stockIDs.push(r.pstockid);
+    	});	
+	}
+	if(stockIDs.length!=0) {
+		var rows = alasql("select lastupdate, correctionQty, message from stockcorrection where stockid IN (" + stockIDs.join(",") + ")");
+        $("#recent-invencorrection").html("");
+        if(rows && rows.length > 0) {
+        	rows.forEach(function(r){
+        		var $tr = $("<tr>");
+        		$("<td>").text(r.lastupdate).appendTo($tr);
+        		$("<td>").text(r.correctionQty).appendTo($tr);
+        		$("<td>").text(r.message).appendTo($tr);
+        		$tr.appendTo($("#recent-invencorrection"));
+        	});
+        }
+	} else {
+    	var $tr = $("<tr>");
+		$("<td>").text("No data available.").appendTo($tr);
+		$tr.appendTo($("#recent-invencorrection"));
+    }
 }
