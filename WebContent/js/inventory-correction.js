@@ -283,8 +283,13 @@ $("#invencorrect-items").jsGrid({
              { type:"control",
                deleteButton: false,
                editButton: false,
+               headerTemplate: function(value, item){
+            	   return this._createGridButton("jsgrid-insert-button", "Add", function(grid) {
+            		   addStockDialog();
+                   });
+               },
+               
                itemTemplate: function(value, item) {
-            	   
             	   return this._createGridButton("jsgrid-edit-button", "Edit", function(grid) {
             		   invenCorrectItems[item.pstockid] = item;
             		   invencorrectDlg.dialog("open");
@@ -368,6 +373,10 @@ function restoreFilter(filter) {
 
 		}
 	}
+}
+
+function addStockDialog(){
+	
 }
 
 function getNextInsertId(table) {

@@ -122,6 +122,7 @@ $("#po-dlg-items").jsGrid({
     editing: true,
     sorting: false,
     autoload: true,
+    rowClick: function(args){    },
     
     onItemUpdated: function(args){
     	console.log(args.item)
