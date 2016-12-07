@@ -1,5 +1,44 @@
 var inbound_data = [];
 var outbound_data = [];
+var daily_data = [];
+$("#0-dialy-stock").jsGrid({
+	width:"100%",
+	height:"500px",
+    autoload: true,
+    filtering: true,
+    
+    controller: {
+    	loadData: function(filter) {
+    		var filtered = $.grep(daily_data, function(ind) {
+    			return (!filter["pcode"] || ind["pcode"].indexOf(filter["pcode"]))
+    				&& (!filter["pcat"] || ind["pcat"].indexOf(filter["pcat"]))
+    				&& (!filter["maker"] || ind["maker"].indexOf(filter["maker"])) 
+    				&& (!filter["warehouse"] || ind["warehouse"].indexOf(filter["warehouse"])) 
+    				&& (!filter["pdetail"] || ind["pdetail"].indexOf(filter["pdetail"])) 
+    				&& (!filter["ostock"] || ind["ostock"].indexOf(filter["ostock"])) 
+    				&& (!filter["ibstock"] || ind["ibstock"].indexOf(filter["ibstock"])) 
+    				&& (!filter["obstock"] || ind["obstock"].indexOf(filter["obstock"])) 
+    				&& (!filter["clstock"] || ind["clstock"]==filter["clstock"]) 
+    				&& (!filter["date"] || ind["date"]==filter["date"]);
+    		});
+    		return filtered;
+    	}
+    },
+    fields: [
+    	{name:"pcode", title:"PRODUCT CODE", type:"text", width:150,align:"center",},
+    	{name:"pcat", title:"CATEGORY", type:"text", width:150,align:"center",},
+    	{name:"maker", title:"MAKER", type:"text", width:150,align:"center",},
+    	{name:"warehouse", title:"WAREHOUSE", type:"text", width:150,align:"center",},
+    	{name:"pdetail", title:"DETAIL", type:"text", width:150,align:"center",},
+    	{name:"ostock", title:"OPENING STOCK", type:"text", width:150,align:"center",},
+    	{name:"ibstock", title:"INBOUND STOCK", type:"text", width:150,align:"center",},
+    	{name:"obstock", title:"OUTBOUND STOCK", type:"text", width:150,align:"center",},
+    	{name:"clstock", title:"CLOSING STOCK", type:"text", width:150,align:"center",},
+    	{name:"date", title:"DATE", type:"text", width:150,align:"center",},
+    ]
+});
+
+
 $("#2-inbound-stock").jsGrid({
 	width:"900px;",
 	height:"500px;",
@@ -73,6 +112,16 @@ $("#3-outbound-stock").jsGrid({
 function dailyStockRun() {
 	$("#report-grids").children().hide();
 	$("#report-grids").children().eq(0).show();
+	
+	if(dmy === 0) daily_data = dailyStockData(true);
+	else if(dmy === 1) daily_data = dailyStockData(undefined, true);
+	else if(dmy === 2) daily_data = dailyStockData(undefined, undefined, true);
+	else if(dmy === 3) daily_data = dailyStockData(undefined, undefined, undefined, from, to);
+
+	$("#0-dialy-stock").jsGrid("reset");
+	$("#0-dialy-stock").jsGrid("loadData");
+	$("#btn-download").attr("onclick", "dailyStockReportDownload()");
+	$("#btn-print").attr("onclick", "dailyStockReportPrint()");
 }
 
 function lowStockRun() {
@@ -119,6 +168,82 @@ function outboundRunReport() {
 	$("#3-outbound-stock").jsGrid("loadData");
 	$("#btn-download").attr("onclick", "outboundStockReportDownload()");
 	$("#btn-print").attr("onclick", "outboundStockReportPrint()");
+}
+
+function dailyStockData(d, m, y, from, to) {
+	var date = getOnlyDate((new Date()).toLocaleString());
+	var data = [];
+	var bound = {};
+	
+	if(d) {			
+		var rows = alasql("select first(stock.id) as stockid, sum(inbound.qty) as inbound, first(inbound.date) as date, " +
+				"first(stock.balance) as balance, first(porders.warehouse) as warehouse, first(porders.vendor) as vendor, " +
+				"first(poitems.pcode) as pcode, first(poitems.pcat) as pcat, first(poitems.pdetail) as pdetail, " +
+				"first(poitems.pmake) as pmake from porders outer join poitems on porders.poid=poitems.poid outer " +
+				"join stock on poitems.pid=stock.item and porders.warehouse=stock.whouse outer " +
+				"join inbound on poitems.id=inbound.itemid where inbound.date='" + date + "' group by stock.id");
+		if(rows) {
+			rows.forEach(function(r){
+				if(r.stockid){
+					var d = {};
+					d.date = r.date;
+					d.stockid = r.stockid;
+					d.ibstock = r.inbound;
+					d.obstock = 0;
+					d.ostock = r.balance;
+					d.clstock = r.balance;
+					d.warehouse = global_warehouse_map[r.warehouse];
+					d.pcode = r.pcode;
+					d.pcat = global_cat_map[r.pcat];
+					d.maker = global_maker_map[r.pmake];
+					d.pdetail = r.pdetail;
+					bound[r.stockid] = d;	
+				}
+			});
+		}
+
+		rows = alasql("select first(stock.id) as stockid, sum(outbound.qty) as outbound, first(outbound.date) as date, " +
+				"first(stock.balance) as balance, first(sorders.warehouse) as warehouse, first(sorders.outlet) as outlet, " +
+				"first(soitems.pcode) as pcode, first(soitems.pcat) as pcat, first(soitems.pdetail) as pdetail, " +
+				"first(soitems.pmake) as pmake from sorders outer join soitems on sorders.soid=soitems.soid outer " +
+				"join stock on soitems.pid=stock.item and sorders.warehouse=stock.whouse outer join " +
+				"outbound on soitems.id=outbound.itemid where outbound.date='" + date + "' group by stock.id");
+		
+		if(rows) {
+			rows.forEach(function(r){
+				if(r.stockid in bound) {
+					bound[r.stockid].obstock = r.outbound;
+				} else {
+					if(r.stockid){
+						var d = {};
+						d.date = r.date;
+						d.stockid = r.stockid;
+						d.ibstock = 0;
+						d.obstock = r.outbound;
+						d.ostock = r.balance;
+						d.clstock = r.balance;
+						d.warehouse = global_warehouse_map[r.warehouse];
+						d.pcode = r.pcode;
+						d.pcat = global_cat_map[r.pcat];
+						d.maker = global_maker_map[r.pmake];
+						d.pdetail = r.pdetail;
+						bound[r.stockid] = d;	
+					}
+				}
+			});
+		}
+		var val = Object.values(bound);
+		val.forEach(function(v){
+			data.push(v);
+		});
+	} else if(m) {
+		
+	} else if(y) {
+		
+	} else {
+		
+	}
+	return data
 }
 
 function inboundStockData(d, m, y, from, to) {

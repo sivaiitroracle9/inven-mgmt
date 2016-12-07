@@ -17,7 +17,7 @@ getWarehousesMap().forEach(function(r){
 });
 
 var dmy = 0;
-function dmy(i){
+function dmyf(i){
 	dmy = Number(i);
 }
 
