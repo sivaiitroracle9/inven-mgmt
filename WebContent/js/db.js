@@ -110,9 +110,6 @@ DB.load = function() {
 	alasql('DROP TABLE IF EXISTS poitems;');
 	alasql('CREATE TABLE poitems(id INT IDENTITY, poid STRING, pid INT, pcode STRING, pcat INT, pmake INT, pdetail STRING, qty INT, status INT, received INT, lastupdate STRING, qprice INT);');
 	
-	alasql('DROP TABLE IF EXISTS intrans_items;');
-	alasql('CREATE TABLE intrans_items(id INT IDENTITY, inoid STRING, initemid INT, transQty INT, lastupdate STRING);');
-	
 	alasql('DROP TABLE IF EXISTS sorders;');
 	alasql('CREATE TABLE sorders(id INT IDENTITY, soid STRING, warehouse INT, outlet INT, status INT, lastupdate STRING);');
 
@@ -134,6 +131,15 @@ DB.load = function() {
 					alasql('INSERT INTO status VALUES(?,?,?,?);', sttus);
 				}
 			});
+	
+	alasql('DROP TABLE IF EXISTS inbound;');
+	alasql('CREATE TABLE inbound(id INT IDENTITY, oid STRING, itemid INT, qty INT, date STRING);');
+	
+	alasql('DROP TABLE IF EXISTS outbound;');
+	alasql('CREATE TABLE outbound(id INT IDENTITY, oid STRING, itemid INT, qty INT, date STRING);');
+	
+	alasql('DROP TABLE IF EXISTS stockhistory;');
+	alasql('CREATE TABLE stockhistory(id INT IDENTITY, stockid STRING, qty INT, ropoint INT, date STRING);');
 	
 	alasql('DROP TABLE IF EXISTS stockcorrection;');
 	alasql('CREATE TABLE stockcorrection(id INT IDENTITY, stockid INT, correctionQty INT, message STRING, lastupdate STRING);');

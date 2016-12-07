@@ -11,59 +11,64 @@ $('input#goodsissue-orderid').keypress(function (e) {
 });
 
 $("#goodsissue-orderid-update-btn").click(function(){
+	var date = (new Date()).toLocaleString();
 	if(Object.keys(gi_so_update_items).length > 0) {
+		var orderId = Object.values(gi_so_update_items)[0].soid;
 		Object.values(gi_so_update_items).forEach(function(upitem){
 			console.log(upitem)
 			
-    		var rows = alasql("select qty, issued from soitems where id = " + upitem.id);
+    		var rows = alasql("select qty, issued, status from soitems where id = " + upitem.id);
     		var orderedQty = rows[0].qty;
     		var issuedQty = rows[0].issued + Number(upitem.issueQty);
-    		var status = 0;
-    		if(issuedQty == 0) status = 7;
-    		else if(orderedQty > issuedQty) status = 8;
-    		else status = 9;
-    		alasql("update soitems set issued=" + issuedQty + ", status=" + status + " where id = " + upitem.id);
+    		// record revision
+    		insertOrderRevision(orderId, "SALES", upitem.pcode, "ISSUED", rows[0].issued, issuedQty, date);
     		
-    		// intrans-items
-    		var intransitem = 0;
-    		var intrans = alasql("select max(id) as id from intrans_items");
-    		if(intrans.length == 1 && intrans[0].id!=undefined) intransitem = intrans[0].id;
-    		intransitem++;
-    		var query = "INSERT INTO intrans_items VALUES("+ intransitem + ",'" + upitem.soid +"'," + upitem.id +"," + Number(upitem.issuedQty) +",'" + (new Date()).toLocaleString() + "')";
+    		var status = 0;
+    		if(issuedQty == 0) status = 19;
+    		else if(orderedQty > issuedQty) status = 20;
+    		else status = 21;
+    		alasql("update soitems set issued=" + issuedQty + ", status=" + status + " where id = " + upitem.id);
+    		if(rows[0].status!==status)
+    			insertOrderRevision(orderId, "SALES", upitem.pcode, "STATUS", global_status_map[rows[0].status], global_status_map[status], date);
+    		
+    		// outbound-items
+    		var obitem = getNextInsertId("outbound");
+    		var query = "INSERT INTO outbound VALUES("+ obitem + ",'" + upitem.soid +"'," + upitem.id +"," + Number(upitem.issueQty) +",'" + getOnlyDate(date) + "')";
     		console.log(query)
     		alasql(query);
-    		
-    		// order status change
-    		var oitemsQty = alasql("select SUM(qty) as qty, SUM(issued) as issued from soitems where soid='" + upitem.soid +"'");
-    		console.log(oitemsQty)
-    		
-    		if(oitemsQty!=undefined && oitemsQty.length > 0 && oitemsQty[0].issued!=0 && oitemsQty[0].qty > oitemsQty[0].issued) {
-    			status = 3;
-    			alasql("update sorders set status=" + status + " where soid = '" + upitem.soid + "'");
-    		}
-    		
-    		if(oitemsQty!=undefined && oitemsQty.length > 0 && oitemsQty[0].issued !== 0 && oitemsQty[0].qty === oitemsQty[0].issued) {
-    			status = 4;
-    			alasql("update sorders set status=" + status + " where soid = '" + upitem.soid + "'");
-    		}
     		
     		// stock balance change.
 			var currOrders = alasql("select * from sorders where soid='" + upitem.soid +"'");
     		var currProduct = alasql("select * from products where code='" + upitem.pcode +"'");
     		var currstock = alasql("select * from stock where item=" + currProduct[0].id + " and whouse=" + currOrders[0].warehouse);
     		if(currstock==undefined || currstock.length==0) {
-    			var nextID = 0;
-    			var stocks = alasql("select max(id) as id from stock");
-    			if(stocks.length != 0) nextID = stocks[0].id;
-    			nextID++;
     			
-    			alasql("INSERT into stock VALUES(" + nextID + "," + currProduct[0].id + "," 
-    					+ currOrders[0].warehouse + "," + Number(upitem.issuedQty) + ")");
     		} else {
-    			alasql("UPDATE stock set balance=" + (currstock[0].balance - Number(upitem.issueQty)) 
+    			var newbalance = (currstock[0].balance - Number(upitem.issueQty)) ;
+    			alasql("UPDATE stock set balance=" + newbalance
     					+ " where item=" + currProduct[0].id + " and whouse=" + currOrders[0].warehouse);
+    			setStockHistory(currstock[0].id, newbalance, date);
     		}
+    		
 		});
+		
+		// order status change
+		var oitemsQty = alasql("select SUM(qty) as qty, SUM(issued) as issued from soitems where soid='" + orderId +"'");
+		var sorder = alasql("select status from sorders where soid='" + orderId +"'");
+		console.log(oitemsQty)
+		
+		if(oitemsQty!=undefined && oitemsQty.length > 0) {
+			var orderStatus = 12;
+			if(oitemsQty[0].issued != 0 && oitemsQty[0].qty > oitemsQty[0].issued) {
+				orderStatus = 13;
+			} else if(oitemsQty[0].qty === oitemsQty[0].received){
+				orderStatus = 14;
+			}
+			if(sorder.status != orderStatus) {
+				alasql("update sorders set status=" + orderStatus + ", lastupdate='" + date + "' where soid = '" + orderId + "'");
+	    		insertOrderRevision(orderId, "SALES", "--", "STATUS", global_status_map[sorder[0].status], global_status_map[orderStatus], date);	
+			}
+		}
 	}
 	
 	gi_so_update_items = {};

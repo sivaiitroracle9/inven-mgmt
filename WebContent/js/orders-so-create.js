@@ -108,7 +108,7 @@ $("#so-create-grid").jsGrid({
         	args.item["pid"] = getProductId(args.item["pcat"], args.item["pmake"], args.item["pdetail"]);
         	
         	var dbitem = {};
-        	dbitem["status"] = 1;
+        	dbitem["status"] = 9;
         	dbitem["so-row-id"] = so_max_insert_id;
         	dbitem["pid"] = args.item["pid"];
         	dbitem["pcode"] = args.item["pcode"];
@@ -353,10 +353,14 @@ function createSO(so_items_inserted) {
 		values.push(pwarehouse);
 		values.push(poutlet);
 		values.push(Number(status));
-		values.push("'" + (new Date()).toLocaleString() + "'");
+		var date = (new Date()).toLocaleString();
+		values.push("'" + date + "'");
 		var orderInsert = "INSERT INTO sorders VALUES (" + values.join(",") + ")";
 		console.log(orderInsert)
 		alasql(orderInsert);
+		
+		// order revision;
+		insertOrderRevision("SO-0000"+orderId, "SALES", "--", "STATUS", "--", "NEW ORDER", date);
 		
 		// order-items
 		var soitems = alasql("select max(id) as id from soitems");
@@ -373,12 +377,16 @@ function createSO(so_items_inserted) {
 			values.push(item["pmake"]);
 			values.push("'" + item["pdetail"] + "'");
 			values.push(item["pquant"]);
-			values.push(10); // status
-			values.push(0); // received
+			values.push(18); // status
+			values.push(0); // issued
 			values.push("'" + (new Date()).toLocaleString() + "'");
 			var soitemInsert = "INSERT INTO soitems VALUES (" + values.join(",") + ")";
 			console.log(soitemInsert)
 			alasql(soitemInsert);
+			
+			insertOrderRevision("SO-0000"+orderId, "SALES", item["pcode"], "QTY", "--", item["pquant"], date);
+			insertOrderRevision("SO-0000"+orderId, "SALES", item["pcode"], "STATUS", "--", global_status_map[18], date);
+			insertOrderRevision("SO-0000"+orderId, "SALES", item["pcode"], "ISSUED", "--", 0, date);
 		});
 		
 		toastr.clear();

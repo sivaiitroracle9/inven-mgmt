@@ -128,7 +128,7 @@ $("#so-dlg-items").jsGrid({
         { name: "qty", title: "ORDERED. QTY", type: "number",},        
         { name: "issuedQty", title: "ISSUED QTY", type: "number",},
         { name: "toissueQty", title: "BALANCE TO ISSUE", type: "number", width:100},
-        { name: "status", title: "STATUS", type: "select", items: getStatusLOV("ORDERITEM"), valueField: "id", textField: "text",
+        { name: "status", title: "STATUS", type: "select", items: getStatusLOV("SOITEM"), valueField: "id", textField: "text",
         	itemTemplate: function(value, item) {
         		var str = "";
         		this.items.forEach(function(r){
@@ -160,6 +160,15 @@ $("#so-orders-grid").jsGrid({
         },
         
         onItemUpdated: function(args){
+    		var date = (new Date()).toLocaleString();
+        	var rows = alasql("select status from sorders where id = " + args.item.id + ";");
+        	if(rows && Number(rows[0].status) !== Number(args.item.status)) {
+        		insertOrderRevision(args.item.onumber, "SALES", "--", "STATUS", 
+        				global_status_map[Number(rows[0].status)], global_status_map[Number(args.item.status)], date);	
+        	}
+        	console.log(args)
+        	var q = "update sorders set status =" + Number(args.item.status) + ", lastupdate='" + date + "' where id =" + args.item.id + ";";
+        	alasql(q);
         },
         
         controller: {
@@ -193,33 +202,41 @@ $("#so-orders-grid").jsGrid({
             },
             { name: "whouse", title: "WAREHOUSE", type: "select", items: getWarehousesLOV(), valueField: "id", textField: "text", editing: false,},
             { name: "outlet", title: "OUTLET", type: "select", items: getVendorsLOV(), valueField: "id", textField: "text", editing: false,},
-            { name: "status", title: "STATUS", type: "select", items: getStatusLOV("ORDER"), valueField: "id", textField: "text",
+            { name: "status", title: "STATUS", type: "select", items: getStatusLOV("SO"), valueField: "id", textField: "text",
 
-            	itemTemplate: function(value, item) {
+            	itemTemplate: function(value, item){
             		var str = "";
-            		this.items.forEach(function(r){
-            			if(value == r.id) {
-
-            				if(value == 1) {
-            					str =  "<span style='font-weight:bold' class='label label-success'>"+ r.text + "</span>";
-            				} else if(value == 2) {
-            					str =  "<span style='font-weight:bold' class='label label-default'>"+ r.text + "</span>";
-            				} else if(value == 3) {
-            					str =  "<span style='font-weight:bold' class='label label-info'>"+ r.text + "</span>";
-            				}
-            				else if(value == 4) {
-            					str =  "<span style='font-weight:bold' class='label label-primary'>"+ r.text + "</span>";
-            				}
-            				else if(value == 5) {
-            					str =  "<span style='font-weight:bold' class='label label-danger'>"+ r.text + "</span>";
-            				}
-            				else if(value == 6) {
-            					str =  "<span style='font-weight:bold' class='label label-warning'>"+ r.text + "</span>";
-            				}
-                		}
+            		getStatusLOV("SO").forEach(function(stl){
+            			if(stl.id == value) {
+            				if(value == 9) str = "<span class='label label-success'>" + stl.text + "</span>";
+            				else if(value == 10) str = "<span class='label label-success'>" + stl.text + "</span>";
+            				else if(value == 11) str = "<span class='label label-warning'>" + stl.text + "</span>";
+            				else if(value == 12) str = "<span class='label label-default'>" + stl.text + "</span>";
+            				else if(value == 13) str = "<span class='label label-default'>" + stl.text + "</span>";
+            				else if(value == 14) str = "<span class='label label-primary'>" + stl.text + "</span>";
+            				else if(value == 15) str = "<span class='label label-danger'>" + stl.text + "</span>";
+            			}
             		});
             		return str;
             	},
+            	
+            	editTemplate: function(value, item){
+            		var $select = $("<select>");
+            		getStatusLOV("SO").forEach(function(stl){
+            			if(stl.id === value) {
+                    		$("<option selected>").val(stl.id).text(stl.text).appendTo($select);
+            			} else if(stl.parent === value) {
+        	         		$("<option>").val(stl.id).text(stl.text).appendTo($select);
+            			}
+            		});
+            		this._selectPicker = $select;
+            		return $select;
+            	},
+            	
+            	editValue: function(args){
+            		console.log(this._selectPicker.val())
+            		return Number(this._selectPicker.val());
+            	}
             	
             },
             { name: "lastupdate", title: "LAST UPDATE", type: "text", filtering: false, editing: false,},
@@ -227,7 +244,9 @@ $("#so-orders-grid").jsGrid({
             {type: "control",
             	deleteButton: false,
             	itemTemplate: function(value, item) {
-            		return this._createEditButton(item);
+            		if(item.status === 9 || item.status === 14) {
+                		return this._createEditButton(item);	
+            		}
             	}
             }
         ]

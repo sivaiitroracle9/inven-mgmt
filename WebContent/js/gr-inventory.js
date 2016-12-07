@@ -26,18 +26,16 @@ $("#goodsreceive-orderid-update-btn").click(function(){
     		insertOrderRevision(upitem.poid, "PURCHASE", upitem.pcode, "RECEIVED", rows[0].received, received, date);
     		
     		var status = 0;
-    		if(received == 0) status = 15; // NOT RECEIVED
-    		else if(qty > received) status = 16;
-    		else status = 17;
+    		if(received == 0) status = 16; // NOT RECEIVED
+    		else if(qty > received) status = 17;
+    		else status = 18;
     		alasql("update poitems set received=" + received + ", status=" + status + ", lastupdate='" + date + "' where id = " + upitem.id);
-    		insertOrderRevision(upitem.poid, "PURCHASE", upitem.pcode, "STATUS", global_status_map[rows[0].status], global_status_map[status], date);
+    		if(rows[0].status!==status)
+    			insertOrderRevision(upitem.poid, "PURCHASE", upitem.pcode, "STATUS", global_status_map[rows[0].status], global_status_map[status], date);
     		
-    		// intrans-items
-    		var intransitem = 0;
-    		var intrans = alasql("select max(id) as id from intrans_items");
-    		if(intrans.length == 1 && intrans[0].id!=undefined) intransitem = intrans[0].id;
-    		intransitem++;
-    		var query = "INSERT INTO intrans_items VALUES("+ intransitem + ",'" + upitem.poid +"'," + upitem.id +"," + Number(upitem.receivedQty) +",'" + date + "')";
+    		// inbound-items
+    		var ibitem = getNextInsertId("inbound");
+    		var query = "INSERT INTO inbound VALUES("+ ibitem + ",'" + upitem.poid +"'," + upitem.id +"," + Number(upitem.receivedQty) +",'" + getOnlyDate(date) + "')";
     		console.log(query)
     		alasql(query);
     		
@@ -52,12 +50,15 @@ $("#goodsreceive-orderid-update-btn").click(function(){
     			nextID++;
     			
     			alasql("INSERT into stock VALUES(" + nextID + "," + currProduct[0].id + "," + currOrders[0].warehouse + "," + Number(upitem.receivedQty) + ",0,0,0," + Number(qprice) + ")");
+    			setStockHistory(nextID, Number(upitem.receivedQty), date);
     		} else {
     			var newavgprice = ((currstock[0].balance)*(currstock[0].price)) + (Number(upitem.receivedQty) * Number(qprice));
     			var newbalance = (currstock[0].balance + Number(upitem.receivedQty));
     			newavgprice = newavgprice/newbalance;
     			alasql("UPDATE stock set balance=" + newbalance + ", price=" + newavgprice + " where item="+currProduct[0].id+" and whouse="+currOrders[0].warehouse);
+    			setStockHistory(currstock[0].id, newbalance, date);
     		}
+    		
 		});
 		
 		// order status change

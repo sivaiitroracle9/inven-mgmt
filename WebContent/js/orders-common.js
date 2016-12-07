@@ -6,6 +6,8 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
 		  refreshSOGrids();
 	  } else if("#tabcontent-revisions" == target) {
 		  refreshORGrids();
+	  } else if("#tabcontent-po-quotes" == target) {
+		  refreshPOQuotes();
 	  }
 });
 
@@ -17,6 +19,12 @@ function refreshPOGrids() {
 	$("#po-dlg-items").jsGrid("loadData");
 	$("#po-dlg-items").jsGrid("render");
 	$("#po-create-grid").jsGrid("render");
+}
+
+function refreshPOQuotes(){
+	$("#porder-quotes").jsGrid("reset");
+	$("#porder-quotes").jsGrid("loadData");
+	$("#porder-quotes").jsGrid("render");
 }
 
 function refreshSOGrids() {

@@ -1,0 +1,141 @@
+var global_warehouse_map = {};
+getWarehousesMap().forEach(function(r){
+	global_warehouse_map[r.id] = r.text;
+});
+var global_vendor_map = {};
+getVendorsMap().forEach(function(r){
+	global_vendor_map[r.id] = r.text;
+});
+var global_maker_map = {};
+getMakersMap().forEach(function(r){
+	global_maker_map[r.id] = r.text;
+});
+
+var global_cat_map = {};
+getWarehousesMap().forEach(function(r){
+	global_cat_map[r.id] = r.text;
+});
+
+var dmy = 0;
+function dmy(i){
+	dmy = Number(i);
+}
+
+$("#from, #to").change(function(){
+	dmy = dmy(3);
+});
+
+$("#generate-report").click(function(){
+	generateReport();
+});
+
+function generateReport() {
+	var report = Number($("#report-select").val());
+	var from = $("#from").val();
+	var to = $("#to").val();
+	if(report === 2) {
+		if(dmy === 0) inboundStockReport(inboundStockData(true));
+		else if(dmy === 1) inboundStockReport(inboundStockData(undefined, true));
+		else if(dmy === 2) inboundStockReport(inboundStockData(undefined, undefined, true));
+		else if(dmy === 3) inboundStockReport(inboundStockData(undefined, undefined, undefined, from, to));
+	}
+}
+
+function downloadCSVFile(filename, csvData){
+    var hiddenElement = document.createElement('a');
+    hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csvData);
+    hiddenElement.target = '_blank';
+    hiddenElement.download = filename + '.csv';
+    hiddenElement.click();
+}
+
+function getOnlyDate(date) {
+	if(date){
+		date = date.split(",")[0];
+		return date;
+	}
+}
+
+function getWarehousesMap(){
+	var data = [];
+	var rows = alasql("select * from whouse");
+	rows.forEach(function(r){
+		var d = {};
+		d.id = r.id
+		d.text = r.name;
+		data.push(d);
+	});
+	return data;
+}
+
+function getVendorsMap(){
+	var data = [];
+	var rows = alasql("select * from vendor");
+	rows.forEach(function(r){
+		var d = {};
+		d.id = r.id
+		d.text = r.name;
+		data.push(d);
+	});
+	return data;
+}
+
+function getCatMap(){
+	var data = [];
+	var rows = alasql("select * from kind");
+	rows.forEach(function(r){
+		var d = {};
+		d.id = r.id
+		d.text = r.text;
+		data.push(d);
+	});
+	return data;
+}
+
+function getMakersMap(){
+	var data = [];
+	var rows = alasql("select * from maker");
+	rows.forEach(function(r){
+		var d = {};
+		d.id = r.id
+		d.text = r.text;
+		data.push(d);
+	});
+	return data;
+}
+
+function inboundStockReport(data){	
+	
+	var csvData = "";
+	
+	var cellDelimiter = ",";
+	var lineDelimiter = "\n";
+	
+	var header = [];
+	
+	if(data.length!=0) {
+		header[0] = "ORDER NUMBER";
+		header[1] = "WAREHOUSE";
+		header[2] = "VENDOR";
+		header[3] = "PRODUCT CODE";
+		header[4] = "PROD. CATEGORY";
+		header[5] = "PROD. MAKER";
+		header[6] = "PROD. DETAIL";
+		header[7] = "INBOUND QTY";
+		csvData += header.join(cellDelimiter) + lineDelimiter;
+		data.forEach(function(d){
+			var v = [];
+			v[0] = d.oid;
+			v[1] = d.warehouse;
+			v[2] = d.vendor;
+			v[3] = d.pcode;
+			v[4] = d.pcat;
+			v[5] = d.pmake;
+			v[6] = d.pdetail;
+			v[7] = d.qty;
+			csvData += v.join(cellDelimiter) + lineDelimiter;
+		});
+	}
+	downloadCSVFile("inbound-stock", csvData)	
+	return data;
+}

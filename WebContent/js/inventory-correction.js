@@ -36,6 +36,27 @@ $( '.dropdown-menu a' ).on( 'click', function( event ) {
 	   return false;
 });
 
+var addStockDlg = $("#add-inventoty-dlg").dialog({
+    autoOpen: false,
+    width: 400,
+    modal: true,
+    closeOnEscape: true,
+    title: "Add Stock",
+    buttons: {
+        Save: function() {
+        	updateStockCorrection(Object.values(invenCorrectItems)[0])
+            $(this).dialog("close");
+        },
+        Cancel: function(){
+        	$(this).dialog("close");
+        }
+    },
+	open: function(event) {
+		$('.ui-dialog-buttonpane').find('button:contains("Save")').removeClass("ui-button ui-corner-all ui-widget").addClass('btn btn-primary');
+		$('.ui-dialog-buttonpane').find('button:contains("Cancel")').removeClass("ui-button ui-corner-all ui-widget").addClass('btn btn-default');
+	 }
+});
+
 var invencorrectDlg = $("#invencorrect-dlg").dialog({
     autoOpen: false,
     width: 400,
@@ -56,6 +77,7 @@ var invencorrectDlg = $("#invencorrect-dlg").dialog({
 		$('.ui-dialog-buttonpane').find('button:contains("Cancel")').removeClass("ui-button ui-corner-all ui-widget").addClass('btn btn-default');
 	 }
 });
+
 
 function updateStockCorrection(item){
 	var crrctQty = $("#invencorrect-qty").val();
@@ -290,10 +312,15 @@ $("#invencorrect-items").jsGrid({
                },
                
                itemTemplate: function(value, item) {
-            	   return this._createGridButton("jsgrid-edit-button", "Edit", function(grid) {
+            	   var $div = $("<div>");
+            	   this._createGridButton("jsgrid-edit-button", "Edit", function(grid) {
             		   invenCorrectItems[item.pstockid] = item;
             		   invencorrectDlg.dialog("open");
-                   }).appendTo($("<div>"));
+                   }).appendTo($div);
+            	   this._createGridButton("jsgrid-delete-button", "Delete", function(grid) {
+
+                   }).appendTo($div);
+            	   return $div;
                }
              }
        ],
@@ -357,6 +384,10 @@ $("#invencorrect-items").jsGrid({
        }
 });
 
+function addStockDialog() {
+	addStockDlg.dialog("open");
+}
+
 function restoreFilter(filter) {
 	var fields = $("#invencorrect-items").data("JSGrid").fields;
 
@@ -373,10 +404,6 @@ function restoreFilter(filter) {
 
 		}
 	}
-}
-
-function addStockDialog(){
-	
 }
 
 function getNextInsertId(table) {

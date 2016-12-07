@@ -307,3 +307,21 @@ function getAllStatusLOV() {
 function insertOrderRevision(onumber, otype, oitem, ofield, ofrom, oto, odate){
 	alasql("INSERT INTO order_revision VALUES(" + getNextInsertId("order_revision") + ",'" + onumber + "','" + otype + "','" + oitem + "','" + ofield + "','" + ofrom + "','" + oto +"','" + odate + "');" );
 }
+
+function getOnlyDate(date) {
+	if(date){
+		date = date.split(",")[0];
+		return date;
+	}
+}
+
+function setStockHistory(stockid, qty, date) {
+
+	var rows = alasql("select * from stockhistory where id=" + Number(stockid));
+	
+	if(rows && rows.length==1) {
+		alasql("UPDATE stockhistory SET qty=" + Number(qty) + " where stockid="+Number(stockid)+" and date='"+getOnlyDate(date)+"'");
+	} else {
+		alasql("INSERT INTO stockhistory VALUES(" + getNextInsertId("stockhistory") + ", "+ Number(stockid) +", " + Number(qty) + ", 0, '" + getOnlyDate(date) + "');");
+	}
+}

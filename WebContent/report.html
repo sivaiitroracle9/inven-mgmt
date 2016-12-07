@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="lib/jquery.js"></script>
+<script src="lib/bootstrap.js"></script>
+<script src="lib/jquery-ui.js"></script>
+<script src="lib/jsgrid.min.js"></script>
+
+<link href="css/bootstrap.css" rel="stylesheet" />
+<link href="css/jsgrid.min.css" rel="stylesheet" />
+<link href="css/jsgrid-theme.min.css" rel="stylesheet" />
+<link href="css/font-awesome.min.css" rel="stylesheet" />
+<link href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"
+	rel="stylesheet" />
+<link href="css/toastr.min.css" rel="stylesheet" />
+<link href="css/style.css" rel="stylesheet" />
+
+<script src="lib/alasql.js"></script>
+<script src="lib/purl.js"></script>
+<script src="js/db.js"></script>
+<script src="lib/toastr.min.js"></script>
+<meta charset="utf-8">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Cache-Control" content="no-cache">
+<meta name="viewport" content="width=device-width">
+<title>COMPANY</title>
+</head>
+<body>
+	<nav class="navbar navbar-default">
+		<div class="clearfix">
+			<!-- Brand and toggle get grouped for better mobile display -->
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed"
+					data-toggle="collapse" data-target="#navbar-collapse">
+					<span class="sr-only">Toggle navigation</span> <span
+						class="icon-bar"></span> <span class="icon-bar"></span> <span
+						class="icon-bar"></span>
+				</button>
+				<div class="navbar-brand">
+					<a id="nav-menu" class="glyphicon glyphicon-list"><span>
+					</span></a><a href="index.html">COMPANY</a>
+				</div>
+			</div>
+
+			<!-- Collect the nav links, forms, and other content for toggling -->
+			<div class="collapse navbar-collapse" id="navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li><a href="index.html">Inventory Management</a></li>
+				</ul>
+				<ul class="nav navbar-nav navbar-right">
+					<li class="dropdown"><a href="#" class="dropdown-toggle"
+						data-toggle="dropdown"><span class="glyphicon glyphicon-cog"></span>
+							Settings <span class="caret"></span></a>
+						<ul class="dropdown-menu">
+							<li><a onclick="window.location.reload(true);"><span
+									class="glyphicon glyphicon-refresh"></span> Reload</a></li>
+							<li><a onclick="DB.init();"><span
+									class="glyphicon glyphicon-repeat"></span> Init DB</a></li>
+							<li role="separator" class="divider"></li>
+							<li><a onclick="DB.remove();"><span
+									class="glyphicon glyphicon-trash"></span> Delete DB</a></li>
+						</ul></li>
+				</ul>
+				<ul class="nav navbar-nav navbar-right">
+					<li class="dropdown"><a href="#" class="dropdown-toggle"
+						data-toggle="dropdown"><span class="glyphicon glyphicon-globe"
+							style="font-size: 20px"><span id="jewel_count"
+								class="jewel_cnt">5</span></span></a>
+						<ul class="dropdown-menu">
+						</ul></li>
+				</ul>
+			</div>
+			<!-- /.navbar-collapse -->
+		</div>
+		<!-- /.container-fluid -->
+	</nav>
+
+	<div class="container">
+
+		<div class="panel panel-success">
+			<div class="panel-heading">
+				<label>INVENTORY REPORTS</label>
+				<hr />
+
+				<div class="pull-left" style="margin-right: 10px">
+					<label for="report-select" style="margin: 4px">REPORT : </label> <select
+						id="report-select" class="form-control"
+						style="width: 200px; float: right">
+						<option value=0>Daily Stock</option>
+						<option value=1>Low Stock</option>
+						<option value=2>Inbound Stock</option>
+						<option value=3>Outbound Stock</option>
+						<option value=4>Stock Adjustment/Correction</option>
+						<option value=5>Inventory</option>
+					</select>
+				</div>
+				<br>
+				<div class="pull-left">
+					<div class="btn-group" role="group" aria-label="...">
+						<button id="btn-d" type="button" onclick=dmy(0) class="btn btn-default">Day</button>
+						<button id="btn-m" type="button" onclick=dmy(1) class="btn btn-default">Month</button>
+						<button id="btn-y" type="button" onclick=dmy(2) class="btn btn-default">Year</button>
+					</div>
+					<label>OR</label>
+					<div class="pull-left">
+						<label for="from">FROM : </label><input type="date" id="from"
+							name="from"><br /> <label for="to">TO : </label><input
+							type="date" id="to" name="to">
+					</div>
+				</div>
+				<button id="generate-report" class="btn btn-success">Generate</button>
+			</div>
+			<div class="panel-body"></div>
+		</div>
+	</div>
+	<script src="js/reports-common.js"></script>
+	<script src="js/reports.js"></script>
+	<nav class="sidebar">
+		<ul class="menu">
+			<li><a href="index.html">Home</a></li>
+			<li><a href="dashboard.html">Dashboard</a></li>
+			<li><a href="inventory.html">Inventory</a></li>
+			<li><a href="products.html">Products</a></li>
+			<li><a href="vendors.html">Vendors</a></li>
+			<li><a href="orders.html">Orders</a></li>
+			<li><a href="users.html">Users</a></li>
+		</ul>
+	</nav>
+	<script src="lib/nav-sidebar.js"></script>
+</body>
+</html>

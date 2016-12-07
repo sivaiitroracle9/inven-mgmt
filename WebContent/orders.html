@@ -81,7 +81,8 @@
 			<div id="tabcontent-po" class="tab-pane active" style="margin-top:10px">
 				<ul class="nav nav-tabs">
 					<li id="li-po-overview" class="active"><a id="tab-overview" href="#tabcontent-po-overview" data-toggle="tab">Overview</a></li>
-		  			<li id="li-po-create"><a id="tab-overview" href="#tabcontent-po-create" data-toggle="tab">Create</a></li>
+		  			<li id="li-po-create"><a id="tab-po-create" href="#tabcontent-po-create" data-toggle="tab">Create</a></li>
+		  			<li id="li-po-quotes"><a id="tab-po-quotes" href="#tabcontent-po-quotes" data-toggle="tab">Quotes / Invoices</a></li>
 				</ul>
 				<div class="tab-content">
 					<div id="tabcontent-po-overview"" class="tab-pane active" style="margin-top:10px">
@@ -305,6 +306,14 @@
 							</div>
 						</div>
 
+					</div>
+					<div id="tabcontent-po-quotes" class="tab-pane">
+						<div class="panel panel-success">
+							<div class="panel-heading">
+								<label> QUOTES / INVOICES</label>
+							</div>
+							<div class="panel-body" id="porder-quotes"></div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -596,9 +605,10 @@
 	<script src="js/orders-common.js"></script>
 	<script src="js/orders-po.js"></script>
 	<script src="js/orders-po-create.js"></script>
+	<script src="js/order-po-quotes.js"></script>
 	<script src="js/orders-so.js"></script>
 	<script src="js/orders-so-create.js"></script>
-		<script src="js/order-revision.js"></script>
+	<script src="js/order-revision.js"></script>
 	<nav class="sidebar">
 		<ul class="menu">
 			<li><a href="index.html">Home</a></li>
