@@ -75,14 +75,14 @@
 		<!-- /.container-fluid -->
 	</nav>
 
-	<div class="container">
+	<div class="container-fluid">
 
 		<div class="panel panel-success">
 			<div class="panel-heading">
 				<label>INVENTORY REPORTS</label>
 				<hr />
-
-				<div class="pull-left" style="margin-right: 10px">
+              <div style="float:left">
+				<div style="margin-right: 10px;float:left">
 					<label for="report-select" style="margin: 4px">REPORT : </label> <select
 						id="report-select" class="form-control"
 						style="width: 200px; float: right">
@@ -91,26 +91,42 @@
 						<option value=2>Inbound Stock</option>
 						<option value=3>Outbound Stock</option>
 						<option value=4>Stock Adjustment/Correction</option>
-						<option value=5>Inventory</option>
+						<option value=5>Inbound Transactions</option>
+						<option value=6>Outbound Transactions</option>
 					</select>
 				</div>
-				<br>
-				<div class="pull-left">
+
+				<div style="float:left">
 					<div class="btn-group" role="group" aria-label="...">
 						<button id="btn-d" type="button" onclick=dmy(0) class="btn btn-default">Day</button>
 						<button id="btn-m" type="button" onclick=dmy(1) class="btn btn-default">Month</button>
 						<button id="btn-y" type="button" onclick=dmy(2) class="btn btn-default">Year</button>
 					</div>
 					<label>OR</label>
-					<div class="pull-left">
-						<label for="from">FROM : </label><input type="date" id="from"
-							name="from"><br /> <label for="to">TO : </label><input
-							type="date" id="to" name="to">
-					</div>
 				</div>
-				<button id="generate-report" class="btn btn-success">Generate</button>
+				<div style="float:left;margin-left:8px">
+					<label for="from">FROM : </label><input type="date" id="from"
+						name="from"><br /> <label for="to" style="margin-left:22px">TO : </label><input
+						type="date" id="to" name="to">
+				</div>
+				</div>
+				<br><br><br>
+				<button id="generate-report" class="btn btn-success">Run</button></p>
+				<div class="btn-group" role="group" aria-label="...">
+						<a id="btn-download" class="btn btn-default">DOWNLOAD</a>
+						<a id="btn-print" class="btn btn-default">PRINT</a>
+						<a id="btn-email" class="btn btn-default">EMAIL</a>
+				</div>
 			</div>
-			<div class="panel-body"></div>
+			<div id="report-grids" class="panel-body">
+				<div id="0-dialy-stock"></div>
+				<div id="1-low-stock" style="display:none"></div>
+				<div id="2-inbound-stock" style="display:none"></div>
+				<div id="3-outbound-stock" style="display:none"></div>
+				<div id="4-stock-adjust" style="display:none"></div>
+				<div id="5-inbound-trans" style="display:none"></div>
+				<div id="6-obound-trans" style="display:none"></div>
+			</div>
 		</div>
 	</div>
 	<script src="js/reports-common.js"></script>
@@ -123,6 +139,7 @@
 			<li><a href="products.html">Products</a></li>
 			<li><a href="vendors.html">Vendors</a></li>
 			<li><a href="orders.html">Orders</a></li>
+			<li><a href="report.html">REPORTS</a></li>
 			<li><a href="users.html">Users</a></li>
 		</ul>
 	</nav>

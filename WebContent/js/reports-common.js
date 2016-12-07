@@ -26,27 +26,28 @@ $("#from, #to").change(function(){
 });
 
 $("#generate-report").click(function(){
-	generateReport();
+	runReport();
 });
 
-function generateReport() {
+function runReport() {
 	var report = Number($("#report-select").val());
 	var from = $("#from").val();
 	var to = $("#to").val();
-	if(report === 2) {
-		if(dmy === 0) inboundStockReport(inboundStockData(true));
-		else if(dmy === 1) inboundStockReport(inboundStockData(undefined, true));
-		else if(dmy === 2) inboundStockReport(inboundStockData(undefined, undefined, true));
-		else if(dmy === 3) inboundStockReport(inboundStockData(undefined, undefined, undefined, from, to));
+	if(report === 0){
+		dailyStockRun();
+	} else if(report === 1) {
+		lowStockRun();
+	} else if(report === 2) {
+		inboundRunReport();
+	} else if(report === 3) {
+		outboundRunReport();
+	} else if(report === 4) {
+		stockAdjustRun();
+	} else if(report === 5) {
+		inboundTransRun();
+	} else if(report === 6) {
+		outboundTransRun();
 	}
-}
-
-function downloadCSVFile(filename, csvData){
-    var hiddenElement = document.createElement('a');
-    hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csvData);
-    hiddenElement.target = '_blank';
-    hiddenElement.download = filename + '.csv';
-    hiddenElement.click();
 }
 
 function getOnlyDate(date) {
@@ -104,7 +105,22 @@ function getMakersMap(){
 	return data;
 }
 
-function inboundStockReport(data){	
+
+function inboundStockReportPrint(){
+	
+}
+
+function inboundStockReportDownload(){	
+	
+	var data = [];
+	var itemsCount = $("#2-inbound-stock").jsGrid("_itemsCount");
+	var pageSize = $("#2-inbound-stock").jsGrid("option","pageSize");
+	var pages = Math.ceil(itemsCount/pageSize);
+	for(var i=0; i<pages; i++) {
+		$("#2-inbound-stock").jsGrid("option","pageIndex",i + 1);
+		var newdata = $("#2-inbound-stock").jsGrid("option","data");
+		newdata.forEach(function(d){data.push(d)})
+	}
 	
 	var csvData = "";
 	
@@ -138,4 +154,58 @@ function inboundStockReport(data){
 	}
 	downloadCSVFile("inbound-stock", csvData)	
 	return data;
+}
+
+function outboundStockReportDownload(){	
+	
+	var data = [];
+	var itemsCount = $("#3-outbound-stock").jsGrid("_itemsCount");
+	var pageSize = $("#3-outbound-stock").jsGrid("option","pageSize");
+	var pages = Math.ceil(itemsCount/pageSize);
+	for(var i=0; i<pages; i++) {
+		$("#3-outbound-stock").jsGrid("option","pageIndex",i + 1);
+		var newdata = $("#3-outbound-stock").jsGrid("option","data");
+		newdata.forEach(function(d){data.push(d)})
+	}
+	
+	var csvData = "";
+	
+	var cellDelimiter = ",";
+	var lineDelimiter = "\n";
+	
+	var header = [];
+	
+	if(data.length!=0) {
+		header[0] = "ORDER NUMBER";
+		header[1] = "WAREHOUSE";
+		header[2] = "OUTLET";
+		header[3] = "PRODUCT CODE";
+		header[4] = "PROD. CATEGORY";
+		header[5] = "PROD. MAKER";
+		header[6] = "PROD. DETAIL";
+		header[7] = "INBOUND QTY";
+		csvData += header.join(cellDelimiter) + lineDelimiter;
+		data.forEach(function(d){
+			var v = [];
+			v[0] = d.oid;
+			v[1] = d.warehouse;
+			v[2] = d.vendor;
+			v[3] = d.pcode;
+			v[4] = d.pcat;
+			v[5] = d.pmake;
+			v[6] = d.pdetail;
+			v[7] = d.qty;
+			csvData += v.join(cellDelimiter) + lineDelimiter;
+		});
+	}
+	downloadCSVFile("outbound-stock", csvData)	
+	return data;
+}
+
+function downloadCSVFile(filename, csvData){
+    var hiddenElement = document.createElement('a');
+    hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csvData);
+    hiddenElement.target = '_blank';
+    hiddenElement.download = filename + '.csv';
+    hiddenElement.click();
 }
