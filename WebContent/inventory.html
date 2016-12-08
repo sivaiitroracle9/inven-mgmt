@@ -5,13 +5,15 @@
 <script src="lib/bootstrap.js"></script>
 <link href="css/bootstrap.css" rel="stylesheet" />
 <script src="lib/jquery-ui.js"></script>
-<link href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet" />
+<link href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"
+	rel="stylesheet" />
 
 <script src="lib/jsgrid.min.js"></script>
 <link href="css/jsgrid.min.css" rel="stylesheet" />
 <link href="css/jsgrid-theme.min.css" rel="stylesheet" />
 <link href="css/toastr.min.css" rel="stylesheet" />
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
 <link href="css/style.css" rel="stylesheet" />
 
 <script src="lib/alasql.js"></script>
@@ -24,7 +26,7 @@
 <meta name="viewport" content="width=device-width">
 <title>COMPANY</title>
 </head>
-<body style="background-color:#cae2db">
+<body style="background-color: #cae2db">
 	<nav class="navbar navbar-default">
 		<div class="clearfix">
 			<!-- Brand and toggle get grouped for better mobile display -->
@@ -35,17 +37,21 @@
 						class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
-				<div class="navbar-brand"><a id="nav-menu" class="glyphicon glyphicon-list"><span> </span></a><a class="nav-home-url" href="index.html">COMPANY</a></div>
+				<div class="navbar-brand">
+					<a id="nav-menu" class="glyphicon glyphicon-list"><span>
+					</span></a><a class="nav-home-url" href="index.html">COMPANY</a>
+				</div>
 			</div>
 
 			<!-- Collect the nav links, forms, and other content for toggling -->
 			<div class="collapse navbar-collapse" id="navbar-collapse">
 				<ul class="nav navbar-nav">
-					<li><a class="nav-home-url" href="index.html">Inventory Management</a></li>
+					<li><a class="nav-home-url" href="index.html">Inventory
+							Management</a></li>
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
-					<li><a onclick="logout()" href="#"><span class="glyphicon glyphicon-log-out"> Logout</span></a>
-					</li>
+					<li><a onclick="logout()" href="#"><span
+							class="glyphicon glyphicon-log-out"> Logout</span></a></li>
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
 					<li class="dropdown"><a href="#" class="dropdown-toggle"
@@ -63,7 +69,9 @@
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
 					<li class="dropdown"><a href="#" class="dropdown-toggle"
-						data-toggle="dropdown"><span class="glyphicon glyphicon-globe" style="font-size:20px"><span id="jewel_count" class="jewel_cnt">5</span></span></a>
+						data-toggle="dropdown"><span class="glyphicon glyphicon-globe"
+							style="font-size: 20px"><span id="jewel_count"
+								class="jewel_cnt">5</span></span></a>
 						<ul class="dropdown-menu">
 						</ul></li>
 				</ul>
@@ -71,7 +79,12 @@
 					<li><a><span> Welcome <span id="username"></span></span></a></li>
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
-					<li><a><span> Warehouse: <span id="defaultWhouse" style="margin:5px;"></span></span></a></li>
+					<li><a><span> Warehouse: <span id="defaultWhouse"
+								style="margin: 5px;"></span></span></a></li>
+				</ul>
+				<ul class="nav navbar-nav navbar-right">
+					<li><a><span> Designation: <span
+								id="defaultdesignation" style="margin: 5px;"></span></span></a></li>
 				</ul>
 			</div>
 			<!-- /.navbar-collapse -->
@@ -88,7 +101,8 @@
 			<li id="li-goodsreceive"><a id="tab-goodsreceive"
 				href="#tabcontent-goodsreceive" data-toggle="tab">Goods Received</a></li>
 			<li id="li-invencorrection"><a id="tab-invencorrection"
-				href="#tabcontent-invencorrection" data-toggle="tab">Add / Correct Stock</a></li>
+				href="#tabcontent-invencorrection" data-toggle="tab">Add /
+					Correct Stock</a></li>
 			<li id="li-settings"><a id="tab-settings"
 				href="#tabcontent-settings" data-toggle="tab">Settings</a></li>
 		</ul>
@@ -98,7 +112,7 @@
 					style="width: 1850px; margin-left: 10px">
 					<div class="panel-body" style="background-color: whitesmoke;">
 						<div class="panel panel-success">
-							<div class="panel-heading" style="height:120px">
+							<div class="panel-heading" style="height: 120px">
 								<div class="row" style="float: right">
 									<div class="col-lg-12">
 										<div class="btn-group pull-right">
@@ -241,7 +255,8 @@
 					</div>
 				</div>
 			</div>
-			<div id="tabcontent-goodsissue" class="tab-pane" style="width: 1600px; margin-left: 10px">
+			<div id="tabcontent-goodsissue" class="tab-pane"
+				style="width: 1600px; margin-left: 10px">
 				<div class="panel panel-primary">
 					<div class="panel-body">
 						<div>
@@ -251,11 +266,13 @@
 								class="glyphicon glyphicon-barcode"> </span>
 							<div class="pull-right" style="margin-right: 3px">
 								<label style="font-weight: bold;">WAREHOUSE: </label><span
-									id="goodsissue-whouse" class="label label-default" style="margin:5px"> </span>
+									id="goodsissue-whouse" class="label label-default"
+									style="margin: 5px"> </span>
 							</div>
 							<div class="pull-right" style="margin-right: 10px">
 								<label style="font-weight: bold;">OUTLET: </label><span
-									id="goodsissue-outlet" class="label label-default" style="margin:5px"> </span>
+									id="goodsissue-outlet" class="label label-default"
+									style="margin: 5px"> </span>
 							</div>
 						</div>
 						<br /></br>
@@ -272,7 +289,8 @@
 				</div>
 
 			</div>
-			<div id="tabcontent-goodsreceive" class="tab-pane" style="width: 1450px; margin-left: 10px">
+			<div id="tabcontent-goodsreceive" class="tab-pane"
+				style="width: 1450px; margin-left: 10px">
 
 				<div class="panel panel-primary">
 					<div class="panel-body">
@@ -283,11 +301,13 @@
 								class="glyphicon glyphicon-barcode"> </span>
 							<div class="pull-right" style="margin-right: 3px">
 								<label style="font-weight: bold;">WAREHOUSE: </label><span
-									id="goodsreceive-whouse" class="label label-default" style="margin:5px"> </span>
+									id="goodsreceive-whouse" class="label label-default"
+									style="margin: 5px"> </span>
 							</div>
 							<div class="pull-right" style="margin-right: 10px">
 								<label style="font-weight: bold;">VENDOR: </label><span
-									id="goodsreceive-vendor" class="label label-default" style="margin:5px"> </span>
+									id="goodsreceive-vendor" class="label label-default"
+									style="margin: 5px"> </span>
 							</div>
 						</div>
 						<br /></br>
@@ -305,21 +325,23 @@
 
 			</div>
 			<div id="tabcontent-invencorrection" class="tab-pane">
-				<div class="panel panel-primary"
-					style="margin-left: 10px">
-					<div class="panel-heading" style="background-color: whitesmoke;color:green">
+				<div class="panel panel-primary" style="margin-left: 10px">
+					<div class="panel-heading"
+						style="background-color: whitesmoke; color: green">
 						<label>STOCK ADJUSTMENT/CORRECTION</label>
 					</div>
 					<div class="panel-body" style="background-color: whitesmoke;">
-						<div class="panel panel-success" style="left:1100px;float:right;">
+						<div class="panel panel-success"
+							style="left: 1100px; float: right;">
 							<div class="panel-heading"
 								style="background-color: whitesmoke; color: green">
 								<label>RECENT ADJUSTMENTS / CORRECTIONS</label>
-								<hr/>
+								<hr />
 								<span id="recent-invencorrection-text"></span>
 							</div>
-							<div class="panel-body" style="background-color: whitesmoke;padding:0px">
-								<table class="table-condensed" style="width:500px">
+							<div class="panel-body"
+								style="background-color: whitesmoke; padding: 0px">
+								<table class="table-condensed" style="width: 500px">
 									<thead>
 										<tr>
 											<th>DATE</th>
@@ -336,16 +358,25 @@
 						</div>
 						<div id="invencorrect-items"></div>
 						<div id="invencorrect-dlg">
-							<label for="invencorrect-qty" class="">Adjust/Correct Qty:</label><input id="invencorrect-qty" class="form-control" type="number">
-							<label for="invencorrect-reason" class="">Reason for Adjustment/Correction:</label><textarea id="invencorrect-reason" class="form-control" ></textarea>
+							<label for="invencorrect-qty" class="">Adjust/Correct
+								Qty:</label><input id="invencorrect-qty" class="form-control"
+								type="number"> <label for="invencorrect-reason" class="">Reason
+								for Adjustment/Correction:</label>
+							<textarea id="invencorrect-reason" class="form-control"></textarea>
 						</div>
 						<div id="add-inventoty-dlg">
-							<label for="add-inventoty-dlg-whouse">Warehouse</label><select class="form-control" id="add-inventoty-dlg-whouse"></select>
-							<label for="add-inventoty-dlg-pcat">CATEGORY</label><select class="form-control" id="add-inventoty-dlg-pcat"></select>
-							<label for="add-inventoty-dlg-pcode">CODE</label><input type="text" class="form-control" id="add-inventoty-dlg-pcode">
-							<label for="add-inventoty-dlg-pmaker">MAKER</label><select class="form-control" id="add-inventoty-dlg-pmaker"></select>
-							<label for="add-inventoty-dlg-pdetail">DETAIL</label><input class="form-control" type="text" id="add-inventoty-dlg-pdetail">
-							<label for="add-inventoty-dlg-pqty">QTY</label><input type="number" class="form-control" id="add-inventoty-dlg-pqty">
+							<label for="add-inventoty-dlg-whouse">Warehouse</label><select
+								class="form-control" id="add-inventoty-dlg-whouse"></select> <label
+								for="add-inventoty-dlg-pcat">CATEGORY</label><select
+								class="form-control" id="add-inventoty-dlg-pcat"></select> <label
+								for="add-inventoty-dlg-pcode">CODE</label><input type="text"
+								class="form-control" id="add-inventoty-dlg-pcode"> <label
+								for="add-inventoty-dlg-pmaker">MAKER</label><select
+								class="form-control" id="add-inventoty-dlg-pmaker"></select> <label
+								for="add-inventoty-dlg-pdetail">DETAIL</label><input
+								class="form-control" type="text" id="add-inventoty-dlg-pdetail">
+							<label for="add-inventoty-dlg-pqty">QTY</label><input
+								type="number" class="form-control" id="add-inventoty-dlg-pqty">
 						</div>
 					</div>
 				</div>
@@ -372,9 +403,11 @@
 										<hr />
 									</div>
 									<div id="auto-po-on-div" style="display: none">
-										<label>SET <span style='color: blue'>PREFERED VENDOR </span> for AUTOMATIC Purchase Order Generation:</label>
+										<label>SET <span style='color: blue'>PREFERED
+												VENDOR </span> for AUTOMATIC Purchase Order Generation:
+										</label>
 										<div id="venpref-4"></div>
-<!-- 										<ul class="nav nav-tabs" style="margin-left: 10px">
+										<!-- 										<ul class="nav nav-tabs" style="margin-left: 10px">
 											<li id="li-venpref-whouse" class="active"><a
 												id="tab-venpref-whouse" href="#tabcontent-venpref-whouse"
 												data-toggle="tab">Warehouse</a></li>
@@ -448,17 +481,24 @@
 		</div>
 	</div>
 	<div id="notification-dlg">
-		<div class="text-center" style="margin:10px">
-			<span class="glyphicon glyphicon-warning-sign label label-default" style="font-size:30px;color:yellow;"> </span>
+		<div class="text-center" style="margin: 10px">
+			<span class="glyphicon glyphicon-warning-sign label label-default"
+				style="font-size: 30px; color: yellow;"> </span>
 		</div>
-		<div><span class="text"></span></div>
+		<div>
+			<span class="text"></span>
+		</div>
 	</div>
-		<div id="dlg-overview-email">
+	<div id="dlg-overview-email">
 		<form action="" class="form-group">
-			<label for="dlg-overview-email-to">To</label><input class="form-control" id="dlg-overview-email-to" type="email">
-			<label for="dlg-overview-email-from">From</label><input class="form-control" id="dlg-overview-email-from" type="email">
-			<label for="dlg-overview-email-subject">Subject</label><input class="form-control" id="dlg-overview-email-subject" type="email">
-			<label for="dlg-overview-email-body">Content</label><textarea class="form-control" style="width:360px"></textarea>
+			<label for="dlg-overview-email-to">To</label><input
+				class="form-control" id="dlg-overview-email-to" type="email">
+			<label for="dlg-overview-email-from">From</label><input
+				class="form-control" id="dlg-overview-email-from" type="email">
+			<label for="dlg-overview-email-subject">Subject</label><input
+				class="form-control" id="dlg-overview-email-subject" type="email">
+			<label for="dlg-overview-email-body">Content</label>
+			<textarea class="form-control" style="width: 360px"></textarea>
 		</form>
 	</div>
 	<nav class="sidebar">

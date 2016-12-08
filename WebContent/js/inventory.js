@@ -231,6 +231,10 @@ $("#inventory-items").jsGrid({
             	 headerTemplate: function() {
  	         		return $("<span>" + this.title + "</span><span style='float:right' class='glyphicon glyphicon-sort'>");
  	         	 },
+ 	         	 
+ 	         	 itemTemplate:function(value, item){
+ 	         		 return value.toLocaleString();
+ 	         	 },
  	         	filterTemplate: function() {
  	         			var operator = $("<select style='width:55px'>").on('change', function (e) {
 	 	         		    	$("#inventory-items").jsGrid("search", $("#inventory-items").jsGrid("getFilter"));
