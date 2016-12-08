@@ -190,7 +190,7 @@ function dailyStockData(d, m, y, from, to) {
 					d.stockid = r.stockid;
 					d.ibstock = r.inbound;
 					d.obstock = 0;
-					d.ostock = r.balance;
+					d.ostock = r.balance + d.obstock - d.ibstock;
 					d.clstock = r.balance;
 					d.warehouse = global_warehouse_map[r.warehouse];
 					d.pcode = r.pcode;
@@ -213,6 +213,7 @@ function dailyStockData(d, m, y, from, to) {
 			rows.forEach(function(r){
 				if(r.stockid in bound) {
 					bound[r.stockid].obstock = r.outbound;
+					bound[r.stockid].ostock = r.balance + bound[r.stockid].obstock - bound[r.stockid].ibstock;
 				} else {
 					if(r.stockid){
 						var d = {};
@@ -220,7 +221,7 @@ function dailyStockData(d, m, y, from, to) {
 						d.stockid = r.stockid;
 						d.ibstock = 0;
 						d.obstock = r.outbound;
-						d.ostock = r.balance;
+						d.ostock = r.balance + d.obstock - d.ibstock;
 						d.clstock = r.balance;
 						d.warehouse = global_warehouse_map[r.warehouse];
 						d.pcode = r.pcode;
