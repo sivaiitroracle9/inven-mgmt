@@ -77,11 +77,10 @@ $("#goodsreceive-orderid-update-btn").click(function(){
 	    		insertOrderRevision(orderId, "PURCHASE", "--", "STATUS", global_status_map[porder[0].status], global_status_map[orderStatus], date);	
 			}
 		}
+		gi_orderid_po_update_items = {};
+		$("#goodsreceive-orderid-update-btn").prop("disabled", true);
+		loadOrderWithItems(orderId);
 	}
-	
-	  gi_orderid_po_update_items = {};
-	  $("#goodsreceive-orderid-update-btn").prop("disabled", true);
-	  loadOrderWithItems($('input#goodsreceive-orderid').val());
 });
 
 

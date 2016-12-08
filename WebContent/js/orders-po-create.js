@@ -358,7 +358,7 @@ function createPO(po_items_inserted) {
 			values.push(item["pmake"]);
 			values.push("'" + item["pdetail"] + "'");
 			values.push(item["pquant"]);
-			values.push(15); // status
+			values.push(16); // status
 			values.push(0); // received
 			values.push("'" + date + "'");
 			values.push(0);
@@ -368,7 +368,7 @@ function createPO(po_items_inserted) {
 			
 			// order revision;
 			insertOrderRevision("PO-0000"+orderId, "PURCHASE", item["pcode"], "QTY", "--", item["pquant"], date);
-			insertOrderRevision("PO-0000"+orderId, "PURCHASE", item["pcode"], "STATUS", "--", global_status_map[15], date);
+			insertOrderRevision("PO-0000"+orderId, "PURCHASE", item["pcode"], "STATUS", "--", global_status_map[16], date);
 			insertOrderRevision("PO-0000"+orderId, "PURCHASE", item["pcode"], "RECEIVED", "--", 0, date);
 			insertOrderRevision("PO-0000"+orderId, "PURCHASE", item["pcode"], "QUOTE PRICE", "--", 0, date);
 		});

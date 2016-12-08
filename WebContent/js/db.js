@@ -73,16 +73,16 @@ DB.load = function() {
 				}
 			});
 	
-/*	// Outlet
+	// Outlet
 	alasql('DROP TABLE IF EXISTS outlet;');
 	alasql('CREATE TABLE outlet(id INT IDENTITY, name STRING, tel STRING, outletcode STRING, email STRING, address STRING);');
-	var pvendor = alasql.promise('SELECT MATRIX * FROM CSV("data/VENDOR-VENDOR.csv", {headers: true})').then(
-			function(vendors) {
-				for (var i = 0; i < vendors.length; i++) {
-					var vendor = vendors[i];
-					alasql('INSERT INTO outlet VALUES(?,?,?,?,?,?);', vendor);
+	var poutlet = alasql.promise('SELECT MATRIX * FROM CSV("data/OUTLET-OUTLET.csv", {headers: true})').then(
+			function(outlets) {
+				for (var i = 0; i < outlets.length; i++) {
+					var outlet = outlets[i];
+					alasql('INSERT INTO outlet VALUES(?,?,?,?,?,?);', outlet);
 				}
-			});*/
+			});
 	
 	alasql('DROP TABLE IF EXISTS products;');
 	alasql('CREATE TABLE products(id INT IDENTITY, code STRING, category INT, detail STRING, make INT, price INT, unit STRING);');
@@ -158,7 +158,7 @@ DB.load = function() {
 	alasql("INSERT INTO users VALUES(3,'goodsreceipt_supervisor');");
 	
 	// Reload page
-	Promise.all([ pkind, pitem, pwhouse, pstock, ptrans, pvendor, pproduct, pmaker, pstatus ]).then(function() {
+	Promise.all([ pkind, pitem, pwhouse, pstock, ptrans, pvendor, pproduct, pmaker, pstatus, poutlet ]).then(function() {
 		window.location.reload(true);
 	});
 };

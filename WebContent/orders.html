@@ -110,7 +110,7 @@
 				<div class="tab-content">
 					<div id="tabcontent-po-overview" " class="tab-pane active"
 						style="margin-top: 10px">
-						<div class="panel panel-default">
+						<div class="panel panel-success">
 							<div class="panel-heading">
 								<label>LIST OF PURCHASE ORDERS</label>
 								<div class="btn-group pull-right">
@@ -350,7 +350,7 @@
 
 					</div>
 					<div id="tabcontent-po-quotes" class="tab-pane">
-						<div class="panel panel-success">
+						<div class="panel panel-success"  style="width:1150px">
 							<div class="panel-heading">
 								<label> QUOTES / INVOICES</label>
 							</div>
@@ -369,7 +369,7 @@
 				<div class="tab-content">
 					<div id="tabcontent-so-overview" " class="tab-pane active"
 						style="margin-top: 10px">
-						<div class="panel panel-default">
+						<div class="panel panel-success">
 							<div class="panel-heading">
 								<label>LIST OF SALE ORDERS</label>
 								<div class="btn-group pull-right">
@@ -420,6 +420,17 @@
 							<div id="so-order-details-dlg" style="width: 300px">
 								<div class="panel panel-primary">
 									<div class="panel-body">
+										<div>
+											<span style="font-weight: bold" class="pull-left">STATUS
+												: <span id="so-dlg-status" class="label label-warning" style="margin:5px"></span>
+											</span> <span style="font-weight: bold" class="pull-left">ORDER
+												TYPE : <span id="so-dlg-type" class="label label-primary" style="margin:5px"></span>
+											</span> <span style="font-weight: bold" class="pull-right">LAST
+												UPDATE : <span id="so-dlg-lastupdate"
+												class="label label-default" style="margin:5px"></span>
+											</span>
+										</div>
+										<hr/>
 										<div class="btn-group pull-right">
 											<a class="btn btn-default"><span
 												class="glyphicon glyphicon-share" style="margin-right: 4px">
@@ -446,20 +457,9 @@
 														class="fa fa-file-code-o"> </span> JSON</a></li>
 											</ul>
 										</div>
+										 <br /><hr/>
 										<div>
-											<span style="font-weight: bold" class="pull-left">STATUS
-												: <span id="so-dlg-status"></span>
-											</span> <span style="font-weight: bold" class="pull-left">ORDER
-												TYPE : <span id="so-dlg-type"></span>
-											</span> <span style="font-weight: bold" class="pull-right">LAST
-												UPDATE : <span id="so-dlg-lastupdate"
-												class="label label-default"></span>
-											</span>
-										</div>
-										<br /> <br />
-										<div>
-
-											<div id="so-dlg-to-info" class="panel panel-info">
+											<div id="so-dlg-to-info" class="panel panel-info" style="width:300px;float:right">
 												<div class="panel-heading">
 													<label> Outlet </label>
 												</div>
@@ -482,7 +482,7 @@
 													</p>
 												</div>
 											</div>
-											<div id="so-dlg-from-info" class="panel panel-info">
+											<div id="so-dlg-from-info" class="panel panel-info" style="width:300px">
 												<div class="panel-heading">
 													<label> Warehouse </label>
 												</div>
@@ -614,8 +614,6 @@
 				<div class="panel panel-success">
 					<div class="panel-heading">
 						<label> ORDER REVISIONS </label>
-					</div>
-					<div class="panel-body">
 						<div class="btn-group pull-right">
 							<button type="button" class="btn btn-default dropdown-toggle"
 								data-toggle="dropdown" aria-haspopup="true"
@@ -633,7 +631,9 @@
 							</ul>
 						</div>
 					</div>
-					<div id="order-revision"></div>
+					<div class="panel-body">
+						<div id="order-revision"></div>
+					</div>
 				</div>
 			</div>
 		</div>

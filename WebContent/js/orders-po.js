@@ -152,11 +152,11 @@ $("#po-dlg-items").jsGrid({
         		var str = "";
         		this.items.forEach(function(r){
         			if(value == r.id) {
-        				if(value == 15) { // NOT
+        				if(value == 16) { // NOT
         					str =  "<span style='font-weight:bold' class='label label-warning'>"+ r.text + "</span>";
-        				} else if(value == 16) {
-        					str =  "<span style='font-weight:bold' class='label label-default'>"+ r.text + "</span>";
         				} else if(value == 17) {
+        					str =  "<span style='font-weight:bold' class='label label-default'>"+ r.text + "</span>";
+        				} else if(value == 18) {
         					str =  "<span style='font-weight:bold' class='label label-primary'>"+ r.text + "</span>";
         				}
             		}

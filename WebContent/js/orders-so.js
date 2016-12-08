@@ -2,6 +2,7 @@ var soOrderDetailsDlg = $("#so-order-details-dlg").dialog({
     autoOpen: false,
     width: 400,
     modal: true,
+    title: "Sales order details.",
     closeOnEscape: true,
     buttons: {
         Ok: function() {
@@ -26,33 +27,11 @@ function openSODetails(soid) {
 	var status = rows[0].status;
 
 	console.log(rows[0]);
-	$("#od-dlg-status").attr("class", "");
-	$("#od-dlg-type").attr("class", "");
-	$("#od-dlg-status").text("")
-	$("#od-dlg-type").text("Purchase");
-	$("#od-dlg-type").addClass("label label-primary");
-
-	getStatusLOV("ORDER").forEach(function(lov) {
+	$("#so-dlg-type").text("Sales");
+	$("#so-dlg-lastupdate").text(rows[0].lastupdate);
+	getStatusLOV("SO").forEach(function(lov) {
 		if (lov.id === status) {
-			if (status === 1) {
-				$("#od-dlg-status").addClass("label label-success");
-				$("#od-dlg-status").text(lov.text);
-			} else if (status === 2) {
-				$("#od-dlg-status").addClass("label label-default");
-				$("#od-dlg-status").text(lov.text);
-			} else if (status === 3) {
-				$("#od-dlg-status").addClass("label label-info");
-				$("#od-dlg-status").text(lov.text);
-			} else if (status === 4) {
-				$("#od-dlg-status").addClass("label label-primary");
-				$("#od-dlg-status").text(lov.text);
-			} else if (status === 5) {
-				$("#od-dlg-status").addClass("label label-danger");
-				$("#od-dlg-status").text(lov.text);
-			} else if (status === 6) {
-				$("#od-dlg-status").addClass("label label-warning");
-				$("#od-dlg-status").text(lov.text);
-			}
+			$("#so-dlg-status").text(lov.text);
 		}
 	});
 
@@ -65,7 +44,7 @@ function openSODetails(soid) {
 	$("#so-whouse-dlg-tel").text(whouse["tel"]);
 	$("#so-whouse-dlg-email").text(whouse["email"]);
 
-	var outlet = getVendorById(Number(outletId));
+	var outlet = getOutletById(Number(outletId));
 	$("#so-outlet-dlg-code").text(outlet["code"]);
 	$("#so-outlet-dlg-name").text(outlet["name"]);
 	$("#so-outlet-dlg-address").text(outlet["address"]);
@@ -133,11 +112,11 @@ $("#so-dlg-items").jsGrid({
         		var str = "";
         		this.items.forEach(function(r){
         			if(value == r.id) {
-        				if(value == 7) { // NOT
+        				if(value == 19) { // NOT
         					str =  "<span style='font-weight:bold' class='label label-warning'>"+ r.text + "</span>";
-        				} else if(value == 8) {
-        					str =  "<span style='font-weight:bold' class='label label-info'>"+ r.text + "</span>";
-        				} else if(value == 9) {
+        				} else if(value == 20) {
+        					str =  "<span style='font-weight:bold' class='label label-default'>"+ r.text + "</span>";
+        				} else if(value == 21) {
         					str =  "<span style='font-weight:bold' class='label label-primary'>"+ r.text + "</span>";
         				}
             		}
@@ -198,10 +177,15 @@ $("#so-orders-grid").jsGrid({
             		if(item!=undefined) {
                 		return "<a href='#' onclick=openSODetails(" + item.id + ")>" + value + "</a>";
             		}
+            	},
+            	editTemplate: function(value, item) {
+            		if(item!=undefined) {
+                		return "<a href='#' onclick=openSODetails(" + item.id + ")>" + value + "</a>";
+            		}
             	}
             },
             { name: "whouse", title: "WAREHOUSE", type: "select", items: getWarehousesLOV(), valueField: "id", textField: "text", editing: false,},
-            { name: "outlet", title: "OUTLET", type: "select", items: getVendorsLOV(), valueField: "id", textField: "text", editing: false,},
+            { name: "outlet", title: "OUTLET", type: "select", items: getOutletsLOV(), valueField: "id", textField: "text", editing: false,},
             { name: "status", title: "STATUS", type: "select", items: getStatusLOV("SO"), valueField: "id", textField: "text",
 
             	itemTemplate: function(value, item){

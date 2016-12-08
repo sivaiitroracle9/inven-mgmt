@@ -69,11 +69,10 @@ $("#goodsissue-orderid-update-btn").click(function(){
 	    		insertOrderRevision(orderId, "SALES", "--", "STATUS", global_status_map[sorder[0].status], global_status_map[orderStatus], date);	
 			}
 		}
+		gi_so_update_items = {};
+		$("#goodsissue-orderid-update-btn").prop("disabled", true);
+		loadSOrderWithItems(orderId);
 	}
-	
-	gi_so_update_items = {};
-	$("#goodsissue-orderid-update-btn").prop("disabled", true);
-	loadOrderWithItems($('input#goodsreceive-orderid').val());
 });
 
 
@@ -221,7 +220,7 @@ function loadSOrderWithItems(soid) {
 			}
 			
 			$("#goodsissue-whouse").text(getWarehouseById(orders[0].warehouse).name);
-			$("#goodsissue-outlet").text(getVendorById(orders[0].outlet).name);
+			$("#goodsissue-outlet").text(getOutletById(orders[0].outlet).name);
 
 	} else {
 		toastr.clear();

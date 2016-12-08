@@ -1,6 +1,6 @@
 //--------------------------------------------------------------------- so -------------------------------------------------------------
 $("#so-date").text((new Date()).toLocaleString());
-getVendorsLOV().forEach(function(lov){
+getOutletsLOV().forEach(function(lov){
 	var option = $("<option>");
 	option.val(lov.id);
 	option.text(lov.text);
@@ -40,7 +40,7 @@ $("#so-outlet-info-select").on("change", function(event) {
 		$("#so-to-info div.panel-body").show();
 		$("#so-to-info div.panel-body div#so-outlet").show();
 		$("#so-to-info div.panel-body div#so-customer").hide();
-		var outlet = getVendorById(outletId);
+		var outlet = getOutletById(outletId);
 		$("#so-outlet-name").text(outlet["name"]);
 		$("#so-outlet-address").text(outlet["address"]);
 		$("#so-outlet-tel").text(outlet["tel"]);
@@ -313,7 +313,7 @@ $("#so-cancel-btn").click(function(event){
 	clearVariables();
 	refreshSOButtons();
 	refreshSOGrids();
-	$("#so-vendor-info-select").val(0);
+	$("#so-outlet-info-select").val(0);
 	$("#so-warehouse-info-select").val(0);
 });
 
@@ -325,8 +325,8 @@ $("#so-create-btn").click(function(event){
 	createSO(so_items_inserted);
 	refreshSOGrids();
 	clearVariables();
-	$("#so-vendor-info-select").val(0);
-	$("#so-vendor-info div.panel-body").hide();
+	$("#so-outlet-info-select").val(0);
+	$("#so-to-info div.panel-body").hide();
 	$("#so-warehouse-info-select").val(0);
 	$("#so-warehouse-info div.panel-body").hide();
 });
@@ -377,7 +377,7 @@ function createSO(so_items_inserted) {
 			values.push(item["pmake"]);
 			values.push("'" + item["pdetail"] + "'");
 			values.push(item["pquant"]);
-			values.push(18); // status
+			values.push(19); // status
 			values.push(0); // issued
 			values.push("'" + (new Date()).toLocaleString() + "'");
 			var soitemInsert = "INSERT INTO soitems VALUES (" + values.join(",") + ")";
@@ -385,7 +385,7 @@ function createSO(so_items_inserted) {
 			alasql(soitemInsert);
 			
 			insertOrderRevision("SO-0000"+orderId, "SALES", item["pcode"], "QTY", "--", item["pquant"], date);
-			insertOrderRevision("SO-0000"+orderId, "SALES", item["pcode"], "STATUS", "--", global_status_map[18], date);
+			insertOrderRevision("SO-0000"+orderId, "SALES", item["pcode"], "STATUS", "--", global_status_map[19], date);
 			insertOrderRevision("SO-0000"+orderId, "SALES", item["pcode"], "ISSUED", "--", 0, date);
 		});
 		

@@ -167,6 +167,20 @@ function getWarehouseById(id) {
 	}
 }
 
+function getOutletById(id) {
+	var rows = alasql("SELECT * FROM outlet where id =" + Number(id) + " order by id desc");
+	if (rows.length != 0) {
+		var d = {};
+		d["id"] = rows[0].id;
+		d["code"] = rows[0].vencode;
+		d["name"] = rows[0].name;
+		d["tel"] = rows[0].tel;
+		d["email"] = rows[0].email;
+		d["address"] = rows[0].address;
+		return d;
+	}
+}
+
 function getVendorsLOV() {
 	var rows = alasql("SELECT id, name FROM vendor order by name");
 
