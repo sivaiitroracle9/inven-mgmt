@@ -1,5 +1,16 @@
 //--------------------------------------------------------------------- PO -------------------------------------------------------------
 $("#po-date").text((new Date()).toLocaleString());
+
+$("#po-rquest-quote-btn").click(function(){
+	var val = $("#po-vendor-info-select").val();
+	toastr.clear();
+	if(val!=0) {
+		getVendorsLOV().forEach(function(lov){
+			if(val == lov.id) toastr.success("Sent to Vendor : " + lov.text, "Quote Requisition");
+		});
+	} else toastr.success("Sent to All Vendors ", "Quote Requisition");
+});
+
 getVendorsLOV().forEach(function(lov){
 	var option = $("<option>");
 	option.val(lov.id);

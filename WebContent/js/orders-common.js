@@ -184,7 +184,7 @@ function getVendorsLOV() {
 	var data = [];
 	var d = {};
 	d["id"] = 0;
-	d["text"] = "";
+	d["text"] = "--All Vendors--";
 	data.push(d);
 	if (rows.length != 0) {
 		rows.forEach(function(r) {
