@@ -12,7 +12,7 @@ getMakersMap().forEach(function(r){
 });
 
 var global_cat_map = {};
-getWarehousesMap().forEach(function(r){
+getCatMap().forEach(function(r){
 	global_cat_map[r.id] = r.text;
 });
 
@@ -106,106 +106,37 @@ function getMakersMap(){
 }
 
 
-function inboundStockReportPrint(){
-	
+
+
+function open_dlg_overview_email() {
+	dlg_overview_email.dialog("open");
 }
 
-function inboundStockReportDownload(){	
-	
-	var data = [];
-	var itemsCount = $("#2-inbound-stock").jsGrid("_itemsCount");
-	var pageSize = $("#2-inbound-stock").jsGrid("option","pageSize");
-	var pages = Math.ceil(itemsCount/pageSize);
-	for(var i=0; i<pages; i++) {
-		$("#2-inbound-stock").jsGrid("option","pageIndex",i + 1);
-		var newdata = $("#2-inbound-stock").jsGrid("option","data");
-		newdata.forEach(function(d){data.push(d)})
-	}
-	
-	var csvData = "";
-	
-	var cellDelimiter = ",";
-	var lineDelimiter = "\n";
-	
-	var header = [];
-	
-	if(data.length!=0) {
-		header[0] = "ORDER NUMBER";
-		header[1] = "WAREHOUSE";
-		header[2] = "VENDOR";
-		header[3] = "PRODUCT CODE";
-		header[4] = "PROD. CATEGORY";
-		header[5] = "PROD. MAKER";
-		header[6] = "PROD. DETAIL";
-		header[7] = "INBOUND QTY";
-		csvData += header.join(cellDelimiter) + lineDelimiter;
-		data.forEach(function(d){
-			var v = [];
-			v[0] = d.oid;
-			v[1] = d.warehouse;
-			v[2] = d.vendor;
-			v[3] = d.pcode;
-			v[4] = d.pcat;
-			v[5] = d.pmake;
-			v[6] = d.pdetail;
-			v[7] = d.qty;
-			csvData += v.join(cellDelimiter) + lineDelimiter;
-		});
-	}
-	downloadCSVFile("inbound-stock", csvData)	
-	return data;
-}
+var dlg_overview_email = $("#dlg-overview-email").dialog(
+		{
+			autoOpen : false,
+			width : 400,
+			modal : true,
+			closeOnEscape : true,
+			title: "Compose Email",
+			buttons : {
+				Send : function() {
+					$(this).dialog("close");
+				},
+				Cancel : function() {
+					$(this).dialog("close");
+				}
+			},
+			open : function(event) {
 
-function outboundStockReportDownload(){	
-	
-	var data = [];
-	var itemsCount = $("#3-outbound-stock").jsGrid("_itemsCount");
-	var pageSize = $("#3-outbound-stock").jsGrid("option","pageSize");
-	var pages = Math.ceil(itemsCount/pageSize);
-	for(var i=0; i<pages; i++) {
-		$("#3-outbound-stock").jsGrid("option","pageIndex",i + 1);
-		var newdata = $("#3-outbound-stock").jsGrid("option","data");
-		newdata.forEach(function(d){data.push(d)})
-	}
-	
-	var csvData = "";
-	
-	var cellDelimiter = ",";
-	var lineDelimiter = "\n";
-	
-	var header = [];
-	
-	if(data.length!=0) {
-		header[0] = "ORDER NUMBER";
-		header[1] = "WAREHOUSE";
-		header[2] = "OUTLET";
-		header[3] = "PRODUCT CODE";
-		header[4] = "PROD. CATEGORY";
-		header[5] = "PROD. MAKER";
-		header[6] = "PROD. DETAIL";
-		header[7] = "INBOUND QTY";
-		csvData += header.join(cellDelimiter) + lineDelimiter;
-		data.forEach(function(d){
-			var v = [];
-			v[0] = d.oid;
-			v[1] = d.warehouse;
-			v[2] = d.vendor;
-			v[3] = d.pcode;
-			v[4] = d.pcat;
-			v[5] = d.pmake;
-			v[6] = d.pdetail;
-			v[7] = d.qty;
-			csvData += v.join(cellDelimiter) + lineDelimiter;
-		});
-	}
-	downloadCSVFile("outbound-stock", csvData)	
-	return data;
-}
+				$('.ui-dialog-buttonpane').find('button:contains("Send")')
+						.removeClass("ui-button ui-corner-all ui-widget")
+						.addClass('btn btn-primary');
+				$('.ui-dialog-buttonpane').find('button:contains("Cancel")')
+				.removeClass("ui-button ui-corner-all ui-widget")
+				.addClass('btn btn-default');
+			},
+			close : function(event) {
 
-function downloadCSVFile(filename, csvData){
-    var hiddenElement = document.createElement('a');
-    hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csvData);
-    hiddenElement.target = '_blank';
-    hiddenElement.download = filename + '.csv';
-    hiddenElement.click();
-}
+			}
+});

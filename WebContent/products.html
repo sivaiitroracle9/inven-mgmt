@@ -7,10 +7,12 @@
 <script src="lib/jsgrid.min.js"></script>
 
 <link href="css/bootstrap.css" rel="stylesheet" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <link href="css/jsgrid.min.css" rel="stylesheet" />
 <link href="css/jsgrid-theme.min.css" rel="stylesheet" />
-<link href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet" />
+<link href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"
+	rel="stylesheet" />
 <link href="css/style.css" rel="stylesheet" />
 
 <script src="lib/alasql.js"></script>
@@ -33,13 +35,20 @@
 						class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
-				<div class="navbar-brand"><a id="nav-menu" class="glyphicon glyphicon-list"><span> </span></a><a href="index.html">COMPANY</a></div>
+				<div class="navbar-brand">
+					<a id="nav-menu" class="glyphicon glyphicon-list"><span>
+					</span></a><a class="nav-home-url" href="index.html">COMPANY</a>
+				</div>
 			</div>
 
 			<!-- Collect the nav links, forms, and other content for toggling -->
 			<div class="collapse navbar-collapse" id="navbar-collapse">
 				<ul class="nav navbar-nav">
-					<li><a href="index.html">Inventory Management</a></li>
+					<li><a class="nav-home-url" href="index.html">Inventory Management</a></li>
+				</ul>
+				<ul class="nav navbar-nav navbar-right">
+					<li><a onclick="logout()" href="#"><span
+							class="glyphicon glyphicon-log-out"> Logout</span></a></li>
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
 					<li class="dropdown"><a href="#" class="dropdown-toggle"
@@ -57,7 +66,9 @@
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
 					<li class="dropdown"><a href="#" class="dropdown-toggle"
-						data-toggle="dropdown"><span class="glyphicon glyphicon-globe" style="font-size:20px"><span id="jewel_count" class="jewel_cnt">5</span></span></a>
+						data-toggle="dropdown"><span class="glyphicon glyphicon-globe"
+							style="font-size: 20px"><span id="jewel_count"
+								class="jewel_cnt">5</span></span></a>
 						<ul class="dropdown-menu">
 						</ul></li>
 				</ul>
@@ -71,8 +82,8 @@
 		<ul class="nav nav-tabs">
 			<li id="li-products" class="active"><a id="tab-po"
 				href="#tabcontent-products" data-toggle="tab">Products</a></li>
-			<li id="li-categories"><a id="tab-so" href="#tabcontent-categories"
-				data-toggle="tab">Categories</a></li>
+			<li id="li-categories"><a id="tab-so"
+				href="#tabcontent-categories" data-toggle="tab">Categories</a></li>
 			<li id="li-makers"><a id="tab-st" href="#tabcontent-makers"
 				data-toggle="tab">Makers</a></li>
 		</ul>
@@ -96,10 +107,14 @@
 								aria-expanded="false">
 								<span class="fa fa-download"> </span> Export <span class="caret"></span>
 							</button>
-							<ul class="dropdown-menu" style="background:#171048">
-								<li style="width:96px"><a href="#" onclick="exportProductsCSV()"><span class="fa fa-file-excel-o"> </span> CSV</a></li>
-								<li style="width:96px"><a href="#"><span class="fa fa-file-pdf-o"> </span> PDF</a></li>
-								<li style="width:96px"><a href="#"><span class="fa fa-file-code-o"> </span> JSON</a></li>
+							<ul class="dropdown-menu" style="background: #171048">
+								<li style="width: 96px"><a href="#"
+									onclick="exportProductsCSV()"><span
+										class="fa fa-file-excel-o"> </span> CSV</a></li>
+								<li style="width: 96px"><a href="#"><span
+										class="fa fa-file-pdf-o"> </span> PDF</a></li>
+								<li style="width: 96px"><a href="#"><span
+										class="fa fa-file-code-o"> </span> JSON</a></li>
 							</ul>
 						</div>
 						<div class="btn-group pull-right">
@@ -108,11 +123,18 @@
 								aria-expanded="false">
 								<span class="fa fa-upload"> </span> Import <span class="caret"></span>
 							</button>
-							<ul class="dropdown-menu" style="background:#171048">
-								<li style="width:96px"><a href="#" onclick=importProductsFile()><span class="fa fa-file-excel-o"> </span> CSV</a></li>
-								<li style="width:96px"><a href="#" onclick=importProductsFile()><span class="fa fa-file-pdf-o"> </span> PDF</a></li>
-								<li style="width:96px"><a href="#" onclick=importProductsFile()><span class="fa fa-file-code-o"> </span> JSON</a></li>
-								<li style="width:96px; display:none"><input id="input-products-file" type="file"></li>
+							<ul class="dropdown-menu" style="background: #171048">
+								<li style="width: 96px"><a href="#"
+									onclick=importProductsFile()><span
+										class="fa fa-file-excel-o"> </span> CSV</a></li>
+								<li style="width: 96px"><a href="#"
+									onclick=importProductsFile()><span class="fa fa-file-pdf-o">
+									</span> PDF</a></li>
+								<li style="width: 96px"><a href="#"
+									onclick=importProductsFile()><span
+										class="fa fa-file-code-o"> </span> JSON</a></li>
+								<li style="width: 96px; display: none"><input
+									id="input-products-file" type="file"></li>
 							</ul>
 						</div>
 					</div>
@@ -140,10 +162,14 @@
 								aria-expanded="false">
 								<span class="fa fa-download"> </span> Export <span class="caret"></span>
 							</button>
-							<ul class="dropdown-menu" style="background:#171048">
-								<li style="width:96px"><a href="#" onclick="exportCategoriesCSV()"><span class="fa fa-file-excel-o"> </span> CSV</a></li>
-								<li style="width:96px"><a href="#"><span class="fa fa-file-pdf-o"> </span> PDF</a></li>
-								<li style="width:96px"><a href="#"><span class="fa fa-file-code-o"> </span> JSON</a></li>
+							<ul class="dropdown-menu" style="background: #171048">
+								<li style="width: 96px"><a href="#"
+									onclick="exportCategoriesCSV()"><span
+										class="fa fa-file-excel-o"> </span> CSV</a></li>
+								<li style="width: 96px"><a href="#"><span
+										class="fa fa-file-pdf-o"> </span> PDF</a></li>
+								<li style="width: 96px"><a href="#"><span
+										class="fa fa-file-code-o"> </span> JSON</a></li>
 							</ul>
 						</div>
 						<div class="btn-group pull-right">
@@ -152,12 +178,18 @@
 								aria-expanded="false">
 								<span class="fa fa-upload"> </span> Import <span class="caret"></span>
 							</button>
-							<ul class="dropdown-menu" style="background:#171048">
-								<li style="width:96px"><a href="#" onclick=importCategoriesFile()><span class="fa fa-file-excel-o"> </span> CSV</a></li>
-								<li style="width:96px"><a href="#" onclick=importCategoriesFile()><span class="fa fa-file-pdf-o"> </span> PDF</a></li>
-								<li style="width:96px"><a href="#" onclick=importCategoriesFile()><span class="fa fa-file-code-o"> </span> JSON</a></li>
-								<li style="width:96px; display:none">
-								<input id="input-categories-file" type="file"></li>
+							<ul class="dropdown-menu" style="background: #171048">
+								<li style="width: 96px"><a href="#"
+									onclick=importCategoriesFile()><span
+										class="fa fa-file-excel-o"> </span> CSV</a></li>
+								<li style="width: 96px"><a href="#"
+									onclick=importCategoriesFile()><span
+										class="fa fa-file-pdf-o"> </span> PDF</a></li>
+								<li style="width: 96px"><a href="#"
+									onclick=importCategoriesFile()><span
+										class="fa fa-file-code-o"> </span> JSON</a></li>
+								<li style="width: 96px; display: none"><input
+									id="input-categories-file" type="file"></li>
 							</ul>
 						</div>
 					</div>
@@ -184,10 +216,14 @@
 								aria-expanded="false">
 								<span class="fa fa-download"> </span> Export <span class="caret"></span>
 							</button>
-							<ul class="dropdown-menu" style="background:#171048">
-								<li style="width:96px"><a href="#" onclick="exportMakersCSV()"><span class="fa fa-file-excel-o"> </span> CSV</a></li>
-								<li style="width:96px"><a href="#"><span class="fa fa-file-pdf-o"> </span> PDF</a></li>
-								<li style="width:96px"><a href="#"><span class="fa fa-file-code-o"> </span> JSON</a></li>
+							<ul class="dropdown-menu" style="background: #171048">
+								<li style="width: 96px"><a href="#"
+									onclick="exportMakersCSV()"><span
+										class="fa fa-file-excel-o"> </span> CSV</a></li>
+								<li style="width: 96px"><a href="#"><span
+										class="fa fa-file-pdf-o"> </span> PDF</a></li>
+								<li style="width: 96px"><a href="#"><span
+										class="fa fa-file-code-o"> </span> JSON</a></li>
 							</ul>
 						</div>
 						<div class="btn-group pull-right">
@@ -196,11 +232,18 @@
 								aria-expanded="false">
 								<span class="fa fa-upload"> </span> Import <span class="caret"></span>
 							</button>
-							<ul class="dropdown-menu" style="background:#171048">
-								<li style="width:96px"><a href="#" onclick=importMakersFile()><span class="fa fa-file-excel-o"> </span> CSV</a></li>
-								<li style="width:96px"><a href="#" onclick=importMakersFile()><span class="fa fa-file-pdf-o"> </span> PDF</a></li>
-								<li style="width:96px"><a href="#" onclick=importMakersFile()><span class="fa fa-file-code-o"> </span> JSON</a></li>
-								<li style="width:96px; display:none"><input id="input-makers-file" type="file" value=""></li>
+							<ul class="dropdown-menu" style="background: #171048">
+								<li style="width: 96px"><a href="#"
+									onclick=importMakersFile()><span class="fa fa-file-excel-o">
+									</span> CSV</a></li>
+								<li style="width: 96px"><a href="#"
+									onclick=importMakersFile()><span class="fa fa-file-pdf-o">
+									</span> PDF</a></li>
+								<li style="width: 96px"><a href="#"
+									onclick=importMakersFile()><span class="fa fa-file-code-o">
+									</span> JSON</a></li>
+								<li style="width: 96px; display: none"><input
+									id="input-makers-file" type="file" value=""></li>
 							</ul>
 						</div>
 					</div>
@@ -214,51 +257,77 @@
 	</div>
 
 	<div id="proddialog-form" title="Details">
-	    <form id="productForm" class="form-group">
-	    	<div><label>Product Code: <input class="form-control" type="text" id="prod_code" /></label></div>
-	    	
-	    	<div id="prod_cat-select-dlg"><label>Category: 
-	        <select class="form-control" id="prod_cat" name="category"></select></label><a>
-	        	<span class="btn btn-success fa fa-plus" style="border-radius:10px;padding:2px;margin:2px"></span></a></div>
-	        
-	        <div id="prod_cat-input-dlg" style="display:none">
-	        	<label>Category: 
-	        		<input type="text" class="form-control" id="dlg-new-cat">
-	        	</label>
-	        	<a id="save-new-cat"><span class="btn btn-success glyphicon glyphicon-ok-sign" style="border-radius:10px;padding:2px;margin:2px"></span></a>
-	        	<a id="remove-new-cat"><span class="btn btn-danger glyphicon glyphicon-remove-sign" style="border-radius:10px;padding:2px;margin:2px"></span></a>
-	        </div>
-	        	
-	    	<div id="prod_maker-select-dlg"><label>Maker: <select class="form-control" id="prod_maker" name="make"></select></label><a>
-	        	<span class="btn btn-success fa fa-plus" style="border-radius:10px;padding:2px;margin:2px"></span></a></div>
-			<div id="prod_maker-input-dlg" style="display:none">
+		<form id="productForm" class="form-group">
+			<div>
+				<label>Product Code: <input class="form-control" type="text"
+					id="prod_code" /></label>
+			</div>
+
+			<div id="prod_cat-select-dlg">
+				<label>Category: <select class="form-control" id="prod_cat"
+					name="category"></select></label><a> <span
+					class="btn btn-success fa fa-plus"
+					style="border-radius: 10px; padding: 2px; margin: 2px"></span></a>
+			</div>
+
+			<div id="prod_cat-input-dlg" style="display: none">
+				<label>Category: <input type="text" class="form-control"
+					id="dlg-new-cat">
+				</label> <a id="save-new-cat"><span
+					class="btn btn-success glyphicon glyphicon-ok-sign"
+					style="border-radius: 10px; padding: 2px; margin: 2px"></span></a> <a
+					id="remove-new-cat"><span
+					class="btn btn-danger glyphicon glyphicon-remove-sign"
+					style="border-radius: 10px; padding: 2px; margin: 2px"></span></a>
+			</div>
+
+			<div id="prod_maker-select-dlg">
+				<label>Maker: <select class="form-control" id="prod_maker"
+					name="make"></select></label><a> <span
+					class="btn btn-success fa fa-plus"
+					style="border-radius: 10px; padding: 2px; margin: 2px"></span></a>
+			</div>
+			<div id="prod_maker-input-dlg" style="display: none">
 				<label>Maker: <input type="text" class="form-control"
 					id="dlg-new-maker">
-				</label> 
-				<a id="save-new-maker"><span
+				</label> <a id="save-new-maker"><span
 					class="btn btn-success glyphicon glyphicon-ok-sign"
-					style="border-radius: 10px; padding: 2px; margin: 2px"></span></a> 
-				<a
+					style="border-radius: 10px; padding: 2px; margin: 2px"></span></a> <a
 					id="remove-new-maker"><span
 					class="btn btn-danger glyphicon glyphicon-remove-sign"
 					style="border-radius: 10px; padding: 2px; margin: 2px"></span></a>
 			</div>
-			<div> <label>Detail: <input class="form-control" type="text" id="prod_detail" /></label></div>
-	    	<div><label>Price: <input class="form-control" type="text" id="prod_price" /></label></div>
-	    	<div><label>Unit: <input class="form-control" type="text" id="prod_unit" /></label></div>
-	    </form>
+			<div>
+				<label>Detail: <input class="form-control" type="text"
+					id="prod_detail" /></label>
+			</div>
+			<div>
+				<label>Price: <input class="form-control" type="text"
+					id="prod_price" /></label>
+			</div>
+			<div>
+				<label>Unit: <input class="form-control" type="text"
+					id="prod_unit" /></label>
+			</div>
+		</form>
 	</div>
-	
+
 	<div id="catdialog-form" title="Details">
-	    <form id="categoryForm" class="form-group">
-	        <p><label>Category: <input type="text" class="form-control" id="cat_cat" name="category"></label></p>
-	    </form>
+		<form id="categoryForm" class="form-group">
+			<p>
+				<label>Category: <input type="text" class="form-control"
+					id="cat_cat" name="category"></label>
+			</p>
+		</form>
 	</div>
-	
+
 	<div id="makedialog-form" title="Details">
-	    <form id="makerForm" class="form-group">
-	        <p><label>Maker: <input type="text" class="form-control" id="make_maker" name="category"></label></p>
-	    </form>
+		<form id="makerForm" class="form-group">
+			<p>
+				<label>Maker: <input type="text" class="form-control"
+					id="make_maker" name="category"></label>
+			</p>
+		</form>
 	</div>
 	<div id="dlg-import-products" title="Import Products">
 		<div id="import-products-grid"></div>
@@ -269,20 +338,22 @@
 	<div id="dlg-import-makers" title="Import Makers">
 		<div id="import-makers-grid"></div>
 	</div>
-	<script src="js/products-common.js"></script>
-	<script src="js/products.js"></script>
+
 	<nav class="sidebar">
 		<ul class="menu">
-			<li><a href="index.html">Home</a></li>
-			<li><a href="dashboard.html">Dashboard</a></li>
-			<li><a href="inventory.html">Inventory</a></li>
-			<li><a href="products.html">Products</a></li>
-			<li><a href="vendors.html">Vendors</a></li>
-			<li><a href="orders.html">Orders</a></li>
-			<li><a href="users.html">Users</a></li>
+			<li id="sidebar-home"><a href="index.html">Home</a></li>
+			<li id="sidebar-inventory"><a href="inventory.html">Inventory</a></li>
+			<li id="sidebar-products"><a href="products.html">Products</a></li>
+			<li id="sidebar-vendors"><a href="vendors.html">Vendors</a></li>
+			<li id="sidebar-orders"><a href="orders.html">Orders</a></li>
+			<li id="sidebar-reports"><a href="report.html">REPORTS</a></li>
+			<li id="sidebar-users"><a href="users.html">Users</a></li>
 		</ul>
 	</nav>
 	<script src="lib/nav-sidebar.js"></script>
+	<script src="js/products-users.js"></script>
+	<script src="js/products-common.js"></script>
+	<script src="js/products.js"></script>
 	<script type="text/javascript">
 		function importProductsFile(filehandle){
 			$("#input-products-file").click();
@@ -294,6 +365,6 @@
 			$("#input-makers-file").click();
 		}
 	</script>
-	
+
 </body>
 </html>

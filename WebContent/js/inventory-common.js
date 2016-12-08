@@ -46,6 +46,7 @@ function refreshInvenCorrectGrids(){
 	$("#invencorrect-items").jsGrid("reset");
 	$("#invencorrect-items").jsGrid("loadData");
 	$("#invencorrect-items").jsGrid("render");
+	refreshInventoryGrid();
 }
 
 function loadStock(){

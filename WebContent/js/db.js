@@ -142,7 +142,7 @@ DB.load = function() {
 	alasql('CREATE TABLE stockhistory(id INT IDENTITY, stockid STRING, qty INT, ropoint INT, date STRING);');
 	
 	alasql('DROP TABLE IF EXISTS stockcorrection;');
-	alasql('CREATE TABLE stockcorrection(id INT IDENTITY, stockid INT, correctionQty INT, message STRING, lastupdate STRING);');
+	alasql('CREATE TABLE stockcorrection(id INT IDENTITY, stockid INT, correctionQty INT, diffQty INT, message STRING, lastupdate STRING);');
 	
 	alasql('DROP TABLE IF EXISTS notifications;');
 	alasql('CREATE TABLE notifications(id INT IDENTITY, type STRING, reference STRING, message STRING, link STRING, lastupdate STRING);');

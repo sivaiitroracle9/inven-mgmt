@@ -35,13 +35,13 @@
 						class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
-				<div class="navbar-brand"><a id="nav-menu" class="glyphicon glyphicon-list"><span> </span></a><a href="index.html">COMPANY</a></div>
+				<div class="navbar-brand"><a id="nav-menu" class="glyphicon glyphicon-list"><span> </span></a><a class="nav-home-url" href="index.html">COMPANY</a></div>
 			</div>
 
 			<!-- Collect the nav links, forms, and other content for toggling -->
 			<div class="collapse navbar-collapse" id="navbar-collapse">
 				<ul class="nav navbar-nav">
-					<li><a href="index.html">Inventory Management</a></li>
+					<li><a class="nav-home-url" href="index.html">Inventory Management</a></li>
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
 					<li><a onclick="logout()" href="#"><span class="glyphicon glyphicon-log-out"> Logout</span></a>
@@ -306,24 +306,27 @@
 			</div>
 			<div id="tabcontent-invencorrection" class="tab-pane">
 				<div class="panel panel-primary"
-					style="width: 1650px; margin-left: 10px">
+					style="margin-left: 10px">
 					<div class="panel-heading" style="background-color: whitesmoke;color:green">
 						<label>STOCK ADJUSTMENT/CORRECTION</label>
 					</div>
 					<div class="panel-body" style="background-color: whitesmoke;">
-						<div class="panel panel-success pull-right">
+						<div class="panel panel-success" style="left:1100px;float:right;">
 							<div class="panel-heading"
 								style="background-color: whitesmoke; color: green">
 								<label>RECENT ADJUSTMENTS / CORRECTIONS</label>
 								<hr/>
 								<span id="recent-invencorrection-text"></span>
 							</div>
-							<div class="panel-body" style="background-color: whitesmoke;">
-								<table class="table-condensed">
+							<div class="panel-body" style="background-color: whitesmoke;padding:0px">
+								<table class="table-condensed" style="width:500px">
 									<thead>
 										<tr>
 											<th>DATE</th>
-											<th>QTY</th>
+											<th>WAREHOUSE</th>
+											<th>PROD-CODE</th>
+											<th>DIFFERENCE QTY</th>
+											<th>NEW QTY</th>
 											<th>REASON</th>
 										</tr>
 									</thead>
@@ -469,23 +472,21 @@
 			<li id="sidebar-users"><a href="users.html">Users</a></li>
 		</ul>
 	</nav>
+	<script src="lib/nav-sidebar.js"></script>
+	<script src="js/inventory-users.js"></script>
 	<script src="js/inventory-common.js"></script>
 	<script src="js/inventory.js"></script>
-		<script src="js/inventory-correction.js"></script>
+	<script src="js/inventory-correction.js"></script>
 	<script src="js/inventory-po-create.js"></script>
 	<script src="js/automatic-po.js"></script>
 	<script src="js/gr-inventory.js"></script>
 	<script src="js/gi-inventory.js"></script>
 	<script src="js/inventory-settings.js"></script>
-	<script src="lib/nav-sidebar.js"></script>
 	<script type="text/javascript">
 		
 		var f = new Date();
 		$( "#from" ).val(f.getDate() + "/")
 	
-		function logout() {
-			$(location).attr('href', 'login.html');
-		}
 		var dateFormat = "mm/dd/yy",
 	      from = $( "#from" )
 	        .datepicker({

@@ -10,7 +10,8 @@
 <link href="css/jsgrid.min.css" rel="stylesheet" />
 <link href="css/jsgrid-theme.min.css" rel="stylesheet" />
 <link href="css/font-awesome.min.css" rel="stylesheet" />
-<link href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet" />
+<link href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"
+	rel="stylesheet" />
 <link href="css/toastr.min.css" rel="stylesheet" />
 <link href="css/style.css" rel="stylesheet" />
 
@@ -35,13 +36,20 @@
 						class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
-				<div class="navbar-brand"><a id="nav-menu" class="glyphicon glyphicon-list"><span> </span></a><a href="index.html">COMPANY</a></div>
+				<div class="navbar-brand">
+					<a id="nav-menu" class="glyphicon glyphicon-list"><span>
+					</span></a><a class="nav-home-url" href="index.html">COMPANY</a>
+				</div>
 			</div>
 
 			<!-- Collect the nav links, forms, and other content for toggling -->
 			<div class="collapse navbar-collapse" id="navbar-collapse">
 				<ul class="nav navbar-nav">
-					<li><a href="index.html">Inventory Management</a></li>
+					<li><a class="nav-home-url" href="index.html">Inventory Management</a></li>
+				</ul>
+				<ul class="nav navbar-nav navbar-right">
+					<li><a onclick="logout()" href="#"><span
+							class="glyphicon glyphicon-log-out"> Logout</span></a></li>
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
 					<li class="dropdown"><a href="#" class="dropdown-toggle"
@@ -59,7 +67,9 @@
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
 					<li class="dropdown"><a href="#" class="dropdown-toggle"
-						data-toggle="dropdown"><span class="glyphicon glyphicon-globe" style="font-size:20px"><span id="jewel_count" class="jewel_cnt">5</span></span></a>
+						data-toggle="dropdown"><span class="glyphicon glyphicon-globe"
+							style="font-size: 20px"><span id="jewel_count"
+								class="jewel_cnt">5</span></span></a>
 						<ul class="dropdown-menu">
 						</ul></li>
 				</ul>
@@ -69,29 +79,41 @@
 		<!-- /.container-fluid -->
 	</nav>
 
-	<div class="container">
-			<ul class="nav nav-tabs">
-				<li id="li-po" class="active"><a id="tab-po" href="#tabcontent-po" data-toggle="tab">Purchase Order</a></li>
-				<li id="li-so"><a id="tab-so" href="#tabcontent-so" data-toggle="tab">Sales Order</a></li>
-				<li id="li-st"><a id="tab-st" href="#tabcontent-st" data-toggle="tab">Stock Transfer</a></li>
-				<li id="li-st"><a id="tab-revisions" href="#tabcontent-revisions" data-toggle="tab">Revisions</a></li>
-			</ul>
+	<div class="container-fluid">
+		<ul class="nav nav-tabs">
+			<li id="li-po" class="active"><a id="tab-po"
+				href="#tabcontent-po" data-toggle="tab">Purchase Order</a></li>
+			<li id="li-so"><a id="tab-so" href="#tabcontent-so"
+				data-toggle="tab">Sales Order</a></li>
+			<li id="li-st"><a id="tab-st" href="#tabcontent-st"
+				data-toggle="tab">Stock Transfer</a></li>
+			<li id="li-st"><a id="tab-revisions"
+				href="#tabcontent-revisions" data-toggle="tab">Revisions</a></li>
+		</ul>
 
 		<div class="tab-content">
-			<div id="tabcontent-po" class="tab-pane active" style="margin-top:10px">
+			<div id="tabcontent-po" class="tab-pane active"
+				style="margin-top: 10px">
 				<ul class="nav nav-tabs">
-					<li id="li-po-overview" class="active"><a id="tab-overview" href="#tabcontent-po-overview" data-toggle="tab">Overview</a></li>
-		  			<li id="li-po-create"><a id="tab-po-create" href="#tabcontent-po-create" data-toggle="tab">Create</a></li>
-		  			<li id="li-po-quotes"><a id="tab-po-quotes" href="#tabcontent-po-quotes" data-toggle="tab">Quotes / Invoices</a></li>
+					<li id="li-po-overview" class="active"><a id="tab-overview"
+						href="#tabcontent-po-overview" data-toggle="tab">Overview</a></li>
+					<li id="li-po-create"><a id="tab-po-create"
+						href="#tabcontent-po-create" data-toggle="tab">Create</a></li>
+					<li id="li-po-quotes"><a id="tab-po-quotes"
+						href="#tabcontent-po-quotes" data-toggle="tab">Quotes /
+							Invoices</a></li>
 				</ul>
 				<div class="tab-content">
-					<div id="tabcontent-po-overview"" class="tab-pane active" style="margin-top:10px">
+					<div id="tabcontent-po-overview" " class="tab-pane active"
+						style="margin-top: 10px">
 						<div class="panel panel-default">
 							<div class="panel-heading">
 								<label>LIST OF PURCHASE ORDERS</label>
 								<div class="btn-group pull-right">
-								<a class="btn btn-default"><span class="glyphicon glyphicon-print" style="margin-right:4px"></span>Print</a> 
-								<a class="btn btn-default" onclick=open_dlg_overview_email()><span class="glyphicon glyphicon-envelope" style="margin-right:4px"></span>Email</a>
+									<a class="btn btn-default"><span
+										class="glyphicon glyphicon-print" style="margin-right: 4px"></span>Print</a>
+									<a class="btn btn-default" onclick=open_dlg_overview_email()><span
+										class="glyphicon glyphicon-envelope" style="margin-right: 4px"></span>Email</a>
 								</div>
 								<div class="btn-group pull-right">
 									<button type="button" class="btn btn-default dropdown-toggle"
@@ -134,8 +156,11 @@
 								<div class="panel panel-primary">
 									<div class="panel-body">
 										<div class="btn-group pull-right">
-											<a class="btn btn-default"><span class="glyphicon glyphicon-print" style="margin-right:4px"></span>Print</a> 
-											<a class="btn btn-default" onclick=open_dlg_overview_email()><span class="glyphicon glyphicon-envelope" style="margin-right:4px"></span>Email</a>
+											<a class="btn btn-default"><span
+												class="glyphicon glyphicon-print" style="margin-right: 4px"></span>Print</a>
+											<a class="btn btn-default" onclick=open_dlg_overview_email()><span
+												class="glyphicon glyphicon-envelope"
+												style="margin-right: 4px"></span>Email</a>
 
 											<button type="button" class="btn btn-default dropdown-toggle"
 												data-toggle="dropdown" aria-haspopup="true"
@@ -150,21 +175,20 @@
 														class="fa fa-file-pdf-o"> </span> PDF</a></li>
 												<li style="width: 96px"><a href="#"><span
 														class="fa fa-file-code-o"> </span> JSON</a></li>
-											</ul></div>
-										
+											</ul>
+										</div>
+
 										<div class="pull-left">
-											<span style="font-weight: bold" >STATUS
-												: <span id="od-dlg-status"></span>
-											</span> <span style="font-weight: bold;margin:4px">ORDER
+											<span style="font-weight: bold">STATUS : <span
+												id="od-dlg-status"></span>
+											</span> <span style="font-weight: bold; margin: 4px">ORDER
 												TYPE : <span id="od-dlg-type"></span>
-											</span>
-											<span style="font-weight: bold" class="pull-left">LAST
+											</span> <span style="font-weight: bold" class="pull-left">LAST
 												UPDATE : <span id="od-dlg-lastupdate"
 												class="label label-default"></span>
 											</span>
 										</div>
-										<br />
-										<br />
+										<br /> <br />
 										<div>
 											<div id="od-dlg-from-info" class="panel panel-info pull-left">
 												<div class="panel-heading">
@@ -185,8 +209,11 @@
 														Phone: <span id="po-vendor-dlg-tel"></span>
 													</p>
 													<p>
-														Email: <span id="po-vendor-dlg-email"></span> 
-														<a onclick=open_dlg_overview_email('povendor') style="margin:4px"><span class="glyphicon glyphicon-envelope" style="margin-right:4px"> </span></a>
+														Email: <span id="po-vendor-dlg-email"></span> <a
+															onclick=open_dlg_overview_email( 'povendor')
+															style="margin: 4px"><span
+															class="glyphicon glyphicon-envelope"
+															style="margin-right: 4px"> </span></a>
 													</p>
 												</div>
 											</div>
@@ -217,21 +244,32 @@
 									<div class="panel-body">
 										<label>ATTACH REQUEST QUOTE FROM VENDOR.</label>
 										<div class="pull-right">
-											<label for="poQuote-input" class="pull-left">Attach Procurement Quote: </label><input id="poQuote-input" type="file"><a id="attached-po-quote" style="color:blue;display:none" target="_blank"></a><br/>
-											<button id="po-quote-send-tovendor" onclick="" class="btn btn-default pull-right"><span class="fa fa-send-o"></span>Send to Vendor</button>											
+											<label for="poQuote-input" class="pull-left">Attach
+												Procurement Quote: </label><input id="poQuote-input" type="file"><a
+												id="attached-po-quote" style="color: blue; display: none"
+												target="_blank"></a><br />
+											<button id="po-quote-send-tovendor" onclick=""
+												class="btn btn-default pull-right">
+												<span class="fa fa-send-o"></span>Send to Vendor
+											</button>
 										</div>
-										<div>
-											
-										</div>
+										<div></div>
 									</div>
 								</div>
 								<div class="panel panel-primary">
 									<div class="panel-body">
 										<div id="po-dlg-items"></div>
-										<hr/>
+										<hr />
 										<div id="po-payment-div">
-											<label for="invoice-input" class="pull-left">Attach Invoice: </label><input id="invoice-input" type="file" class="pull-left"><a id="attached-po-invoice" style="color:blue;display:none;float:left" target="_blank"></a>
-											<button id="update-payment" onclick="poUpdatePayment()" class="btn btn-default"><span class="fa fa-cc-amex"></span>Payment Done</button>
+											<label for="invoice-input" class="pull-left">Attach
+												Invoice: </label><input id="invoice-input" type="file"
+												class="pull-left"><a id="attached-po-invoice"
+												style="color: blue; display: none; float: left"
+												target="_blank"></a>
+											<button id="update-payment" onclick="poUpdatePayment()"
+												class="btn btn-default">
+												<span class="fa fa-cc-amex"></span>Payment Done
+											</button>
 										</div>
 									</div>
 								</div>
@@ -317,8 +355,7 @@
 					</div>
 				</div>
 			</div>
-			<div id="tabcontent-so" class="tab-pane"
-				style="margin-top: 10px">
+			<div id="tabcontent-so" class="tab-pane" style="margin-top: 10px">
 				<ul class="nav nav-tabs">
 					<li id="li-so-overview" class="active"><a id="tab-so-overview"
 						href="#tabcontent-so-overview" data-toggle="tab">Overview</a></li>
@@ -333,11 +370,11 @@
 								<label>LIST OF SALE ORDERS</label>
 								<div class="btn-group pull-right">
 									<a class="btn btn-default"><span
-										class="glyphicon glyphicon-share" style="margin-right:4px"></span>Share</a> <a
-										class="btn btn-default"><span
-										class="glyphicon glyphicon-print" style="margin-right:4px"></span>Print</a>
+										class="glyphicon glyphicon-share" style="margin-right: 4px"></span>Share</a>
+									<a class="btn btn-default"><span
+										class="glyphicon glyphicon-print" style="margin-right: 4px"></span>Print</a>
 									<a class="btn btn-default" onclick=open_dlg_overview_email()><span
-										class="glyphicon glyphicon-envelope" style="margin-right:4px"></span>Email</a>
+										class="glyphicon glyphicon-envelope" style="margin-right: 4px"></span>Email</a>
 								</div>
 								<div class="btn-group pull-right">
 									<button type="button" class="btn btn-default dropdown-toggle"
@@ -379,11 +416,15 @@
 							<div id="so-order-details-dlg" style="width: 300px">
 								<div class="panel panel-primary">
 									<div class="panel-body">
-									<div class="btn-group pull-right">
+										<div class="btn-group pull-right">
 											<a class="btn btn-default"><span
-												class="glyphicon glyphicon-share" style="margin-right:4px"> </span>Share</a> <a
-												class="btn btn-default"><span class="glyphicon glyphicon-print" style="margin-right:4px"> </span>Print</a> <a class="btn btn-default" onclick=open_dlg_overview_email()><span
-												class="glyphicon glyphicon-envelope" style="margin-right:4px" > </span>Email</a>
+												class="glyphicon glyphicon-share" style="margin-right: 4px">
+											</span>Share</a> <a class="btn btn-default"><span
+												class="glyphicon glyphicon-print" style="margin-right: 4px">
+											</span>Print</a> <a class="btn btn-default"
+												onclick=open_dlg_overview_email()><span
+												class="glyphicon glyphicon-envelope"
+												style="margin-right: 4px"> </span>Email</a>
 										</div>
 										<div class="btn-group pull-right">
 											<button type="button" class="btn btn-default dropdown-toggle"
@@ -563,8 +604,9 @@
 					</div>
 				</div>
 			</div>
-			<div id="tabcontent-st" class="tab-pane" style="margin-top:10px"></div>
-			<div id="tabcontent-revisions" class="tab-pane" style="margin-top:10px">
+			<div id="tabcontent-st" class="tab-pane" style="margin-top: 10px"></div>
+			<div id="tabcontent-revisions" class="tab-pane"
+				style="margin-top: 10px">
 				<div class="panel panel-success">
 					<div class="panel-heading">
 						<label> ORDER REVISIONS </label>
@@ -577,7 +619,8 @@
 								<span class="fa fa-download"> </span> Export <span class="caret"></span>
 							</button>
 							<ul class="dropdown-menu" style="background: #171048">
-								<li style="width: 96px"><a href="#" onclick="exportOrderRevisionsCSV()"><span
+								<li style="width: 96px"><a href="#"
+									onclick="exportOrderRevisionsCSV()"><span
 										class="fa fa-file-excel-o"> </span> CSV</a></li>
 								<li style="width: 96px"><a href="#"><span
 										class="fa fa-file-pdf-o"> </span> PDF</a></li>
@@ -594,14 +637,29 @@
 	<div id="notificationDialog"></div>
 	<div id="dlg-overview-email">
 		<form action="" class="form-group">
-			<label for="dlg-overview-email-to">To</label><input class="form-control" id="dlg-overview-email-to" type="email">
-			<label for="dlg-overview-email-from">From</label><input class="form-control" id="dlg-overview-email-from" type="email">
-			<label for="dlg-overview-email-subject">Subject</label><input class="form-control" id="dlg-overview-email-subject" type="email">
-			<label for="dlg-overview-email-body">Content</label><textarea class="form-control" style="width:360px"></textarea>
+			<label for="dlg-overview-email-to">To</label><input
+				class="form-control" id="dlg-overview-email-to" type="email">
+			<label for="dlg-overview-email-from">From</label><input
+				class="form-control" id="dlg-overview-email-from" type="email">
+			<label for="dlg-overview-email-subject">Subject</label><input
+				class="form-control" id="dlg-overview-email-subject" type="email">
+			<label for="dlg-overview-email-body">Content</label>
+			<textarea class="form-control" style="width: 360px"></textarea>
 		</form>
 	</div>
-								
-	
+	<nav class="sidebar">
+		<ul class="menu">
+			<li id="sidebar-home"><a href="index.html">Home</a></li>
+			<li id="sidebar-inventory"><a href="inventory.html">Inventory</a></li>
+			<li id="sidebar-products"><a href="products.html">Products</a></li>
+			<li id="sidebar-vendors"><a href="vendors.html">Vendors</a></li>
+			<li id="sidebar-orders"><a href="orders.html">Orders</a></li>
+			<li id="sidebar-reports"><a href="report.html">REPORTS</a></li>
+			<li id="sidebar-users"><a href="users.html">Users</a></li>
+		</ul>
+	</nav>
+	<script src="lib/nav-sidebar.js"></script>
+	<script src="js/orders-users.js"></script>
 	<script src="js/orders-common.js"></script>
 	<script src="js/orders-po.js"></script>
 	<script src="js/orders-po-create.js"></script>
@@ -609,18 +667,5 @@
 	<script src="js/orders-so.js"></script>
 	<script src="js/orders-so-create.js"></script>
 	<script src="js/order-revision.js"></script>
-	<nav class="sidebar">
-		<ul class="menu">
-			<li><a href="index.html">Home</a></li>
-			<li><a href="dashboard.html">Dashboard</a></li>
-			<li><a href="inventory.html">Inventory</a></li>
-			<li><a href="products.html">Products</a></li>
-			<li><a href="vendors.html">Vendors</a></li>
-			<li><a href="orders.html">Orders</a></li>
-			<li><a href="report.html">REPORTS</a></li>
-			<li><a href="users.html">Users</a></li>
-		</ul>
-	</nav>
-	<script src="lib/nav-sidebar.js"></script>
 </body>
 </html>

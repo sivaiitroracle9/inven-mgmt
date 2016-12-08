@@ -38,14 +38,18 @@
 				</button>
 				<div class="navbar-brand">
 					<a id="nav-menu" class="glyphicon glyphicon-list"><span>
-					</span></a><a href="index.html">COMPANY</a>
+					</span></a><a class="nav-home-url" href="index.html">COMPANY</a>
 				</div>
 			</div>
 
 			<!-- Collect the nav links, forms, and other content for toggling -->
 			<div class="collapse navbar-collapse" id="navbar-collapse">
 				<ul class="nav navbar-nav">
-					<li><a href="index.html">Inventory Management</a></li>
+					<li><a class="nav-home-url" href="index.html">Inventory Management</a></li>
+				</ul>
+				<ul class="nav navbar-nav navbar-right">
+					<li><a onclick="logout()" href="#"><span
+							class="glyphicon glyphicon-log-out"> Logout</span></a></li>
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
 					<li class="dropdown"><a href="#" class="dropdown-toggle"
@@ -81,68 +85,90 @@
 			<div class="panel-heading">
 				<label>INVENTORY REPORTS</label>
 				<hr />
-              <div style="float:left">
-				<div style="margin-right: 10px;float:left">
-					<label for="report-select" style="margin: 4px">REPORT : </label> <select
-						id="report-select" class="form-control"
-						style="width: 200px; float: right">
-						<option value=0>Daily Stock</option>
-						<option value=1>Low Stock</option>
-						<option value=2>Inbound Stock</option>
-						<option value=3>Outbound Stock</option>
-						<option value=4>Stock Adjustment/Correction</option>
-						<option value=5>Inbound Transactions</option>
-						<option value=6>Outbound Transactions</option>
-					</select>
-				</div>
-
-				<div style="float:left">
-					<div class="btn-group" role="group" aria-label="...">
-						<button id="btn-d" type="button" onclick="dmyf(0)" class="btn btn-default">Day</button>
-						<button id="btn-m" type="button" onclick="dmyf(1)" class="btn btn-default">Month</button>
-						<button id="btn-y" type="button" onclick="dmyf(2)" class="btn btn-default">Year</button>
+				<div style="float: left">
+					<div style="margin-right: 10px; float: left">
+						<label for="report-select" style="margin: 4px">REPORT : </label> <select
+							id="report-select" class="form-control"
+							style="width: 200px; float: right">
+							<option value=0>Daily Stock</option>
+							<option value=1>Low Stock</option>
+							<option value=2>Inbound Stock</option>
+							<option value=3>Outbound Stock</option>
+							<option value=4>Stock Adjustment/Correction</option>
+							<option value=5>Inbound Transactions</option>
+							<option value=6>Outbound Transactions</option>
+						</select>
 					</div>
-					<label>OR</label>
+
+					<div style="float: left">
+						<div class="btn-group" role="group" aria-label="...">
+							<button id="btn-d" type="button" onclick="dmyf(0)"
+								class="btn btn-default">Day</button>
+							<button id="btn-m" type="button" onclick="dmyf(1)"
+								class="btn btn-default">Month</button>
+							<button id="btn-y" type="button" onclick="dmyf(2)"
+								class="btn btn-default">Year</button>
+						</div>
+						<label>OR</label>
+					</div>
+					<div style="float: left; margin-left: 8px">
+						<label for="from">FROM : </label><input type="date" id="from"
+							name="from"><br /> <label for="to"
+							style="margin-left: 22px">TO : </label><input type="date" id="to"
+							name="to">
+					</div>
 				</div>
-				<div style="float:left;margin-left:8px">
-					<label for="from">FROM : </label><input type="date" id="from"
-						name="from"><br /> <label for="to" style="margin-left:22px">TO : </label><input
-						type="date" id="to" name="to">
-				</div>
-				</div>
-				<br><br><br>
+				<br>
+				<br>
+				<br>
 				<button id="generate-report" class="btn btn-success">Run</button>
 				<div class="btn-group" role="group" aria-label="...">
-						<a id="btn-download" class="btn btn-default">DOWNLOAD</a>
-						<a id="btn-print" class="btn btn-default">PRINT</a>
-						<a id="btn-email" class="btn btn-default">EMAIL</a>
+					<a id="btn-download" class="btn btn-default">DOWNLOAD</a> <a
+						id="btn-print" class="btn btn-default">PRINT</a> <a id="btn-email"
+						onclick="open_dlg_overview_email()" class="btn btn-default">EMAIL</a>
 				</div>
 			</div>
 			<div id="report-grids" class="panel-body">
 				<div id="0-dialy-stock"></div>
-				<div id="1-low-stock" style="display:none"></div>
-				<div id="2-inbound-stock" style="display:none"></div>
-				<div id="3-outbound-stock" style="display:none"></div>
-				<div id="4-stock-adjust" style="display:none"></div>
-				<div id="5-inbound-trans" style="display:none"></div>
-				<div id="6-obound-trans" style="display:none"></div>
+				<div id="1-low-stock" style="display: none"></div>
+				<div id="2-inbound-stock" style="display: none"></div>
+				<div id="3-outbound-stock" style="display: none"></div>
+				<div id="4-stock-adjust" style="display: none"></div>
+				<div id="5-inbound-trans" style="display: none"></div>
+				<div id="6-obound-trans" style="display: none"></div>
 			</div>
 		</div>
+		<div id="dlg-overview-email">
+			<form action="" class="form-group">
+				<label for="dlg-overview-email-to">To</label><input
+					class="form-control" id="dlg-overview-email-to" type="email">
+				<label for="dlg-overview-email-from">From</label><input
+					class="form-control" id="dlg-overview-email-from" type="email">
+				<label for="dlg-overview-email-subject">Subject</label><input
+					class="form-control" id="dlg-overview-email-subject" type="text"
+					placeholder="[REPORT]"> <label
+					for="dlg-overview-email-body">Content</label>
+				<textarea class="form-control" style="width: 360px"
+					placeholder="Report Attched ...."></textarea>
+			</form>
+		</div>
 	</div>
-	<script src="js/reports-common.js"></script>
-	<script src="js/reports.js"></script>
+
 	<nav class="sidebar">
 		<ul class="menu">
-			<li><a href="index.html">Home</a></li>
-			<li><a href="dashboard.html">Dashboard</a></li>
-			<li><a href="inventory.html">Inventory</a></li>
-			<li><a href="products.html">Products</a></li>
-			<li><a href="vendors.html">Vendors</a></li>
-			<li><a href="orders.html">Orders</a></li>
-			<li><a href="report.html">REPORTS</a></li>
-			<li><a href="users.html">Users</a></li>
+			<li id="sidebar-home"><a href="index.html">Home</a></li>
+			<li id="sidebar-inventory"><a href="inventory.html">Inventory</a></li>
+			<li id="sidebar-products"><a href="products.html">Products</a></li>
+			<li id="sidebar-vendors"><a href="vendors.html">Vendors</a></li>
+			<li id="sidebar-orders"><a href="orders.html">Orders</a></li>
+			<li id="sidebar-reports"><a href="report.html">REPORTS</a></li>
+			<li id="sidebar-users"><a href="users.html">Users</a></li>
 		</ul>
 	</nav>
 	<script src="lib/nav-sidebar.js"></script>
+	<script src="js/reports-users.js"></script>
+	<script src="js/reports-common.js"></script>
+	<script src="js/reports-download.js"></script>
+	<script src="js/reports.js"></script>
 </body>
 </html>

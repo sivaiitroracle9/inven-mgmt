@@ -11,3 +11,27 @@ $(window).click(function(event){
 		}
 	}
 });
+
+var user = parseInt($.url().param('user'));
+if(!user) {
+	/*var $a = $("<a>").attr("href", "login.html");
+	$a.click();*/
+	$(location).attr('href', 'login.html')
+} else {
+	var rows = alasql("select name from users where id="+user);
+	$("#username").text(rows[0].name);
+	$("nav.sidebar ul.menu").find("li a").each(function(){
+		if(user) {
+			$(this).attr("href", $(this).attr("href") + "?user="+user);
+		}
+	});
+	$(".nav-home-url").each(function(){
+		if(user) {
+			$(this).attr("href", $(this).attr("href") + "?user="+user);
+		}
+	});
+}
+
+function logout() {
+	$(location).attr('href', 'login.html');
+}

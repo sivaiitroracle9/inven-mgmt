@@ -5,13 +5,15 @@
 <script src="lib/bootstrap.js"></script>
 <link href="css/bootstrap.css" rel="stylesheet" />
 <script src="lib/jquery-ui.js"></script>
-<link href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet" />
+<link href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"
+	rel="stylesheet" />
 
 <script src="lib/jsgrid.min.js"></script>
 <link href="css/jsgrid.min.css" rel="stylesheet" />
 <link href="css/jsgrid-theme.min.css" rel="stylesheet" />
 
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
 <link href="css/style.css" rel="stylesheet" />
 
 <script src="lib/alasql.js"></script>
@@ -34,13 +36,20 @@
 						class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
-				<div class="navbar-brand"><a id="nav-menu" class="glyphicon glyphicon-list"><span> </span></a><a href="index.html">COMPANY</a></div>
+				<div class="navbar-brand">
+					<a id="nav-menu" class="glyphicon glyphicon-list"><span>
+					</span></a><a class="nav-home-url" href="index.html">COMPANY</a>
+				</div>
 			</div>
 
 			<!-- Collect the nav links, forms, and other content for toggling -->
 			<div class="collapse navbar-collapse" id="navbar-collapse">
 				<ul class="nav navbar-nav">
-					<li><a href="index.html">Inventory Management</a></li>
+					<li><a class="nav-home-url" href="index.html">Inventory Management</a></li>
+				</ul>
+				<ul class="nav navbar-nav navbar-right">
+					<li><a onclick="logout()" href="#"><span
+							class="glyphicon glyphicon-log-out"> Logout</span></a></li>
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
 					<li class="dropdown"><a href="#" class="dropdown-toggle"
@@ -62,48 +71,15 @@
 		<!-- /.container-fluid -->
 	</nav>
 
-	<div class="container">
-		<form action="index.html" class="form-inline text-center">
-			<div class="form-group">
-				<label>Warehouse</label> <select name="q1" class="form-control">
-					<option value="0">All</option>
-				</select>
+	<div class="container-fluid">
+		<div class="panel panel-sucess">
+			<div class="panel-heading">
+				<label>USERS</label>
 			</div>
-			<div class="form-group">
-				<label>Classification</label> <select name="q2" class="form-control">
-					<option value="0">All</option>
-				</select>
+			<div class="panel-body">
+				<div id="users-grid"></div>
 			</div>
-			<div class="form-group">
-				<label>Code</label> <input name="q3" type="text"
-					class="form-control" placeholder="Prefix Search">
-			</div>
-			<button type="submit" class="btn btn-primary">
-				<span class="glyphicon glyphicon-search"></span> Search
-			</button>
-		</form>
-		<hr>
-
-		<div class="clearfix" style="margin: 10px 0;">
-			<a href="stock-form.html" class="btn btn-sm btn-success pull-right"><span
-				class="glyphicon glyphicon-plus"></span> New</a>
 		</div>
-
-		<table class="table table-hover table-condensed">
-			<thead>
-				<tr>
-					<th>Warehouse</th>
-					<th>Classification</th>
-					<th>Code</th>
-					<th>Maker</th>
-					<th>Detail</th>
-					<th>Price</th>
-					<th>In Stock</th>
-					<th>Unit</th>
-				</tr>
-			</thead>
-			<tbody id="tbody-stocks"></tbody>
-		</table>
 	</div>
 	<nav class="sidebar">
 		<ul class="menu">
@@ -112,10 +88,11 @@
 			<li><a href="products.html">Products</a></li>
 			<li><a href="vendors.html">Vendors</a></li>
 			<li><a href="orders.html">Orders</a></li>
+			<li><a href="report.html">REPORTS</a></li>
 			<li><a href="users.html">Users</a></li>
 		</ul>
 	</nav>
-	<script src="js/index.js"></script>
+	<script src="js/users.js"></script>
 	<script src="lib/nav-sidebar.js"></script>
 </body>
 </html>

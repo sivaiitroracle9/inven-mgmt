@@ -34,13 +34,13 @@
 						class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
-				<div class="navbar-brand"><a id="nav-menu" class="glyphicon glyphicon-list"><span> </span></a><a href="index.html">COMPANY</a></div>
+				<div class="navbar-brand"><a id="nav-menu" class="glyphicon glyphicon-list"><span> </span></a><a class="nav-home-url" href="index.html">COMPANY</a></div>
 			</div>
 
 			<!-- Collect the nav links, forms, and other content for toggling -->
 			<div class="collapse navbar-collapse" id="navbar-collapse">
 				<ul class="nav navbar-nav">
-					<li><a href="index.html">Inventory Management</a></li>
+					<li><a class="nav-home-url" href="index.html">Inventory Management</a></li>
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
 					<li><a href="#" onclick=showLoginForm()><span class="glyphicon glyphicon-log-in"> Login</span></a>
@@ -84,7 +84,7 @@
 			if($("#userid").val()!=="" && $("#password").val()!=="" && $("#userid").val()=== $("#password").val()){
 				console.log("logged in")
 				var rows = alasql("select id from users where name='" + $("#userid").val().trim()+"'");
-				$(location).attr('href', 'dashboard.html?user='+rows[0].id)
+				$(location).attr('href', 'index.html?user='+rows[0].id)
 			}
 			
 		});

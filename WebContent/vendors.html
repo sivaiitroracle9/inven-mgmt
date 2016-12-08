@@ -5,13 +5,15 @@
 <script src="lib/bootstrap.js"></script>
 <link href="css/bootstrap.css" rel="stylesheet" />
 <script src="lib/jquery-ui.js"></script>
-<link href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet" />
+<link href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"
+	rel="stylesheet" />
 
 <script src="lib/jsgrid.min.js"></script>
 <link href="css/jsgrid.min.css" rel="stylesheet" />
 <link href="css/jsgrid-theme.min.css" rel="stylesheet" />
 
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
 <link href="css/style.css" rel="stylesheet" />
 
 <script src="lib/alasql.js"></script>
@@ -34,13 +36,20 @@
 						class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
-				<div class="navbar-brand"><a id="nav-menu" class="glyphicon glyphicon-list"><span> </span></a><a href="index.html">COMPANY</a></div>
+				<div class="navbar-brand">
+					<a id="nav-menu" class="glyphicon glyphicon-list"><span>
+					</span></a><a class="nav-home-url" href="index.html">COMPANY</a>
+				</div>
 			</div>
 
 			<!-- Collect the nav links, forms, and other content for toggling -->
 			<div class="collapse navbar-collapse" id="navbar-collapse">
 				<ul class="nav navbar-nav">
-					<li><a href="index.html">Inventory Management</a></li>
+					<li><a class="nav-home-url" href="index.html">Inventory Management</a></li>
+				</ul>
+				<ul class="nav navbar-nav navbar-right">
+					<li><a onclick="logout()" href="#"><span
+							class="glyphicon glyphicon-log-out"> Logout</span></a></li>
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
 					<li class="dropdown"><a href="#" class="dropdown-toggle"
@@ -58,7 +67,9 @@
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
 					<li class="dropdown"><a href="#" class="dropdown-toggle"
-						data-toggle="dropdown"><span class="glyphicon glyphicon-globe" style="font-size:20px"><span id="jewel_count" class="jewel_cnt">5</span></span></a>
+						data-toggle="dropdown"><span class="glyphicon glyphicon-globe"
+							style="font-size: 20px"><span id="jewel_count"
+								class="jewel_cnt">5</span></span></a>
 						<ul class="dropdown-menu">
 						</ul></li>
 				</ul>
@@ -85,9 +96,10 @@
 						data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 						<span class="fa fa-download"> </span> Export <span class="caret"></span>
 					</button>
-					<ul class="dropdown-menu" style="background:#171048">
-						<li style="width: 96px"><a href="#" onclick="vendorExportCSV()"><span
-								class="fa fa-file-excel-o"> </span> CSV</a></li>
+					<ul class="dropdown-menu" style="background: #171048">
+						<li style="width: 96px"><a href="#"
+							onclick="vendorExportCSV()"><span class="fa fa-file-excel-o">
+							</span> CSV</a></li>
 						<li style="width: 96px"><a href="#"><span
 								class="fa fa-file-pdf-o"> </span> PDF</a></li>
 						<li style="width: 96px"><a href="#"><span
@@ -99,13 +111,13 @@
 						data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 						<span class="fa fa-upload"> </span> Import <span class="caret"></span>
 					</button>
-					<ul class="dropdown-menu" style="background:#171048">
+					<ul class="dropdown-menu" style="background: #171048">
 						<li style="width: 96px;"><a href="#" onclick=importFile()><span
 								class="fa fa-file-excel-o"> </span> CSV</a></li>
-						<li style="width: 96px"><a href="#" onclick=importFile() style="#3c765e;"><span
-								class="fa fa-file-pdf-o"> </span> PDF</a></li>
-						<li style="width: 96px"><a href="#" onclick=importFile() style="#3c765e;"><span
-								class="fa fa-file-code-o"> </span> JSON</a></li>
+						<li style="width: 96px"><a href="#" onclick=importFile()
+							style=""><span class="fa fa-file-pdf-o"> </span> PDF</a></li>
+						<li style="width: 96px"><a href="#" onclick=importFile()
+							style=""><span class="fa fa-file-code-o"> </span> JSON</a></li>
 						<li style="width: 96px; display: none"><input
 							id="input-vendors-file" type="file"></li>
 					</ul>
@@ -118,30 +130,47 @@
 	</div>
 
 	<div id="dialog-form" title="Details">
-	    <form id="vendorForm" class="form-group">
-	        <p><label>Vendor Code: <input id="ven_code" type="text" class="form-control" /></label></p>
-	        <p><label>Name: <input id="ven_name" type="text" class="form-control"/></label></p>
-	        <p><label>Telephone Number: <input id="ven_tel" type="text" class="form-control"/></label></p>
-	        <p><label>Email: <input id="ven_email" type="text" class="form-control"/ ></label></p>
-	        <p><label>Address: <input id="ven_addr" type="text" class="form-control"/></label></p>
-	    </form>
+		<form id="vendorForm" class="form-group">
+			<p>
+				<label>Vendor Code: <input id="ven_code" type="text"
+					class="form-control" /></label>
+			</p>
+			<p>
+				<label>Name: <input id="ven_name" type="text"
+					class="form-control" /></label>
+			</p>
+			<p>
+				<label>Telephone Number: <input id="ven_tel" type="text"
+					class="form-control" /></label>
+			</p>
+			<p>
+				<label>Email: <input id="ven_email" type="text"
+					class="form-control"/ ></label>
+			</p>
+			<p>
+				<label>Address: <input id="ven_addr" type="text"
+					class="form-control" /></label>
+			</p>
+		</form>
 	</div>
 	<div id="dlg-import-vendors" title="Import Makers">
 		<div id="import-vendors-grid"></div>
 	</div>
 	<nav class="sidebar">
 		<ul class="menu">
-			<li><a href="index.html">Home</a></li>
-			<li><a href="dashboard.html">Dashboard</a></li>
-			<li><a href="products.html">Products</a></li>
-			<li><a href="vendors.html">Vendors</a></li>
-			<li><a href="orders.html">Orders</a></li>
-			<li><a href="report.html">REPORTS</a></li>
+			<li id="sidebar-home"><a href="index.html">Home</a></li>
+			<li id="sidebar-inventory"><a href="inventory.html">Inventory</a></li>
+			<li id="sidebar-products"><a href="products.html">Products</a></li>
+			<li id="sidebar-vendors"><a href="vendors.html">Vendors</a></li>
+			<li id="sidebar-orders"><a href="orders.html">Orders</a></li>
+			<li id="sidebar-reports"><a href="report.html">REPORTS</a></li>
+			<li id="sidebar-users"><a href="users.html">Users</a></li>
 		</ul>
 	</nav>
-	<script src="js/vendors.js"></script>
 	<script src="lib/nav-sidebar.js"></script>
-		<script type="text/javascript">
+	<script src="js/vendors-users.js"></script>
+	<script src="js/vendors.js"></script>
+	<script type="text/javascript">
 		function importFile(){
 			$("#input-vendors-file").click();
 		}

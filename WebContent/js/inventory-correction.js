@@ -65,7 +65,7 @@ var invencorrectDlg = $("#invencorrect-dlg").dialog({
     title: "Stock Adjustment / Correction",
     buttons: {
         Save: function() {
-        	updateStockCorrection(Object.values(invenCorrectItems)[0])
+        	updateStockCorrection(Object.values(invenCorrectItems)[0]);
             $(this).dialog("close");
         },
         Cancel: function(){
@@ -75,6 +75,10 @@ var invencorrectDlg = $("#invencorrect-dlg").dialog({
 	open: function(event) {
 		$('.ui-dialog-buttonpane').find('button:contains("Save")').removeClass("ui-button ui-corner-all ui-widget").addClass('btn btn-primary');
 		$('.ui-dialog-buttonpane').find('button:contains("Cancel")').removeClass("ui-button ui-corner-all ui-widget").addClass('btn btn-default');
+	 },
+	 close: function(event){
+		$("#invencorrect-qty").val("");
+		$("#invencorrect-reason").val("");
 	 }
 });
 
@@ -83,16 +87,23 @@ function updateStockCorrection(item){
 	var crrctQty = $("#invencorrect-qty").val();
 	var reason = $("#invencorrect-reason").val();
 	if(crrctQty && Number(crrctQty)!==0 && reason) {
-		alasql("insert into stockcorrection values("+getNextInsertId("stockcorrection") 
-				+ "," + item.pstockid + "," + Number(crrctQty) + ",'" 
-				+ reason + "','" + (new Date()).toLocaleString() + "')");
-		alasql("update stock set balance=balance-"+ Number(crrctQty) + " where id=" + Number(item.pstockid));
+		var stock = alasql("select balance from stock where id=" + Number(item.pstockid));
+		if(stock) {
+			var diff = stock[0].balance - Number(crrctQty);
+			alasql("insert into stockcorrection values("+getNextInsertId("stockcorrection") 
+					+ "," + item.pstockid + "," + Number(crrctQty) + "," + Number(diff) + ",'" 
+					+ reason + "','" + (new Date()).toLocaleString() + "')");
+			alasql("update stock set balance="+ Number(crrctQty) + " where id=" + Number(item.pstockid));
+		}
 	}
 	refreshInvenCorrectGrids();
 }
 
 function refreshInventoryGrid(){
 	$("#invencorrect-items").jsGrid("render");
+	loadFullAdjustmentData();
+	$("#invencorrect-qty").val("");
+	$("#invencorrect-reason").val("");
 }
 
 $("#invencorrect-items").jsGrid({
@@ -424,20 +435,25 @@ $("#invencorrect-items").on({
             if(item) {
                 $("#recent-invencorrection-text").html("for <span style='color:blue'>" + item.pcode + "</span> in <span style='color:blue'>" 
                 		+ global_warehouse_map[item.whouse] + "</span> warehouse");
-                rows = alasql("select lastupdate, correctionQty, message from stockcorrection where stockid = " + item.pstockid);	
+                rows = alasql("select lastupdate, whouse.name as warehouse, products.code as pcode, correctionQty, diffQty, message from stockcorrection outer join stock " +
+        				"on stockcorrection.stockid = stock.id join products on products.id=stock.item join whouse on whouse.id=stock.whouse " +
+        				"where stockid = " + item.pstockid);	
             }
 
             if(rows && rows.length > 0) {
             	rows.forEach(function(r){
             		var $tr = $("<tr>");
             		$("<td>").text(r.lastupdate).appendTo($tr);
+            		$("<td>").text(r.warehouse).appendTo($tr);
+            		$("<td>").text(r.pcode).appendTo($tr);
+            		$("<td>").text(r.diffQty).appendTo($tr);
             		$("<td>").text(r.correctionQty).appendTo($tr);
             		$("<td>").text(r.message).appendTo($tr);
             		$tr.appendTo($("#recent-invencorrection"));
             	});
             } else {
             	var $tr = $("<tr>");
-        		$("<td>").text("No data available.").appendTo($tr);
+            	$("<td style='color:red'>").text("No data available.").appendTo($tr);
         		$tr.appendTo($("#recent-invencorrection"));
             }
     	}
@@ -460,12 +476,17 @@ function loadFullAdjustmentData() {
     	});	
 	}
 	if(stockIDs.length!=0) {
-		var rows = alasql("select lastupdate, correctionQty, message from stockcorrection where stockid IN (" + stockIDs.join(",") + ")");
+		var rows = alasql("select lastupdate, whouse.name as warehouse, products.code as pcode, correctionQty, diffQty, message from stockcorrection outer join stock " +
+				"on stockcorrection.stockid = stock.id join products on products.id=stock.item join whouse on whouse.id=stock.whouse " +
+				"where stockid IN (" + stockIDs.join(",") + ")");
         $("#recent-invencorrection").html("");
         if(rows && rows.length > 0) {
         	rows.forEach(function(r){
         		var $tr = $("<tr>");
         		$("<td>").text(r.lastupdate).appendTo($tr);
+        		$("<td>").text(r.warehouse).appendTo($tr);
+        		$("<td>").text(r.pcode).appendTo($tr);
+        		$("<td>").text(r.diffQty).appendTo($tr);
         		$("<td>").text(r.correctionQty).appendTo($tr);
         		$("<td>").text(r.message).appendTo($tr);
         		$tr.appendTo($("#recent-invencorrection"));
@@ -473,7 +494,7 @@ function loadFullAdjustmentData() {
         }
 	} else {
     	var $tr = $("<tr>");
-		$("<td>").text("No data available.").appendTo($tr);
+		$("<td style='color:red'>").text("No data available.").appendTo($tr);
 		$tr.appendTo($("#recent-invencorrection"));
     }
 }
