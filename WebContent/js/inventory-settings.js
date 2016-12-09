@@ -5,6 +5,7 @@ $("input.auto-po").each(function(){
 	if(stocks!=undefined && stocks.length!=0) value = stocks[0].autopo;
 	
 	if($(this).val() == value) $(this).prop('checked', true);
+	toggleAutoPO();
 });
 $("#grp-reorder-point-input").val("");
 
@@ -158,10 +159,7 @@ $("input.auto-po").change(function() {
 		alasql("UPDATE stock set autopo = " + $(this).val());
 	}
 	
-	if($("input#auto-po-on").is(":checked")) {
-		$("div#auto-po-on-div").show();
-		refreshVendorPrefGrids();
-	} else $("div#auto-po-on-div").hide();
+	toggleAutoPO();
 });
 
 $("input.cstock-set").change(function() {
@@ -175,6 +173,13 @@ $("input.cstock-set").change(function() {
 		refreshInventoryGrid();
 	}
 });
+
+function toggleAutoPO(){
+	if($("input#auto-po-on").is(":checked")) {
+		$("div#auto-po-on-div").show();
+		refreshVendorPrefItem();
+	} else $("div#auto-po-on-div").hide();
+}
 
 $("input.cstock-gnl-radio").change(function() {
 	var $current = $(this);

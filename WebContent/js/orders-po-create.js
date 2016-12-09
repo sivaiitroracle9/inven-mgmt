@@ -317,6 +317,8 @@ $("#po-create-btn").click(function(event){
 	}
 	createPO(po_items_inserted);
 	refreshPOGrids();
+	po_max_insert_id=0;
+	po_items_inserted = {};
 	$("#po-vendor-info-select").val(0);
 	$("#po-vendor-info div.panel-body").hide();
 	$("#po-warehouse-info-select").val(0);
@@ -387,4 +389,5 @@ function createPO(po_items_inserted) {
 		toastr.clear();
 		toastr.success('PO created successfully.');
 	}
+	po_items_inserted = {};
 }

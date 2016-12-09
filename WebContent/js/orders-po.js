@@ -1,3 +1,4 @@
+var od_dlg_po_item = [];
 var poOrderDetailsDlg = $("#po-order-details-dlg").dialog({
     autoOpen: false,
     width: 400,
@@ -11,10 +12,12 @@ var poOrderDetailsDlg = $("#po-order-details-dlg").dialog({
     },
 	open: function(event) {
 		$('.ui-dialog-buttonpane').find('button:contains("Ok")').removeClass("ui-button ui-corner-all ui-widget").addClass('btn btn-default');
+	 },
+	 close: function(event){
+		 od_dlg_po_item = [];
 	 }
 });
 
-var od_dlg_po_item = [];
 function openPODetails(id) {
 
 	

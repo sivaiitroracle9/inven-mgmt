@@ -328,6 +328,40 @@ function dailyStockData(d, m, y, from, to) {
 				}
 			});
 		}
+		
+		console.log("select first(stock.id) as stockid, first(stock.balance) as balance, sum(stockcorrection.diffQty) as diff, first(stockcorrection.date) as date, first(products.code) as pcode, " +
+				"first(products.category) as pcat, first(products.detail) as pdetail, first(products.make) as pmake " +
+				"from stock outer join products on products.id=stock.item outer join stockcorrection on stock.id=stockcorrection.stockid where stockcorrection.date like '" + date + "%' group by stock.id")
+		
+		rows = alasql("select first(stock.id) as stockid, first(stock.whouse) as warehouse, first(stock.balance) as balance, sum(stockcorrection.diffQty) as diff, first(stockcorrection.lastupdate) as date, first(products.code) as pcode, " +
+				"first(products.category) as pcat, first(products.detail) as pdetail, first(products.make) as pmake " +
+				"from stock outer join products on products.id=stock.item outer join stockcorrection on stock.id=stockcorrection.stockid where stockcorrection.lastupdate like '" + date + "%' group by stockid");
+		
+		if(rows) {
+			rows.forEach(function(r){
+				if(r.stockid in bound) {
+					bound[r.stockid].stcorrection = r.diff;
+					bound[r.stockid].ostock = bound[r.stockid].clstock + bound[r.stockid].obstock - bound[r.stockid].ibstock + bound[r.stockid].stcorrection;
+				} else {
+					if(r.stockid){
+						var d = {};
+						d.date = r.date;
+						d.stockid = r.stockid;
+						d.ibstock = 0;
+						d.obstock = 0;
+						d.stcorrection = getStockCorrectionByDate(d.stockid , d.date);
+						d.ostock = r.balance + d.obstock - d.ibstock + d.stcorrection;
+						d.clstock = r.balance;
+						d.warehouse = global_warehouse_map[r.warehouse];
+						d.pcode = r.pcode;
+						d.pcat = global_cat_map[r.pcat];
+						d.maker = global_maker_map[r.pmake];
+						d.pdetail = r.pdetail;
+						bound[r.stockid] = d;	
+					}
+				}
+			});
+		}
 		var val = Object.values(bound);
 		val.forEach(function(v){
 			data.push(v);
@@ -497,7 +531,6 @@ function outboundTransData(d, m, y, from, to) {
 	}
 	return data
 }
-
 function getStockCorrectionByDate(stockid, date) {
 	var rows = alasql("select sum(diffQty) as diff from stockcorrection where lastupdate like '" + date + "%' and stockid=" + Number(stockid));
 	if(rows && rows[0].diff!=undefined) return rows[0].diff;

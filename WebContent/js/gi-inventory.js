@@ -14,6 +14,8 @@ $("#goodsissue-orderid-update-btn").click(function(){
 	var date = (new Date()).toLocaleString();
 	if(Object.keys(gi_so_update_items).length > 0) {
 		var orderId = Object.values(gi_so_update_items)[0].soid;
+		var stockIDS = {};
+		
 		Object.values(gi_so_update_items).forEach(function(upitem){
 			console.log(upitem)
 			
@@ -47,7 +49,9 @@ $("#goodsissue-orderid-update-btn").click(function(){
     			var newbalance = (currstock[0].balance - Number(upitem.issueQty)) ;
     			alasql("UPDATE stock set balance=" + newbalance
     					+ " where item=" + currProduct[0].id + " and whouse=" + currOrders[0].warehouse);
+    			
     			setStockHistory(currstock[0].id, newbalance, date);
+    			stockIDS[Number(currstock[0].id)] = true;
     		}
     		
 		});
@@ -72,6 +76,9 @@ $("#goodsissue-orderid-update-btn").click(function(){
 		gi_so_update_items = {};
 		$("#goodsissue-orderid-update-btn").prop("disabled", true);
 		loadSOrderWithItems(orderId);
+		
+		
+		createAutoPO(true, Object.keys(stockIDS));
 	}
 });
 
@@ -229,4 +236,71 @@ function loadSOrderWithItems(soid) {
 
 	$("#gi-so-items").jsGrid("reset");
 	$("#gi-so-items").jsGrid("render");
+}
+
+
+function createAutoPO(multiple, items){
+	var po_items_inserted = {};
+	var index = 0;
+	if(items.length > 1) {
+		var rows = alasql("select stock.id as pstockid, stock.venpref as venpref, stock.cstock as cstock, stock.cstock_type as cstock_type, products.id as prodid, stock.whouse as whouse, stock.balance as qty, products.code as code, " +
+				"products.category as category, products.detail as detail, products.make as make, products.price as price, products.unit as unit" +
+				" from products JOIN stock ON products.id=stock.item where stock.id IN (" + items.join(",") +")");
+		if(rows!=undefined && rows.length != 0) {
+			var items_on_vendor = {};
+			rows.forEach(function(item){
+				if(!items_on_vendor[item["venpref"]]) items_on_vendor[item["venpref"]] = [];
+				
+				var poitem = {};
+				poitem["status"] = 1;
+				poitem["pid"] = item["prodid"];
+				poitem["pvendor"] = item["venpref"];
+				poitem["pwarehouse"] = item["whouse"];
+		    	poitem["pcat"] = item["category"];
+		    	poitem["pcode"] = item["code"];
+		    	poitem["pmake"] = item["make"];
+		    	poitem["pdetail"] = item["detail"];
+		    	poitem.inWarehouse = item["qty"];
+		    	poitem.reorderPoint = item["cstock"];
+		    	poitem.reservedForIssue = getReservedQty(item.whouse, item.prodid);
+		    	poitem.inStock = poitem.inWarehouse - poitem.reservedForIssue;
+		    	poitem["pquant"] = poitem["inStock"] - poitem["reorderPoint"] < 0 ? Math.abs(poitem["inStock"] - poitem["reorderPoint"]): 0;
+		    	
+		    	items_on_vendor[item["venpref"]].push(poitem);
+			});
+			
+			if(Object.keys(items_on_vendor) > 0) {
+				Object.keys(items_on_vendor).forEach(function(key){
+					items_on_vendor[key].forEach(function(item){
+						po_items_inserted[index++] = item;
+					});
+				})
+			}
+			
+		}
+	} else {
+		var rows = alasql("select stock.id as pstockid, stock.venpref as venpref, stock.cstock as cstock, stock.cstock_type as cstock_type, products.id as prodid, stock.whouse as whouse, stock.balance as qty, products.code as code, " +
+				"products.category as category, products.detail as detail, products.make as make, products.price as price, products.unit as unit" +
+				" from products JOIN stock ON products.id=stock.item where stock.id = " + Number(items[0]));
+		if(rows!=undefined && rows.length != 0) {
+			var item = rows[0];
+			var poitem = {};
+			poitem["status"] = 1;
+			poitem["pid"] = item["prodid"];
+			poitem["pvendor"] = item["venpref"];
+			poitem["pwarehouse"] = item["whouse"];
+	    	poitem["pcat"] = item["category"];
+	    	poitem["pcode"] = item["code"];
+	    	poitem["pmake"] = item["make"];
+	    	poitem["pdetail"] = item["detail"];
+	    	poitem.inWarehouse = item["qty"];
+	    	poitem.reorderPoint = item["cstock"];
+	    	poitem.reservedForIssue = getReservedQty(item.whouse, item.prodid);
+	    	poitem.inStock = poitem.inWarehouse - poitem.reservedForIssue;
+	    	poitem["pquant"] = poitem["inStock"] - poitem["reorderPoint"] < 0 ? Math.abs(poitem["inStock"] - poitem["reorderPoint"]): 0;
+	    	
+	    	po_items_inserted[index++] = poitem;
+		}
+	}
+	createPO(po_items_inserted, true);
 }
