@@ -24,9 +24,7 @@ $('a[data-toggle="tab"]').on(
 		});
 
 function refreshVendorPrefItem(){
-	$("#venpref-4").jsGrid("reset");
-	$("#venpref-4").jsGrid("render");
-	$("#venpref-4").jsGrid("loadData");
+	$("#venpref-4").jsGrid("search", $("#venpref-4").jsGrid("getFilter"));
 }
 
 function refreshVendorPrefCat(){
@@ -42,9 +40,8 @@ function refreshVendorPrefWhouse(){
 }
 
 function refreshReorderPoint(){
+	$("#cstock-spc-items-grid").jsGrid("search", $("#cstock-spc-items-grid").jsGrid("getFilter"));
 	$("#cstock-spc-items-grid").jsGrid("reset");
-	$("#cstock-spc-items-grid").jsGrid("render");
-	$("#cstock-spc-items-grid").jsGrid("loadData");
 }
 
 function refreshInventoryGrid(){

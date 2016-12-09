@@ -18,8 +18,10 @@ if(!user) {
 	$a.click();*/
 	$(location).attr('href', 'login.html')
 } else {
-	var rows = alasql("select name from users where id="+user);
+	var rows = alasql("select users.name, whouse.name as warehouse, users.designation  from users outer join whouse on users.whouse=whouse.id where users.id="+user);
 	$("#username").text(rows[0].name);
+	$("#defaultWhouse").text(rows[0].warehouse);
+	$("#defaultdesignation").text(rows[0].designation);
 	$("nav.sidebar ul.menu").find("li a").each(function(){
 		if(user) {
 			$(this).attr("href", $(this).attr("href") + "?user="+user);

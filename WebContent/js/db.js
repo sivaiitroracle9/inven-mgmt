@@ -151,12 +151,14 @@ DB.load = function() {
 	alasql('CREATE TABLE procrequest(id INT IDENTITY, soid STRING, soitem STRING, qty STRING, lastupdate STRING);');
 	
 	alasql('DROP TABLE IF EXISTS users;');
-	alasql('CREATE TABLE users(id INT IDENTITY, name STRING);');
-	alasql("INSERT INTO users VALUES(0,'admin');");
-	alasql("INSERT INTO users VALUES(1,'manager');");
-	alasql("INSERT INTO users VALUES(2,'shelf_supervisor');");
-	alasql("INSERT INTO users VALUES(3,'goodsreceipt_supervisor');");
-	
+	alasql('CREATE TABLE users(id INT IDENTITY, uname STRING, email STRING, name STRING, department STRING, whouse INT, dob STRING, designation STRING, status STRING);');
+	var pusers = alasql.promise('SELECT MATRIX * FROM CSV("data/USER-USER.csv", {headers: true})').then(
+			function(users) {
+				for (var i = 0; i < users.length; i++) {
+					var user = users[i];
+					alasql('INSERT INTO users VALUES(?,?,?,?,?,?,?,?,?);', user);
+				}
+			});
 	// Reload page
 	Promise.all([ pkind, pitem, pwhouse, pstock, ptrans, pvendor, pproduct, pmaker, pstatus, poutlet ]).then(function() {
 		window.location.reload(true);
