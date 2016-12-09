@@ -6,10 +6,11 @@ $("input.auto-po").each(function(){
 	
 	if($(this).val() == value) $(this).prop('checked', true);
 });
+$("#grp-reorder-point-input").val("");
 
 var settings_inventory_items_stock = [];
-
-$("#cstock-spc-items").jsGrid({
+var settings_inventory_items_stock_selected = {};
+$("#cstock-spc-items-grid").jsGrid({
 	width:"100%",
 	filtering: true,
 	editing: true,
@@ -21,25 +22,23 @@ $("#cstock-spc-items").jsGrid({
     updateOnResize: true,
     
     onItemUpdated: function(args){
-    	
-    	alasql("UPDATE stock set cstock=" + args.item.cstock + ", cstock_type=0 where id=" + args.item.stockid);
+    	alasql("UPDATE stock set cstock=" + args.item.cstock + " where id=" + args.item.stockid);
     	toastr.clear();
-						toastr.success("Critical stock for { "
-								+ args.item.whouse + ","
-								+ args.item.pcat + ","
-								+ args.item.pcode + " } set to " + args.item.threshold);
+    	toastr.success("for " + args.item.pcode,"Reorderpoint update, Sucess");
     },
     
     controller: {
     	loadData: function(filter) {
     		
-    		var products = alasql("select stock.id as stockid, products.id as id, stock.whouse as whouse, stock.balance as qty, products.code as code, " +
+    		var products = alasql("select stock.id as stockid, products.id as pid, stock.whouse as whouse, stock.balance as qty, products.code as code, " +
     				"products.category as category, products.detail as detail, products.make as make, products.price as price, products.unit as unit," +
     				" stock.cstock as cstock from products JOIN stock ON products.id=stock.item");
     		
     		var settings_inventory_items_stock = [];
     		products.forEach(function(prd){
     			var iitem = {};
+    			iitem.pckb = true;
+    			iitem.pid = prd.pid;
     			iitem.stockid = prd.stockid;
     			iitem.whouse = prd.whouse;
     			iitem.pcat = prd.category;
@@ -61,17 +60,70 @@ $("#cstock-spc-items").jsGrid({
     					&& (!filter["inStock"] || filter["inStock"]==="" || filter["inStock"] === iitem["inStock"])
     					&& (!filter["pprice"] || filter["pprice"] === iitem["pprice"]));
     		});
+    		
+    		settings_inventory_items_stock_selected = {};
+    		filtered.forEach(function(f){
+    			settings_inventory_items_stock_selected[f.stockid] = f;
+    		});
+    		toggleGroupRP();
+    		
     		return filtered;
     	},
     	
     },
     fields: [
+		 { name: "pckb", title: "", type: "checkbox", align: "center", filtering:false, sorting:false, width:20, css:"pckbheader",
+			 headerTemplate: function(value, item) {
+				 return $("<input id='pckb-header' checked>").attr("type", "checkbox").change(function(){
+					 if($(this).is(":checked")){
+						 $("input.pckb-item").each(function(){
+							$(this).prop('checked', true); 
+						 });
+						 $("#cstock-spc-items-grid").data("JSGrid").data.forEach(function(d){
+							 settings_inventory_items_stock_selected[d.stockid] = d;
+				    	 });
+					 } else {
+						 $("input.pckb-item").each(function(){
+ 							$(this).prop('checked', false); 
+ 						 });
+						 settings_inventory_items_stock_selected = {};
+					 }
+				 });
+			 },
+		 
+    		 itemTemplate: function(value, item) {
+                 return $("<input class='pckb-item' id='pckb-item-" + item.stockid + "' checked>").attr("type", "checkbox").change(function(){
+                	 var id = Number($(this).attr("id").slice(10));
+                	 
+                	 if($(this).is(":checked")){
+                		 settings_inventory_items_stock_selected[item.stockid] = item;
+                	 } else {
+                		 delete settings_inventory_items_stock_selected[item.stockid];
+                	 }
+                	 
+                	 if($("#cstock-spc-items-grid").data("JSGrid").data.length === Object.keys(settings_inventory_items_stock_selected).length) 
+                		 $("input#pckb-header").prop('checked', true);
+                	 else 
+                		 $("input#pckb-header").prop('checked', false);
+                	 
+                	 toggleGroupRP();
+                 });
+             },
+    	 },
+         { name: "pimg", title: "IMG", type: "text", editing:false, width:70, sorting:false, filtering: false, css:"pimgheader",
+    		 itemTemplate: function(value, item) {
+    			 if(item != undefined)
+    				 return "<img style='width:40px;height:40px' src='img/" + item.pid + ".jpg'>";
+             },
+             editTemplate: function(value, item) {
+    			 if(item != undefined)
+    				 return "<img style='width:40px;height:40px' src='img/" + item.pid + ".jpg'>";
+             },
+         },
     	 { name: "whouse", title: "WAREHOUSE", type: "select", items:getWarehousesLOV(), valueField: "id", textField: "text",editing:false},
          { name: "pcat", title: "CATEGORY", type: "select", items:getCategoriesLOV(), valueField: "id", textField: "text",editing:false},
          { name: "pcode", title: "PROD CODE", type: "text", editing:false},
-         { name: "pmake", title: "MAKER", type: "select", items:getMakersLOV(), valueField: "id", textField: "text",editing:false},
          { name: "pdetail", title: "DETAIL", type: "text",editing:false},
-         { name: "pprice", title: "PRICE ", type: "number", filtering: false,editing:false},   
          { name: "inStock", title: "In Stock QTY", type: "number",editing:false},
          { name: "cstock", title: "REORDER POINT", type: "number"},
          { type: "control", deleteButton: false,}
@@ -98,58 +150,6 @@ function loadStock(){
 	return inventory_items_stock;
 }
 
-function getMakersLOV(){
-	var query = "select * from maker";
-	var data = [];
-	var d = {};
-	d["id"] = 0;
-	d["text"] = "";
-	data.push(d);
-	alasql(query).forEach(function(maker){
-		d = {};
-		d["id"] = maker.id;
-		d["text"] = maker.text;
-		data.push(d);
-	});
-	return data;
-}
-
-function getCategoriesLOV(){
-	var query = "select * from kind";
-	var data = [];
-	var d = {};
-	d["id"] = 0;
-	d["text"] = "";
-	data.push(d);
-	alasql(query).forEach(function(maker){
-		d = {};
-		d["id"] = maker.id;
-		d["text"] = maker.text;
-		data.push(d);
-	});
-	return data;
-}
-
-function getWarehousesLOV() {
-	var rows = alasql("SELECT id, name FROM whouse order by name");
-
-	var data = [];
-	var d = {};
-	d["id"] = 0;
-	d["text"] = "";
-	data.push(d);
-	if (rows.length != 0) {
-		rows.forEach(function(r) {
-			var d = {};
-			d["id"] = r.id;
-			d["text"] = r.name;
-			data.push(d);
-		});
-	}
-
-	return data;
-}
-
 $("input.auto-po").change(function() {
 	if ($(this).is(":checked")) {
 		$(this).siblings("input").each(function() {
@@ -171,7 +171,8 @@ $("input.cstock-set").change(function() {
 			$("#"+$(this).attr("id")+"-items").hide();
 		});
 		$("#"+$(this).attr("id")+"-items").show();
-		$("#cstock-spc-items").jsGrid("reset");
+		refreshReorderPoint();
+		refreshInventoryGrid();
 	}
 });
 
@@ -193,6 +194,31 @@ $("button#btn-cstock-gnl").on('click', function(){
 			alasql("UPDATE stock set cstock="+Number(setVal) + ", cstock_type="+Number($(this).val()));
 		}
 	});
-	$("#cstock-spc-items").jsGrid("render");
-	$("#inventory-items").jsGrid("render");
+	refreshReorderPoint();
+	refreshInventoryGrid();
+});
+
+function toggleGroupRP(){
+	var input = $("#grp-reorder-point-input").val();
+	var selection = $("#grp-reorder-point-select").val();
+	if(Object.keys(settings_inventory_items_stock_selected).length!=0 && input!="" ) 
+		$("#btn-grp-reorder-point").removeClass("disabled");
+	else $("#btn-grp-reorder-point").addClass("disabled");
+}
+
+$("#grp-reorder-point-select, #grp-reorder-point-input").change(function(){
+	toggleGroupRP();
+});
+
+$("#btn-grp-reorder-point").click(function(evt){
+	var input = $("#grp-reorder-point-input").val();
+	var selection = $("#grp-reorder-point-select").val();
+	if(Object.keys(settings_inventory_items_stock_selected).length!=0 && input!="" )  {
+		var stockIDs = Object.keys(settings_inventory_items_stock_selected);
+		alasql("UPDATE stock set cstock=" + Number(input) + " where id IN (" + stockIDs.join(",") + ");");
+    	toastr.clear();
+    	toastr.success("for selected items","Reorderpoint update, Sucess");
+	}
+	refreshInventoryGrid();
+	refreshReorderPoint();
 });

@@ -32,7 +32,7 @@ $( '.dropdown-menu a' ).on( 'click', function( event ) {
 
 	   $("#invencorrect-items").jsGrid("search", filter);
 	   restoreFilter(filter);
-	   refreshInventoryGrid();
+	   refreshInvenCorrectGrids();
 	   return false;
 });
 
@@ -97,13 +97,6 @@ function updateStockCorrection(item){
 		}
 	}
 	refreshInvenCorrectGrids();
-}
-
-function refreshInventoryGrid(){
-	$("#invencorrect-items").jsGrid("render");
-	loadFullAdjustmentData();
-	$("#invencorrect-qty").val("");
-	$("#invencorrect-reason").val("");
 }
 
 $("#invencorrect-items").jsGrid({

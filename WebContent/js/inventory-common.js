@@ -1,17 +1,51 @@
-$('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-	  var target = $(e.target).attr("href") // activated tab
-	  if("#tabcontent-inventory" == target) {
-		  refreshInventoryGrid();
-	  } else if("#tabcontent-goodsissue" == target) {
-		  refreshSOGrids();
-	  } else if("#tabcontent-goodsreceive" == target) {
-		  refreshPOGrids();
-	  } else if("#tabcontent-invencorrection" == target) {
-		  refreshInvenCorrectGrids();
-	  } else if("#tabcontent-settings" == target) {
-		 
-	  }
-});
+$('a[data-toggle="tab"]').on(
+		'shown.bs.tab',
+		function(e) {
+			var target = $(e.target).attr("href") // activated tab
+			if ("#tabcontent-inventory" == target) {
+				refreshInventoryGrid();
+			} else if ("#tabcontent-goodsissue" == target) {
+				refreshSOGrids();
+			} else if ("#tabcontent-goodsreceive" == target) {
+				refreshPOGrids();
+			} else if ("#tabcontent-invencorrection" == target) {
+				refreshInvenCorrectGrids();
+			} else if ("#tabcontent-settings" == target) {
+				refreshReorderPoint();
+			} else if (target == "#tabcontent-settings-vendorpref-item"
+					|| target == "#tabcontent-settings-vendorpref")
+				refreshVendorPrefItem();
+			else if (target == "#tabcontent-settings-vendorpref-cat")
+				refreshVendorPrefCat();
+			else if (target == "#tabcontent-settings-vendorpref-whouse")
+				refreshVendorPrefWhouse();
+			else if (target == "#tabcontent-settings-reorderpoint")
+				refreshReorderPoint();
+		});
+
+function refreshVendorPrefItem(){
+	$("#venpref-4").jsGrid("reset");
+	$("#venpref-4").jsGrid("render");
+	$("#venpref-4").jsGrid("loadData");
+}
+
+function refreshVendorPrefCat(){
+	$("#venpref-3").jsGrid("reset");
+	$("#venpref-3").jsGrid("render");
+	$("#venpref-3").jsGrid("loadData");
+}
+
+function refreshVendorPrefWhouse(){
+	$("#venpref-2").jsGrid("reset");
+	$("#venpref-2").jsGrid("render");
+	$("#venpref-2").jsGrid("loadData");
+}
+
+function refreshReorderPoint(){
+	$("#cstock-spc-items-grid").jsGrid("reset");
+	$("#cstock-spc-items-grid").jsGrid("render");
+	$("#cstock-spc-items-grid").jsGrid("loadData");
+}
 
 function refreshInventoryGrid(){
 	$("#inventory-items").jsGrid("reset");
@@ -198,6 +232,17 @@ function getVendorsLOV() {
 		});
 	}
 
+	return data;
+}
+
+function getVendorPrefSpecificLOV() {
+	var data = [];
+	data.push({id:0,text:""});
+	data.push({id:1,text:"HIGH RATING"});
+	data.push({id:2,text:"LESS ITEM PRICE"});
+	data.push({id:3,text:"MAX. PROCURED ITEMS"});
+	data.push({id:4,text:"MAX PROCURED ORDERS"});
+	data.push({id:5,text:"MAX PROCURED $ VALUE"});
 	return data;
 }
 

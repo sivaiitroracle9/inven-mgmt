@@ -15,7 +15,9 @@ $("select#st-chart-cat").change(function(){
 
 $("select#global-warehouse").change(function(){
 	var warehouse = $("#global-warehouse").val();
-	setInventoryValue(warehouse);
+	var ivalue = setInventoryValue(warehouse);
+	var date = (new Date()).toLocaleDateString();
+	generateInventoryValueChart(ivalue, date);
 });
 
 function init(){
@@ -38,7 +40,9 @@ function init(){
 	});
 	
 	var warehouse = $("#global-warehouse").val();
-	setInventoryValue(warehouse);
+	var ivalue = setInventoryValue(warehouse);
+	var date = (new Date()).toLocaleDateString();
+	generateInventoryValueChart(ivalue, date);
 }
 
 function setInventoryValue(whouse){
