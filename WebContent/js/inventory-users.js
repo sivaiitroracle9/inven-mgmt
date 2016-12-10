@@ -1,12 +1,22 @@
-$("body").hide();
+$("#li-overview").hide().removeClass("active");
+$("#tabcontent-inventory").removeClass("active");
 
-resetUsersPermissions();
+$("#li-goodsissue").hide().removeClass("active");
+$("#tabcontent-goodsissue").removeClass("active");
+
+$("#li-goodsreceive").hide().removeClass("active");
+$("#tabcontent-goodsreceive").removeClass("active");
+
+$("#li-invencorrection").hide().removeClass("active");
+$("#tabcontent-invencorrection").removeClass("active");
+
+$("#li-settings").hide().removeClass("active");
+$("#tabcontent-settings").removeClass("active");
+
 var ifirst = false;
 if(getPermission("inventory-tab")) {
-	$("#li-overview").show().addClass("active");
-	$("#tabcontent-inventory").show().addClass("active");
+	$("#li-overview").show();
 	
-	$("#li-overview").show();	
 	if(!ifirst) {
 		$("#li-overview").addClass("active");
 		$("#tabcontent-inventory").addClass("active");
@@ -53,18 +63,3 @@ if(getPermission("inventory-settings")) {
 		ifirst = true;
 	}
 }
-
-function resetUsersPermissions(){
-	$("#li-overview").hide().removeClass("active");
-	$("#tabcontent-inventory").removeClass("active");
-	$("#li-goodsissue").hide().removeClass("active");
-	$("#tabcontent-goodsissue").removeClass("active");
-	$("#li-goodsreceive").hide().removeClass("active");
-	$("#tabcontent-goodsreceive").removeClass("active");
-	$("#li-invencorrection").hide().removeClass("active");
-	$("#tabcontent-invencorrection").removeClass("active");
-	$("#li-settings").hide().removeClass("active");
-	$("#tabcontent-settings").removeClass("active");
-}
-
-$("body").show();

@@ -23,14 +23,17 @@ var global_permissions_map = {
 			"sb-inventory":true,
 			"inventory-tab":true,
 			"inventory-stc":true,
+			"sb-reports":true,
 		},
 		2: {
 			"sb-inventory":true,
 			"inventory-gr":true,
+			"sb-reports":true,
 		},
 		3: {
 			"sb-inventory":true,
 			"inventory-gi":true,
+			"sb-reports":true,
 		},
 		4: {
 			"sb-inventory":true,
