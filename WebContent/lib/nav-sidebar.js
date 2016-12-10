@@ -17,31 +17,45 @@ var global_permissions_map = {
 			"orders-revisions":true,
 			"orders-st-tab":true,
 			"sb-reports":true,
+			"reports-0":true,
+			"reports-1":true,
+			"reports-2":true,
+			"reports-3":true,
+			"reports-4":true,
+			"reports-5":true,
+			"reports-6":true,
 			"sb-users":true,
 		},
-		1: {
+		1: {"sb-home":true,
 			"sb-inventory":true,
 			"inventory-tab":true,
 			"inventory-stc":true,
 			"sb-reports":true,
+			"reports-0":true,
+			"reports-1":true,
+			"reports-4":true,
 		},
-		2: {
+		2: {"sb-home":true,
 			"sb-inventory":true,
 			"inventory-gr":true,
 			"sb-reports":true,
+			"reports-2":true,
+			"reports-4":true,
 		},
-		3: {
+		3: {"sb-home":true,
 			"sb-inventory":true,
 			"inventory-gi":true,
 			"sb-reports":true,
+			"reports-3":true,
+			"reports-6":true,
 		},
-		4: {
+		4: {"sb-home":true,
 			"sb-inventory":true,
 			"inventory-tab":true,
 			"sb-orders":true,
 			"orders-so-tab":true,
 		},
-		5: {
+		5: {"sb-home":true,
 			"sb-inventory":true,
 			"inventory-tab":true,
 			"sb-products":true,
@@ -170,6 +184,5 @@ function sidebarAccess(){
 }
 
 $(window).load(function() {
-	  // When the page has loaded
-	  $("#show-body").fadeIn(1000);
-	});
+	$("#show-body").fadeIn(1000);
+});
