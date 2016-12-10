@@ -15,6 +15,7 @@ $("#goodsissue-orderid-update-btn").click(function(){
 	if(Object.keys(gi_so_update_items).length > 0) {
 		var orderId = Object.values(gi_so_update_items)[0].soid;
 		var stockIDS = {};
+		var autopo = 0;
 		
 		Object.values(gi_so_update_items).forEach(function(upitem){
 			console.log(upitem)
@@ -52,6 +53,7 @@ $("#goodsissue-orderid-update-btn").click(function(){
     			
     			setStockHistory(currstock[0].id, newbalance, date);
     			stockIDS[Number(currstock[0].id)] = true;
+    			autopo = currstock[0].autopo;
     		}
     		
 		});
@@ -77,8 +79,10 @@ $("#goodsissue-orderid-update-btn").click(function(){
 		$("#goodsissue-orderid-update-btn").prop("disabled", true);
 		loadSOrderWithItems(orderId);
 		
-		
-		createAutoPO(true, Object.keys(stockIDS));
+		// create auto Purchase Order.
+		if(autopo == 1) {
+			createAutoPO(true, Object.keys(stockIDS));	
+		}
 	}
 });
 

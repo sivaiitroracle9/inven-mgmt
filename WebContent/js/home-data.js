@@ -22,6 +22,7 @@ function generateInventoryData(base, date){
 	}
 	return data;
 }
+
 function generateInventoryValueChart(base, date){
 	$("#morris-inventory-value-chart").empty();
 	var rdata = generateInventoryData(base, date);
@@ -44,6 +45,51 @@ function generateInventoryValueChart(base, date){
 	    };
     // Line Chart
     var m = Morris.Line(x); 
+}
+
+function generateStockQtyData(base, date){
+	
+	var maxbase = base*(1.1);
+	var minbase = base*(0.8);
+	var data = [];
+	var d={};
+	var date = new Date(date);
+	var newdate = date;
+	d.d = morrisDate(date);
+	d.units = Math.floor(base);
+	data.push(d);
+	for(var i=1; i<90; i++) {
+		d={};
+		newdate.setDate(newdate.getDate() - 1);
+		d.date = morrisDate(newdate);
+		d.units = Math.floor((Math.random()*(maxbase-minbase)) + minbase);
+		data.push(d);
+	}
+	return data;
+}
+
+function generateStockQtyBarChart(warehouse, ctype, pcat, pid, date){
+	$("#st-chart-qty").empty();
+	var rows;
+	if(warehouse == 0) {
+		rows = alasql("select sum(balance) as balance from stock");
+	} else {
+		rows = alasql("select sum(balance) as balance from stock where whouse=" + Number(warehouse));
+	}
+
+	var rdata = generateStockQtyData(rows[0].balance, date);
+	var x = {
+	        element: 'st-chart-qty',
+	        data: rdata,
+	        xkey: 'date',
+	        ykeys: ['units'],
+	        labels: ['Qty : '],
+	        barRatio: 0.4,
+	        xLabelAngle: 35,
+	        hideHover: 'auto',
+	        resize: true
+	    };
+	Morris.Bar(x);
 }
 
 function morrisDate(date) {

@@ -116,8 +116,8 @@
 								<div class="row" style="float: right">
 									<div class="col-lg-12">
 										<div class="btn-group pull-right">
-											<a class="btn btn-default"><span
-												class="glyphicon glyphicon-share" style="margin-right: 4px"></span>Share</a>
+<!-- 											<a class="btn btn-default"><span
+												class="glyphicon glyphicon-share" style="margin-right: 4px"></span>Share</a> -->
 											<a class="btn btn-default"><span
 												class="glyphicon glyphicon-print" style="margin-right: 4px"></span>Print</a>
 											<a class="btn btn-default" onclick=open_dlg_overview_email()><span
@@ -132,7 +132,7 @@
 													class="caret"></span>
 											</button>
 											<ul class="dropdown-menu" style="background: #171048">
-												<li style="width: 96px"><a href="#"><span
+												<li style="width: 96px"><a href="#" onclick="downloadInventory()"><span
 														class="fa fa-file-excel-o"> </span> CSV</a></li>
 												<li style="width: 96px"><a href="#"><span
 														class="fa fa-file-pdf-o"> </span> PDF</a></li>
@@ -178,7 +178,7 @@
 										<button id='inven-grp-po' class="btn btn-primary"
 											onclick=openInventoryPO(true)>
 											<span class="glyphicon glyphicon-plus"
-												style="margin-right: 4px"></span>Create PO
+												style="margin-right: 4px"></span>Restock
 										</button>
 									</div>
 								</div>
@@ -329,6 +329,38 @@
 					<div class="panel-heading"
 						style="background-color: whitesmoke; color: green">
 						<label>STOCK ADJUSTMENT/CORRECTION</label>
+						<input class="stock-crrct" id="inven-crct-sadjst" type="radio" checked="checked"><br/>
+						<label>STOCK SHELF CHANGE</label>
+						<input class="stock-crrct" id="inven-crct-shelfchange" type="radio">
+														<div class="row" style="float: right">
+									<div class="col-lg-12">
+										<div class="btn-group pull-right">
+<!-- 											<a class="btn btn-default"><span
+												class="glyphicon glyphicon-share" style="margin-right: 4px"></span>Share</a> -->
+											<a class="btn btn-default"><span
+												class="glyphicon glyphicon-print" style="margin-right: 4px"></span>Print</a>
+											<a class="btn btn-default" onclick=open_dlg_overview_email()><span
+												class="glyphicon glyphicon-envelope"
+												style="margin-right: 4px"></span>Email</a>
+										</div>
+										<div class="btn-group pull-right">
+											<button type="button" class="btn btn-default dropdown-toggle"
+												data-toggle="dropdown" aria-haspopup="true"
+												aria-expanded="false">
+												<span class="fa fa-download"> </span> Export <span
+													class="caret"></span>
+											</button>
+											<ul class="dropdown-menu" style="background: #171048">
+												<li style="width: 96px"><a href="#"><span
+														class="fa fa-file-excel-o"> </span> CSV</a></li>
+												<li style="width: 96px"><a href="#"><span
+														class="fa fa-file-pdf-o"> </span> PDF</a></li>
+												<li style="width: 96px"><a href="#"><span
+														class="fa fa-file-code-o"> </span> JSON</a></li>
+											</ul>
+										</div>
+									</div>
+								</div>
 					</div>
 					<div class="panel-body" style="background-color: whitesmoke;">
 						<div class="panel panel-success"
@@ -398,47 +430,6 @@
 						<div class="panel panel-primary">
 							<div class="panel-body">
 								<div>
-<!-- 									<div style="margin: 3px">
-										<label>SET REORDER POINT values: </label> <input type="radio"
-											id="cstock-gnl" class="cstock-set" checked><label
-											for="cstock-gnl">GENERAL </label> <input type="radio"
-											id="cstock-spc" class="cstock-set"><label
-											for="cstock-spc">SPECIFIC </label>
-										<hr />
-									</div>
-
-									<div id="cstock-gnl-items" class="panel panel-info"
-										style="width: 30%">
-										<div class="panel-body">
-											<ul style="list-style: none">
-												<li><input type="radio" class="cstock-gnl-radio"
-													id="year" value=3><input type="text"
-													style="margin: 5px; width: 80px" class="cstock-gnl-text"
-													id="year" value=0 disabled><span> year (s)
-														sales</span></li>
-												<li><input type="radio" class="cstock-gnl-radio"
-													id="month" value=2><input type="text"
-													style="margin: 5px; width: 80px" class="cstock-gnl-text"
-													id="month" value=0 disabled><span> month (s)
-														sales</span></li>
-												<li><input type="radio" class="cstock-gnl-radio"
-													id="day" value=1><input type="text"
-													style="margin: 5px; width: 80px" class="cstock-gnl-text"
-													id="day" value=0 disabled><span> day (s)
-														sales</span></li>
-												<li><input type="radio" class="cstock-gnl-radio"
-													id="value" checked value=0><input type="text"
-													style="margin: 5px; width: 80px" class="cstock-gnl-text"
-													id="value" value=0><span> value </span></li>
-											</ul>
-										</div>
-										<div class="panel-footer" style="height: 50px">
-											<button type="button" id="btn-cstock-gnl"
-												class="btn btn-success pull-right">
-												<span class="glyphicon glyphicon-ok"> Save</span>
-											</button>
-										</div>
-									</div> -->
 									<div id="cstock-spc-items">
 										<div style="float: right">
 											<div>
@@ -475,7 +466,7 @@
 									for="auto-po-off">MANUAL </label>
 								<hr />
 							</div>
-							<div id="auto-po-on-div" class="panel-body" style="display: none">
+							<div id="auto-po-on-div" class="panel-body">
 								<div class="panel panel-default">
 									<div class="panel-heading" style="height: 150px">
 										<div style="float: right">
@@ -496,8 +487,7 @@
 											</div>
 										</div>
 										<label style="margin-top: 40px">SET <span
-											style='color: blue'>PREFERED VENDOR </span> for AUTOMATIC
-											Purchase Order Generation:
+											style='color: blue'>PREFERED VENDOR </span>
 										</label>
 									</div>
 									<div class="panel-body">
@@ -556,6 +546,7 @@
 	<script src="js/venpref-item.js"></script>
 	<script src="js/venpref-cat.js"></script>
 	<script src="js/venpref-whouse.js"></script>
+	<script src="js/inventory-download.js"></script>
 	<script type="text/javascript">
 		
 		var f = new Date();

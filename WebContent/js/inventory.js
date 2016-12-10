@@ -48,7 +48,7 @@ $("#inventory-items").jsGrid({
     controller: {
     	loadData: function(filter) {
     		console.log(filter)
-    		var products = alasql("select stock.id as pstockid, products.id as prodid, stock.cstock as cstock, stock.cstock_type as cstock_type, products.id as id, stock.whouse as whouse, stock.balance as qty, products.code as code, " +
+    		var products = alasql("select stock.id as pstockid, stock.location as location, products.id as prodid, stock.cstock as cstock, stock.cstock_type as cstock_type, products.id as id, stock.whouse as whouse, stock.balance as qty, products.code as code, " +
     				"products.category as category, products.detail as detail, products.make as make, stock.price as price, products.unit as unit" +
     				" from products JOIN stock ON products.id=stock.item");
 
@@ -62,7 +62,7 @@ $("#inventory-items").jsGrid({
     			iitem.whouse = prd.whouse;
     			iitem.pcat = prd.category;
     			iitem.pcode = prd.code;
-    			iitem.plocId = "SL-00" + iitem.whouse + "-" + iitem.pcode;
+    			iitem.plocId = prd.location;
     			iitem.pmake = prd.make;
     			iitem.pdetail = prd.detail;
     			iitem.pprice = Number((prd.price).toFixed(2));
@@ -157,7 +157,7 @@ $("#inventory-items").jsGrid({
     fields: [
     		 { name: "pckb", title: "", type: "checkbox", align: "center", filtering:false, sorting:false, width:20, css:"pckbheader",
     			 headerTemplate: function(value, item) {
-    				 return $("<input id='pckb-header'>").attr("type", "checkbox").change(function(){
+    				 return $("<input id='pckb-header' checked>").attr("type", "checkbox").change(function(){
     					 if($(this).is(":checked")){
     						 $("input.pckb-item").each(function(){
     							$(this).prop('checked', true); 
@@ -188,7 +188,7 @@ $("#inventory-items").jsGrid({
 	                	 
 	                	 console.log(inventory_items_selected);
 	                	 toggleGroupPO();
-	                 });
+	                 }).prop("checked", value);
 	             },
 	    	 },
 	         { name: "pimg", title: "", type: "text", editing:false, width:70, sorting:false, filtering: false, css:"pimgheader", align:"center",
@@ -524,7 +524,7 @@ function toggleGroupPO(){
 
 function getReservedQty(whouse, pid) {
 	var rows = alasql("select sorders.soid, sorders.warehouse, soitems.pid, soitems.qty - soitems.issued as balance from sorders join soitems on sorders.soid=soitems.soid " +
-			"where warehouse=" + Number(whouse));
+			"where warehouse=" + Number(whouse) + " and sorders.status!=11");
 	var balance = 0;
 	if(rows && rows.length!=0) {
 		rows.forEach(function(r){
@@ -538,7 +538,7 @@ function getReservedQty(whouse, pid) {
 
 function getLeadQty(whouse, pid) {
 	var rows = alasql("select porders.poid, porders.warehouse, poitems.pid, poitems.qty - poitems.received as balance from porders join poitems on porders.poid=poitems.poid " +
-			"where warehouse=" + Number(whouse));
+			"where warehouse=" + Number(whouse) + " and porders.status!=3");
 	var balance = 0;
 	if(rows && rows.length!=0) {
 		rows.forEach(function(r){

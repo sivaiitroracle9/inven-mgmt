@@ -142,7 +142,9 @@ $("#po-create-grid").jsGrid({
     },
     
     controller: {
-    	loadData: function(){
+    	loadData: function(filter){
+    		console.log(this)
+    		console.log(filter)
     		return [];
     	}
     },
@@ -286,7 +288,7 @@ $("#po-create-grid").jsGrid({
 				return this.insertControl.val();
 		    },
 		},	
-		{name: "pquant", title: "QTY", type: "text",
+		{name: "pquant", title: "QTY", type: "number",
 			validate:{
 				validator: function(value, item) {
 					if(Number(value) === parseInt(value, 10) && Number(value) > 0) return true;
@@ -298,7 +300,11 @@ $("#po-create-grid").jsGrid({
 				param: [1]
 			},
 			itemTemplate: function(value, item) {
-				return parseInt(value, 10);
+				var str = "";
+				if(parseInt(value, 10) <= 0) {
+					str = "<span class='label label-danger pull-left'>Invalid</span><span class='pull-right'>" + parseInt(value, 10) + "</span>" ;
+				} else str = parseInt(value, 10);
+				return str;
 			}
 		
 		},
@@ -327,7 +333,7 @@ function openInventoryPO(multiple, itemId) {
 			} else{
 				poOrderDetailsDlg.dialog("open");
 				Object.values(inventory_items_selected).forEach(function(item){
-					if(item["reorderPoint"] - item["inStock"] > 0) {
+					 if(item["reorderPoint"] - item["inStock"] > 0) {
 						var poitem = {};
 				    	poitem["pcat"] = item["pcat"];
 				    	poitem["pmake"] = item["pmake"];
@@ -393,6 +399,8 @@ $("#po-create-btn").click(function(event){
 	}
 	createPO(po_items_inserted);
 	refreshPOGrids();
+	po_max_insert_id=0;
+	po_items_inserted = {};
 	$("#po-vendor-info-select").val(0);
 	$("#po-vendor-info div.panel-body").hide();
 	$("#po-warehouse-info-select").val(0);
@@ -400,7 +408,7 @@ $("#po-create-btn").click(function(event){
 	poOrderDetailsDlg.dialog("close");
 });
 
-function createPO(po_items_inserted, autopo) {
+function createPO(po_items_inserted, stopmsg) {
 	console.log(po_items_inserted)
 	if(Object.keys(po_items_inserted).length > 0) {
 		var row = po_items_inserted[Object.keys(po_items_inserted)[0]];
@@ -460,9 +468,10 @@ function createPO(po_items_inserted, autopo) {
 			insertOrderRevision("PO-0000"+orderId, "PURCHASE", item["pcode"], "RECEIVED", "--", 0, date);
 			insertOrderRevision("PO-0000"+orderId, "PURCHASE", item["pcode"], "QUOTE PRICE", "--", 0, date);
 		});
-		if(autopo) {
+		if(!stopmsg) {
 			toastr.clear();
 			toastr.success('PO created successfully.');	
 		}
+		refreshInventoryGridFilter();
 	}
 }

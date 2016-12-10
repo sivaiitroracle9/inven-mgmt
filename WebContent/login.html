@@ -67,9 +67,15 @@
 	</nav>
 
 	<div class="container">
-		<form class="form-group" style="display:none;position:absolute;left:45%;top:30%">
-			<label for="email">User ID: </label><input id="userid" type="text" class="form-control login-form-element">
-			<label for="password">Password: </label><input id="password" type="password" class="form-control login-form-element">
+		<div >
+			<h1 style="position:absolute;top:15%;left:43%;color:blue">COMPANY</h1>
+			<h1 style="position:absolute;top:20%;left:36%;">Inventory Management System</h1>
+		</div>
+
+		<form class="form-group" style="display:none;position:absolute;left:40%;top:30%">
+			<span id="error-msg" style="color:red;font-weight:bold"></span><br>
+			<label for="email">User ID: </label><input id="userid" type="text" class="form-control login-form-element" style="width:300px">
+			<label for="password">Password: </label><input id="password" type="password" class="form-control login-form-element" style="width:300px">
 			<br/>
 			<button id="btn-login" type="button" class="form-control btn btn-primary">Submit</button>
 		</form>
@@ -83,8 +89,12 @@
 			
 			if($("#userid").val()!=="" && $("#password").val()!=="" && $("#userid").val()=== $("#password").val()){
 				console.log("logged in")
-				var rows = alasql("select id from users where name='" + $("#userid").val().trim()+"'");
-				$(location).attr('href', 'index.html?user='+rows[0].id)
+				var rows = alasql("select id from users where uname='" + $("#userid").val().trim()+"'");
+				if(rows.length == 0) {
+					$("#userid").val("");
+					$("#password").val("");
+					$("#error-msg").text("Invalid Username / Password");
+				} else	$(location).attr('href', 'index.html?user='+rows[0].id)
 			}
 			
 		});

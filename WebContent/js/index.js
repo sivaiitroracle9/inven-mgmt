@@ -4,12 +4,26 @@ var product_map = getProductsLOV();
 
 init();
 
-
 $("select#st-chart-cat").change(function(){
 	var pmap = getProductsLOV($(this).val());
 	$("select#st-chart-prod").html("");
 	Object.keys(pmap).forEach(function(key){
 		$("<option>").val(Number(key)).text(pmap[key]).appendTo($("select#st-chart-prod"));
+	});
+	generateStockQtyBarChart(warehouse, $("select#st-chart-type").val(), 
+			$("select#st-chart-cat").val(), $("select#st-chart-prod").val(), date);
+});
+$("select#st-chart-prod").change(function(){
+	var date = (new Date()).toLocaleDateString();
+	generateStockQtyBarChart(warehouse, $("select#st-chart-type").val(), 
+			$("select#st-chart-cat").val(), $("select#st-chart-prod").val(), date);
+});
+
+$("select#iv-chart-cat").change(function(){
+	var pmap = getProductsLOV($(this).val());
+	$("select#iv-chart-prod").html("");
+	Object.keys(pmap).forEach(function(key){
+		$("<option>").val(Number(key)).text(pmap[key]).appendTo($("select#iv-chart-prod"));
 	});
 });
 
@@ -18,6 +32,9 @@ $("select#global-warehouse").change(function(){
 	var ivalue = setInventoryValue(warehouse);
 	var date = (new Date()).toLocaleDateString();
 	generateInventoryValueChart(ivalue, date);
+	generateStockQtyBarChart(date)
+	generateStockQtyBarChart(warehouse, $("select#st-chart-type").val(), 
+			$("select#st-chart-cat").val(), $("select#st-chart-prod").val(), date);
 });
 
 function init(){
@@ -43,6 +60,8 @@ function init(){
 	var ivalue = setInventoryValue(warehouse);
 	var date = (new Date()).toLocaleDateString();
 	generateInventoryValueChart(ivalue, date);
+	generateStockQtyBarChart(warehouse, $("select#st-chart-type").val(), 
+			$("select#st-chart-cat").val(), $("select#st-chart-prod").val(), date);
 }
 
 function setInventoryValue(whouse){

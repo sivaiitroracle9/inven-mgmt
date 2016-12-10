@@ -285,7 +285,7 @@ $("#po-orders-grid").jsGrid({
             {type: "control",
             	deleteButton: false,
             	itemTemplate: function(value, item) {
-            		if(Number(item.status) != 3 && Number(item.status) != 4 && Number(item.status) != 5 && Number(item.status) != 6 && Number(item.status) != 8)
+            		if(Number(item.status) == 1 && Number(item.status) == 7)
             			return this._createEditButton(item);
             	}
             }

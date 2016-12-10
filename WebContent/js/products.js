@@ -475,7 +475,7 @@ $("#productsGird").jsGrid({
         { name: "maker", title:"MAKER", type: "select", items: getMakersFromDB(), valueField: "id", textField: "text", sorting: false, },
         { name: "category", title:"CATEGORY", type: "select", items: getCategoriesFromDB(), valueField: "id", textField: "text", sorting: false, },
         
-        { name: "price", title:"PRICE", type: "text", width: 150, 
+/*        { name: "price", title:"PRICE", type: "text", width: 150, 
         	headerTemplate: function() {
         		return $("<span>Price</span><span style='float:right' class='glyphicon glyphicon-sort'>");
         	},
@@ -505,7 +505,7 @@ $("#productsGird").jsGrid({
         		   op: this._operatorPicker.val(),
         	   };
            }
-        },
+        },*/
         
         { name: "unit", title:"UNIT", type: "text", width: 150, 
         	headerTemplate: function() {

@@ -5,7 +5,7 @@ $("input.auto-po").each(function(){
 	if(stocks!=undefined && stocks.length!=0) value = stocks[0].autopo;
 	
 	if($(this).val() == value) $(this).prop('checked', true);
-	toggleAutoPO();
+	//toggleAutoPO();
 });
 $("#grp-reorder-point-input").val("");
 
@@ -156,10 +156,10 @@ $("input.auto-po").change(function() {
 		$(this).siblings("input").each(function() {
 			$(this).prop('checked', false);
 		});
-		alasql("UPDATE stock set autopo = " + $(this).val());
+		alasql("UPDATE stock set autopo = " + Number($(this).val()));
 	}
 	
-	toggleAutoPO();
+	//toggleAutoPO();
 });
 
 $("input.cstock-set").change(function() {

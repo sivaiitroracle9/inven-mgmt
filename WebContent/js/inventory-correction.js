@@ -115,10 +115,18 @@ $("#invencorrect-items").jsGrid({
 
     },
     
+    onItemUpdated: function(args){
+    	if($("input#inven-crct-shelfchange").is(":checked")) {
+    		alasql("UPDATE stock set location='"+ args.item.plocId+"' where id="+Number(args.item.pstockid));
+    		toastr.clear();
+    		toastr.success("successfully","Location Updated");
+    	}
+    },
+
     controller: {
     	loadData: function(filter) {
     		console.log(filter)
-    		var products = alasql("select stock.id as pstockid, products.id as prodid, stock.cstock as cstock, stock.cstock_type as cstock_type, products.id as prodid, stock.whouse as whouse, stock.balance as qty, products.code as code, " +
+    		var products = alasql("select stock.id as pstockid, stock.location as location, products.id as prodid, stock.cstock as cstock, stock.cstock_type as cstock_type, products.id as prodid, stock.whouse as whouse, stock.balance as qty, products.code as code, " +
     				"products.category as category, products.detail as detail, products.make as make, products.price as price, products.unit as unit" +
     				" from products JOIN stock ON products.id=stock.item");
     		
@@ -132,7 +140,7 @@ $("#invencorrect-items").jsGrid({
     			iitem.whouse = prd.whouse;
     			iitem.pcat = prd.category;
     			iitem.pcode = prd.code;
-    			iitem.plocId = "SL-00" + iitem.whouse + "-" + iitem.pcode;
+    			iitem.plocId = prd.location;
     			iitem.pmake = prd.make;
     			iitem.pdetail = prd.detail;
     			iitem.pprice = prd.price;
@@ -318,8 +326,12 @@ $("#invencorrect-items").jsGrid({
                itemTemplate: function(value, item) {
             	   var $div = $("<div>");
             	   this._createGridButton("jsgrid-edit-button", "Edit", function(grid) {
-            		   invenCorrectItems[item.pstockid] = item;
-            		   invencorrectDlg.dialog("open");
+            		   if($("#inven-crct-sadjst").is(":checked")) {
+                		   invenCorrectItems[item.pstockid] = item;
+                		   invencorrectDlg.dialog("open");   
+            		   } else {
+            			   grid.editItem(item);
+            		   }
                    }).appendTo($div);
             	   this._createGridButton("jsgrid-delete-button", "Delete", function(grid) {
 
@@ -491,3 +503,15 @@ function loadFullAdjustmentData() {
 		$tr.appendTo($("#recent-invencorrection"));
     }
 }
+
+$("input.stock-crrct").change(function(){
+	if($(this).is(":checked")){
+		$("input.stock-crrct").not($(this)).prop("checked", false);
+	}
+	
+	if($("input#inven-crct-shelfchange").is(":checked")) {
+		$("#invencorrect-items").jsGrid("fieldOption", "plocId", "editing", true);	
+	} else {
+		$("#invencorrect-items").jsGrid("fieldOption", "plocId", "editing", false);	
+	}
+})

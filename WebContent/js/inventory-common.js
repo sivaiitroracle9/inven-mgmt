@@ -13,8 +13,10 @@ $('a[data-toggle="tab"]').on(
 			} else if ("#tabcontent-settings" == target) {
 				refreshReorderPoint();
 			} else if (target == "#tabcontent-settings-vendorpref-item"
-					|| target == "#tabcontent-settings-vendorpref")
-				refreshVendorPrefItem();
+					|| target == "#tabcontent-settings-vendorpref") {
+				refreshVendorPrefItem();	
+				$("#venpref-4").jsGrid("reset");
+			}
 			else if (target == "#tabcontent-settings-vendorpref-cat")
 				refreshVendorPrefCat();
 			else if (target == "#tabcontent-settings-vendorpref-whouse")
@@ -51,6 +53,11 @@ function refreshInventoryGrid(){
 	$("#po-create-grid").jsGrid("reset");
 	$("#po-create-grid").jsGrid("loadData");
 	$("#po-create-grid").jsGrid("render");
+}
+
+function refreshInventoryGridFilter(){
+	$("#inventory-items").jsGrid("search", $("#inventory-items").jsGrid("getFilter"));
+	$("#po-create-grid").jsGrid("search", $("#po-create-grid").jsGrid("getFilter"));
 }
 
 function refreshPOGrids() {
@@ -331,6 +338,21 @@ getAllStatusLOV().forEach(function(d){
 		global_status_map[d.id] = d.text;
 	}
 });
+
+var global_cat_map = {};
+getCategoriesLOV().forEach(function(d){
+	if(d!=0) {
+		global_cat_map[d.id] = d.text;
+	}
+});
+
+var global_maker_map = {};
+getMakersLOV().forEach(function(d){
+	if(d!=0) {
+		global_maker_map[d.id] = d.text;
+	}
+});
+
 
 function getNextInsertId(table) {
 	var rows = alasql("select max(id) as id from " + table + ";");
