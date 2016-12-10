@@ -94,7 +94,7 @@
 					$("#userid").val("");
 					$("#password").val("");
 					$("#error-msg").text("Invalid Username / Password");
-				} else	$(location).attr('href', 'index.html?user='+rows[0].id)
+				} else	$(location).attr('href', 'index.html?user='+rows[0].id+"&&login=0")
 			}
 			
 		});
