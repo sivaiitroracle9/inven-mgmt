@@ -91,409 +91,415 @@
 		</div>
 		<!-- /.container-fluid -->
 	</nav>
-
-	<div class="container-fluid">
-		<ul class="nav nav-tabs" style="margin-left: 10px">
-			<li id="li-overview" class="active"><a id="tab-inventory"
-				href="#tabcontent-inventory" data-toggle="tab">Inventory Stock</a></li>
-			<li id="li-goodsissue"><a id="tab-goodsissue"
-				href="#tabcontent-goodsissue" data-toggle="tab">Goods Issue</a></li>
-			<li id="li-goodsreceive"><a id="tab-goodsreceive"
-				href="#tabcontent-goodsreceive" data-toggle="tab">Goods Received</a></li>
-			<li id="li-invencorrection"><a id="tab-invencorrection"
-				href="#tabcontent-invencorrection" data-toggle="tab">Add /
-					Correct Stock</a></li>
-			<li id="li-settings"><a id="tab-settings"
-				href="#tabcontent-settings" data-toggle="tab">Settings</a></li>
-		</ul>
-		<div class="tab-content">
-			<div id="tabcontent-inventory" class="tab-pane active">
-				<div class="panel panel-primary"
-					style="width: 1850px; margin-left: 10px">
-					<div class="panel-body" style="background-color: whitesmoke;">
-						<div class="panel panel-success">
-							<div class="panel-heading" style="height: 120px">
-								<div class="row" style="float: right">
-									<div class="col-lg-12">
-										<div class="btn-group pull-right">
-<!-- 											<a class="btn btn-default"><span
+	<div id="show-body" style="display: none">
+		<div class="container-fluid">
+			<ul class="nav nav-tabs" style="margin-left: 10px">
+				<li id="li-overview" class="active"><a id="tab-inventory"
+					href="#tabcontent-inventory" data-toggle="tab">Inventory Stock</a></li>
+				<li id="li-goodsissue"><a id="tab-goodsissue"
+					href="#tabcontent-goodsissue" data-toggle="tab">Goods Issue</a></li>
+				<li id="li-goodsreceive"><a id="tab-goodsreceive"
+					href="#tabcontent-goodsreceive" data-toggle="tab">Goods
+						Received</a></li>
+				<li id="li-invencorrection"><a id="tab-invencorrection"
+					href="#tabcontent-invencorrection" data-toggle="tab">Add /
+						Correct Stock</a></li>
+				<li id="li-settings"><a id="tab-settings"
+					href="#tabcontent-settings" data-toggle="tab">Settings</a></li>
+			</ul>
+			<div class="tab-content">
+				<div id="tabcontent-inventory" class="tab-pane active">
+					<div class="panel panel-primary"
+						style="width: 1850px; margin-left: 10px">
+						<div class="panel-body" style="background-color: whitesmoke;">
+							<div class="panel panel-success">
+								<div class="panel-heading" style="height: 120px">
+									<div class="row" style="float: right">
+										<div class="col-lg-12">
+											<div class="btn-group pull-right">
+												<!-- 											<a class="btn btn-default"><span
 												class="glyphicon glyphicon-share" style="margin-right: 4px"></span>Share</a> -->
-											<a class="btn btn-default"><span
-												class="glyphicon glyphicon-print" style="margin-right: 4px"></span>Print</a>
-											<a class="btn btn-default" onclick=open_dlg_overview_email()><span
-												class="glyphicon glyphicon-envelope"
-												style="margin-right: 4px"></span>Email</a>
+												<a class="btn btn-default"><span
+													class="glyphicon glyphicon-print" style="margin-right: 4px"></span>Print</a>
+												<a class="btn btn-default" onclick=open_dlg_overview_email()><span
+													class="glyphicon glyphicon-envelope"
+													style="margin-right: 4px"></span>Email</a>
+											</div>
+											<div class="btn-group pull-right">
+												<button type="button"
+													class="btn btn-default dropdown-toggle"
+													data-toggle="dropdown" aria-haspopup="true"
+													aria-expanded="false">
+													<span class="fa fa-download"> </span> Export <span
+														class="caret"></span>
+												</button>
+												<ul class="dropdown-menu" style="background: #171048">
+													<li style="width: 96px"><a href="#"
+														onclick="downloadInventory()"><span
+															class="fa fa-file-excel-o"> </span> CSV</a></li>
+													<li style="width: 96px"><a href="#"><span
+															class="fa fa-file-pdf-o"> </span> PDF</a></li>
+													<li style="width: 96px"><a href="#"><span
+															class="fa fa-file-code-o"> </span> JSON</a></li>
+												</ul>
+											</div>
+											<div class="btn-group pull-right">
+												<button type="button"
+													class="btn btn-default dropdown-toggle"
+													data-toggle="dropdown">
+													<span class="glyphicon glyphicon-cog"></span> Hide Columns<span
+														class="caret"></span>
+												</button>
+												<ul class="dropdown-menu" style="background: #171048">
+													<li><a href="#" class="small" data-value="pimg"
+														tabIndex="-1"><input type="checkbox" checked />IMAGE</a></li>
+													<li><a href="#" class="small" data-value="pcat"
+														tabIndex="-1"><input type="checkbox" checked />CATEGORY</a></li>
+													<li><a href="#" class="small" data-value="pmake"
+														tabIndex="-1"><input type="checkbox" checked />MAKER</a></li>
+													<li><a href="#" class="small" data-value="pdetail"
+														tabIndex="-1"><input type="checkbox" checked />DETAIL</a></li>
+													<li><a href="#" class="small" data-value="whouse"
+														tabIndex="-1"><input type="checkbox" checked />WAREHOUSE</a></li>
+													<li><a href="#" class="small" data-value="pprice"
+														tabIndex="-1"><input type="checkbox" checked />PRICE</a></li>
+													<li><a href="#" class="small"
+														data-value="reorderPoint" tabIndex="-1"><input
+															type="checkbox" checked />REORDER POINT</a></li>
+													<li><a href="#" class="small" data-value="stocklevel"
+														tabIndex="-1"><input type="checkbox" checked />STOCK
+															STATUS</a></li>
+												</ul>
+											</div>
 										</div>
+									</div>
+									<div>
+										<label>LIST OF INVENTORY</label>
+									</div>
+									<hr />
+									<div class="row" style="float: right">
 										<div class="btn-group pull-right">
-											<button type="button" class="btn btn-default dropdown-toggle"
-												data-toggle="dropdown" aria-haspopup="true"
-												aria-expanded="false">
-												<span class="fa fa-download"> </span> Export <span
-													class="caret"></span>
+											<button id='inven-grp-po' class="btn btn-primary"
+												onclick=openInventoryPO(true)>
+												<span class="glyphicon glyphicon-plus"
+													style="margin-right: 4px"></span>Restock
 											</button>
-											<ul class="dropdown-menu" style="background: #171048">
-												<li style="width: 96px"><a href="#" onclick="downloadInventory()"><span
-														class="fa fa-file-excel-o"> </span> CSV</a></li>
-												<li style="width: 96px"><a href="#"><span
-														class="fa fa-file-pdf-o"> </span> PDF</a></li>
-												<li style="width: 96px"><a href="#"><span
-														class="fa fa-file-code-o"> </span> JSON</a></li>
-											</ul>
-										</div>
-										<div class="btn-group pull-right">
-											<button type="button" class="btn btn-default dropdown-toggle"
-												data-toggle="dropdown">
-												<span class="glyphicon glyphicon-cog"></span> Hide Columns<span
-													class="caret"></span>
-											</button>
-											<ul class="dropdown-menu" style="background: #171048">
-												<li><a href="#" class="small" data-value="pimg"
-													tabIndex="-1"><input type="checkbox" checked />IMAGE</a></li>
-												<li><a href="#" class="small" data-value="pcat"
-													tabIndex="-1"><input type="checkbox" checked />CATEGORY</a></li>
-												<li><a href="#" class="small" data-value="pmake"
-													tabIndex="-1"><input type="checkbox" checked />MAKER</a></li>
-												<li><a href="#" class="small" data-value="pdetail"
-													tabIndex="-1"><input type="checkbox" checked />DETAIL</a></li>
-												<li><a href="#" class="small" data-value="whouse"
-													tabIndex="-1"><input type="checkbox" checked />WAREHOUSE</a></li>
-												<li><a href="#" class="small" data-value="pprice"
-													tabIndex="-1"><input type="checkbox" checked />PRICE</a></li>
-												<li><a href="#" class="small" data-value="reorderPoint"
-													tabIndex="-1"><input type="checkbox" checked />REORDER
-														POINT</a></li>
-												<li><a href="#" class="small" data-value="stocklevel"
-													tabIndex="-1"><input type="checkbox" checked />STOCK
-														STATUS</a></li>
-											</ul>
 										</div>
 									</div>
 								</div>
-								<div>
-									<label>LIST OF INVENTORY</label>
+							</div>
+							<div id="inventory-items"></div>
+						</div>
+					</div>
+					<div id="dlg-inventory-create-po"
+						style="width: 300px; display: none">
+						<div class="panel panel-default">
+							<div class="panel-body">
+								<div class="panel panel-primary">
+									<div class="panel-body">
+										<div id="po-vendor-info" class="panel panel-info">
+											<div class="panel-heading">
+												<label> Vendor: </label> <select id="po-vendor-info-select"
+													class="btn btn-default dropdown-toggle"></select>
+											</div>
+											<div class="panel-body">
+												<p>
+													CODE: <span id="po-vendor-info-code"></span>
+												</p>
+												<p>
+													Name: <span id="po-vendor-info-name"></span>
+												</p>
+												<p>
+													Address: <span id="po-vendor-info-address"></span>
+												</p>
+												<br />
+												<p>
+													Phone: <span id="po-vendor-info-tel"></span>
+												</p>
+												<p>
+													Email: <span id="po-vendor-info-email"></span>
+												</p>
+											</div>
+										</div>
+										<div id="po-warehouse-info" class="panel panel-info">
+											<div class="panel-heading">
+												<label>Warehouse:</label> <select
+													id="po-warehouse-info-select"
+													class="btn btn-default dropdown-toggle"></select>
+											</div>
+											<div class="panel-body">
+												<p>
+													Name: <span id="po-warehouse-info-name"></span>
+												</p>
+												<p>
+													Address: <span id="po-warehouse-info-address"></span>
+												</p>
+												<br />
+												<p>
+													Phone: <span id="po-warehouse-info-tel"></span>
+												</p>
+												<p>
+													Email: <span id="po-warehouse-info-email"></span>
+												</p>
+											</div>
+										</div>
+
+										<label style="float: right; margin: 5px"><span
+											style="color: #3A83D5">Date:</span> <span
+											class="label label-default" id="po-date"></span></label>
+									</div>
 								</div>
-								<hr />
-								<div class="row" style="float: right">
+								<div id="po-create-grid"></div>
+								<div id="btns-po-create">
+									<button id="po-cancel-btn" class="btn btn-default"
+										style="float: right; margin: 5px" disabled>Cancel</button>
+									<button id="po-create-btn" class="btn btn-success"
+										style="float: right; margin: 5px" disabled>Create</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div id="tabcontent-goodsissue" class="tab-pane"
+					style="width: 1600px; margin-left: 10px">
+					<div class="panel panel-primary">
+						<div class="panel-body">
+							<div>
+								<label style="font-weight: bold" for="goodsissue-orderid">ORDER
+									ID: </label> <input id="goodsissue-orderid" type="text" width="20px"
+									autocomplete="off"> <span
+									class="glyphicon glyphicon-barcode"> </span>
+								<div class="pull-right" style="margin-right: 3px">
+									<label style="font-weight: bold;">WAREHOUSE: </label><span
+										id="goodsissue-whouse" class="label label-default"
+										style="margin: 5px"> </span>
+								</div>
+								<div class="pull-right" style="margin-right: 10px">
+									<label style="font-weight: bold;">OUTLET: </label><span
+										id="goodsissue-outlet" class="label label-default"
+										style="margin: 5px"> </span>
+								</div>
+							</div>
+							<br /></br>
+							<hr />
+							<div class="panel panel-default">
+								<div class="panel-body">
+									<div id="gi-so-items"></div>
+									<br />
+									<button id="goodsissue-orderid-update-btn" type="button"
+										class="btn btn-warning pull-right" disabled>Update</button>
+								</div>
+							</div>
+						</div>
+					</div>
+
+				</div>
+				<div id="tabcontent-goodsreceive" class="tab-pane"
+					style="width: 1450px; margin-left: 10px">
+
+					<div class="panel panel-primary">
+						<div class="panel-body">
+							<div>
+								<label style="font-weight: bold" for="goodsreceive-orderid">ORDER
+									ID: </label> <input id="goodsreceive-orderid" type="text" width="20px"
+									autocomplete="off"> <span
+									class="glyphicon glyphicon-barcode"> </span>
+								<div class="pull-right" style="margin-right: 3px">
+									<label style="font-weight: bold;">WAREHOUSE: </label><span
+										id="goodsreceive-whouse" class="label label-default"
+										style="margin: 5px"> </span>
+								</div>
+								<div class="pull-right" style="margin-right: 10px">
+									<label style="font-weight: bold;">VENDOR: </label><span
+										id="goodsreceive-vendor" class="label label-default"
+										style="margin: 5px"> </span>
+								</div>
+							</div>
+							<br /></br>
+							<hr />
+							<div class="panel panel-default">
+								<div class="panel-body">
+									<div id="gr-po-items"></div>
+									<br />
+									<button id="goodsreceive-orderid-update-btn" type="button"
+										class="btn btn-warning pull-right" disabled>Update</button>
+								</div>
+							</div>
+						</div>
+					</div>
+
+				</div>
+				<div id="tabcontent-invencorrection" class="tab-pane">
+					<div class="panel panel-primary" style="margin-left: 10px">
+						<div class="panel-heading"
+							style="background-color: whitesmoke; color: green">
+							<label>STOCK ADJUSTMENT/CORRECTION</label> <input
+								class="stock-crrct" id="inven-crct-sadjst" type="radio"
+								checked="checked"><br /> <label>STOCK SHELF
+								CHANGE</label> <input class="stock-crrct" id="inven-crct-shelfchange"
+								type="radio">
+							<div class="row" style="float: right">
+								<div class="col-lg-12">
 									<div class="btn-group pull-right">
-										<button id='inven-grp-po' class="btn btn-primary"
-											onclick=openInventoryPO(true)>
-											<span class="glyphicon glyphicon-plus"
-												style="margin-right: 4px"></span>Restock
+										<!-- 											<a class="btn btn-default"><span
+												class="glyphicon glyphicon-share" style="margin-right: 4px"></span>Share</a> -->
+										<a class="btn btn-default"><span
+											class="glyphicon glyphicon-print" style="margin-right: 4px"></span>Print</a>
+										<a class="btn btn-default" onclick=open_dlg_overview_email()><span
+											class="glyphicon glyphicon-envelope"
+											style="margin-right: 4px"></span>Email</a>
+									</div>
+									<div class="btn-group pull-right">
+										<button type="button" class="btn btn-default dropdown-toggle"
+											data-toggle="dropdown" aria-haspopup="true"
+											aria-expanded="false">
+											<span class="fa fa-download"> </span> Export <span
+												class="caret"></span>
 										</button>
+										<ul class="dropdown-menu" style="background: #171048">
+											<li style="width: 96px"><a href="#"><span
+													class="fa fa-file-excel-o"> </span> CSV</a></li>
+											<li style="width: 96px"><a href="#"><span
+													class="fa fa-file-pdf-o"> </span> PDF</a></li>
+											<li style="width: 96px"><a href="#"><span
+													class="fa fa-file-code-o"> </span> JSON</a></li>
+										</ul>
 									</div>
 								</div>
 							</div>
 						</div>
-						<div id="inventory-items"></div>
+						<div class="panel-body" style="background-color: whitesmoke;">
+							<div class="panel panel-success"
+								style="left: 1100px; float: right;">
+								<div class="panel-heading"
+									style="background-color: whitesmoke; color: green">
+									<label>RECENT ADJUSTMENTS / CORRECTIONS</label>
+									<hr />
+									<span id="recent-invencorrection-text"></span>
+								</div>
+								<div class="panel-body"
+									style="background-color: whitesmoke; padding: 0px">
+									<table class="table-condensed" style="width: 500px">
+										<thead>
+											<tr>
+												<th>DATE</th>
+												<th>WAREHOUSE</th>
+												<th>PROD-CODE</th>
+												<th>DIFFERENCE QTY</th>
+												<th>NEW QTY</th>
+												<th>REASON</th>
+											</tr>
+										</thead>
+										<tbody id="recent-invencorrection"></tbody>
+									</table>
+								</div>
+							</div>
+							<div id="invencorrect-items"></div>
+							<div id="invencorrect-dlg">
+								<label for="invencorrect-qty" class="">Adjust/Correct
+									Qty:</label><input id="invencorrect-qty" class="form-control"
+									type="number"> <label for="invencorrect-reason"
+									class="">Reason for Adjustment/Correction:</label>
+								<textarea id="invencorrect-reason" class="form-control"></textarea>
+							</div>
+							<div id="add-inventoty-dlg">
+								<label for="add-inventoty-dlg-whouse">Warehouse</label><select
+									class="form-control" id="add-inventoty-dlg-whouse"></select> <label
+									for="add-inventoty-dlg-pcat">CATEGORY</label><select
+									class="form-control" id="add-inventoty-dlg-pcat"></select> <label
+									for="add-inventoty-dlg-pcode">CODE</label><input type="text"
+									class="form-control" id="add-inventoty-dlg-pcode"> <label
+									for="add-inventoty-dlg-pmaker">MAKER</label><select
+									class="form-control" id="add-inventoty-dlg-pmaker"></select> <label
+									for="add-inventoty-dlg-pdetail">DETAIL</label><input
+									class="form-control" type="text" id="add-inventoty-dlg-pdetail">
+								<label for="add-inventoty-dlg-pqty">QTY</label><input
+									type="number" class="form-control" id="add-inventoty-dlg-pqty">
+							</div>
+						</div>
 					</div>
 				</div>
-				<div id="dlg-inventory-create-po" style="width: 300px;display:none">
-					<div class="panel panel-default">
-						<div class="panel-body">
+				<div id="tabcontent-settings" class="tab-pane">
+					<br>
+					<ul class="nav nav-tabs">
+						<li id="li-settings-reorderpoint" class="active"><a
+							id="tab-settings-reorderpoint"
+							href="#tabcontent-settings-reorderpoint" " data-toggle="tab">Reorder
+								Point</a></li>
+						<li id="li-settings-vendorpref"><a
+							id="tab-settings-vendorpref"
+							href="#tabcontent-settings-vendorpref" " data-toggle="tab">Vendor
+								Preference</a></li>
+					</ul>
+					<div class="tab-content">
+						<div id="tabcontent-settings-reorderpoint" class="tab-pane active">
 							<div class="panel panel-primary">
 								<div class="panel-body">
-									<div id="po-vendor-info" class="panel panel-info">
-										<div class="panel-heading">
-											<label> Vendor: </label> <select id="po-vendor-info-select"
-												class="btn btn-default dropdown-toggle"></select>
+									<div>
+										<div id="cstock-spc-items">
+											<div style="float: right">
+												<div>
+													<select id="grp-reorder-point-select" class="form-control"
+														style="width: 200px">
+														<option value=0>Value</option>
+														<option value=1>Days Sales</option>
+														<option value=3>Months Sales</option>
+														<option value=4>Years Sales</option>
+													</select> <input id="grp-reorder-point-input" type="number"
+														class="form-control" style="width: 200px">
+													<button id="btn-grp-reorder-point"
+														class="form-control btn btn-primary"
+														style="width: 200px; margin-top: 4px; margin-bottom: 10px">Set
+														Reorder Point</button>
+												</div>
+											</div>
+											<label>SET REORDER POINT </label>
+											<div id="cstock-spc-items-grid"></div>
+										</div>
+
+									</div>
+								</div>
+							</div>
+						</div>
+						<div id="tabcontent-settings-vendorpref" class="tab-pane">
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<label>Generate Purchase Order: </label> <input type="radio"
+										id="auto-po-on" class="auto-po" value=1><label
+										for="auto-po-on">AUTO </label> <input type="radio"
+										id="auto-po-off" class="auto-po" value=0><label
+										for="auto-po-off">MANUAL </label>
+									<hr />
+								</div>
+								<div id="auto-po-on-div" class="panel-body">
+									<div class="panel panel-default">
+										<div class="panel-heading" style="height: 150px">
+											<div style="float: right">
+												<div>
+													<label for="venpref-type" style="float: left;">PREFERENCE
+														TYPE :</label><select id="venpref-type" class="form-control"
+														style="width: 200px;"></select>
+												</div>
+												<div>
+													<label for="venpref-selection"
+														style="float: left; margin-left: 50px; margin-top: 4px; margin-bottom: 4px; margin-right: 4px;">SELECTION
+														:</label> <select id="venpref-selection" class="form-control"
+														style="width: 200px"></select>
+													<button id="btn-group-venpref"
+														class="form-control btn btn-primary"
+														style="width: 300px; margin-left: 28px; margin-top: 4px">Set
+														Preference</button>
+												</div>
+											</div>
+											<label style="margin-top: 40px">SET <span
+												style='color: blue'>PREFERED VENDOR </span>
+											</label>
 										</div>
 										<div class="panel-body">
-											<p>
-												CODE: <span id="po-vendor-info-code"></span>
-											</p>
-											<p>
-												Name: <span id="po-vendor-info-name"></span>
-											</p>
-											<p>
-												Address: <span id="po-vendor-info-address"></span>
-											</p>
-											<br />
-											<p>
-												Phone: <span id="po-vendor-info-tel"></span>
-											</p>
-											<p>
-												Email: <span id="po-vendor-info-email"></span>
-											</p>
+											<div id="venpref-4"></div>
 										</div>
-									</div>
-									<div id="po-warehouse-info" class="panel panel-info">
-										<div class="panel-heading">
-											<label>Warehouse:</label> <select
-												id="po-warehouse-info-select"
-												class="btn btn-default dropdown-toggle"></select>
-										</div>
-										<div class="panel-body">
-											<p>
-												Name: <span id="po-warehouse-info-name"></span>
-											</p>
-											<p>
-												Address: <span id="po-warehouse-info-address"></span>
-											</p>
-											<br />
-											<p>
-												Phone: <span id="po-warehouse-info-tel"></span>
-											</p>
-											<p>
-												Email: <span id="po-warehouse-info-email"></span>
-											</p>
-										</div>
-									</div>
 
-									<label style="float: right; margin: 5px"><span
-										style="color: #3A83D5">Date:</span> <span
-										class="label label-default" id="po-date"></span></label>
-								</div>
-							</div>
-							<div id="po-create-grid"></div>
-							<div id="btns-po-create">
-								<button id="po-cancel-btn" class="btn btn-default"
-									style="float: right; margin: 5px" disabled>Cancel</button>
-								<button id="po-create-btn" class="btn btn-success"
-									style="float: right; margin: 5px" disabled>Create</button>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div id="tabcontent-goodsissue" class="tab-pane"
-				style="width: 1600px; margin-left: 10px">
-				<div class="panel panel-primary">
-					<div class="panel-body">
-						<div>
-							<label style="font-weight: bold" for="goodsissue-orderid">ORDER
-								ID: </label> <input id="goodsissue-orderid" type="text" width="20px"
-								autocomplete="off"> <span
-								class="glyphicon glyphicon-barcode"> </span>
-							<div class="pull-right" style="margin-right: 3px">
-								<label style="font-weight: bold;">WAREHOUSE: </label><span
-									id="goodsissue-whouse" class="label label-default"
-									style="margin: 5px"> </span>
-							</div>
-							<div class="pull-right" style="margin-right: 10px">
-								<label style="font-weight: bold;">OUTLET: </label><span
-									id="goodsissue-outlet" class="label label-default"
-									style="margin: 5px"> </span>
-							</div>
-						</div>
-						<br /></br>
-						<hr />
-						<div class="panel panel-default">
-							<div class="panel-body">
-								<div id="gi-so-items"></div>
-								<br />
-								<button id="goodsissue-orderid-update-btn" type="button"
-									class="btn btn-warning pull-right" disabled>Update</button>
-							</div>
-						</div>
-					</div>
-				</div>
-
-			</div>
-			<div id="tabcontent-goodsreceive" class="tab-pane"
-				style="width: 1450px; margin-left: 10px">
-
-				<div class="panel panel-primary">
-					<div class="panel-body">
-						<div>
-							<label style="font-weight: bold" for="goodsreceive-orderid">ORDER
-								ID: </label> <input id="goodsreceive-orderid" type="text" width="20px"
-								autocomplete="off"> <span
-								class="glyphicon glyphicon-barcode"> </span>
-							<div class="pull-right" style="margin-right: 3px">
-								<label style="font-weight: bold;">WAREHOUSE: </label><span
-									id="goodsreceive-whouse" class="label label-default"
-									style="margin: 5px"> </span>
-							</div>
-							<div class="pull-right" style="margin-right: 10px">
-								<label style="font-weight: bold;">VENDOR: </label><span
-									id="goodsreceive-vendor" class="label label-default"
-									style="margin: 5px"> </span>
-							</div>
-						</div>
-						<br /></br>
-						<hr />
-						<div class="panel panel-default">
-							<div class="panel-body">
-								<div id="gr-po-items"></div>
-								<br />
-								<button id="goodsreceive-orderid-update-btn" type="button"
-									class="btn btn-warning pull-right" disabled>Update</button>
-							</div>
-						</div>
-					</div>
-				</div>
-
-			</div>
-			<div id="tabcontent-invencorrection" class="tab-pane">
-				<div class="panel panel-primary" style="margin-left: 10px">
-					<div class="panel-heading"
-						style="background-color: whitesmoke; color: green">
-						<label>STOCK ADJUSTMENT/CORRECTION</label>
-						<input class="stock-crrct" id="inven-crct-sadjst" type="radio" checked="checked"><br/>
-						<label>STOCK SHELF CHANGE</label>
-						<input class="stock-crrct" id="inven-crct-shelfchange" type="radio">
-														<div class="row" style="float: right">
-									<div class="col-lg-12">
-										<div class="btn-group pull-right">
-<!-- 											<a class="btn btn-default"><span
-												class="glyphicon glyphicon-share" style="margin-right: 4px"></span>Share</a> -->
-											<a class="btn btn-default"><span
-												class="glyphicon glyphicon-print" style="margin-right: 4px"></span>Print</a>
-											<a class="btn btn-default" onclick=open_dlg_overview_email()><span
-												class="glyphicon glyphicon-envelope"
-												style="margin-right: 4px"></span>Email</a>
-										</div>
-										<div class="btn-group pull-right">
-											<button type="button" class="btn btn-default dropdown-toggle"
-												data-toggle="dropdown" aria-haspopup="true"
-												aria-expanded="false">
-												<span class="fa fa-download"> </span> Export <span
-													class="caret"></span>
-											</button>
-											<ul class="dropdown-menu" style="background: #171048">
-												<li style="width: 96px"><a href="#"><span
-														class="fa fa-file-excel-o"> </span> CSV</a></li>
-												<li style="width: 96px"><a href="#"><span
-														class="fa fa-file-pdf-o"> </span> PDF</a></li>
-												<li style="width: 96px"><a href="#"><span
-														class="fa fa-file-code-o"> </span> JSON</a></li>
-											</ul>
-										</div>
 									</div>
-								</div>
-					</div>
-					<div class="panel-body" style="background-color: whitesmoke;">
-						<div class="panel panel-success"
-							style="left: 1100px; float: right;">
-							<div class="panel-heading"
-								style="background-color: whitesmoke; color: green">
-								<label>RECENT ADJUSTMENTS / CORRECTIONS</label>
-								<hr />
-								<span id="recent-invencorrection-text"></span>
-							</div>
-							<div class="panel-body"
-								style="background-color: whitesmoke; padding: 0px">
-								<table class="table-condensed" style="width: 500px">
-									<thead>
-										<tr>
-											<th>DATE</th>
-											<th>WAREHOUSE</th>
-											<th>PROD-CODE</th>
-											<th>DIFFERENCE QTY</th>
-											<th>NEW QTY</th>
-											<th>REASON</th>
-										</tr>
-									</thead>
-									<tbody id="recent-invencorrection"></tbody>
-								</table>
-							</div>
-						</div>
-						<div id="invencorrect-items"></div>
-						<div id="invencorrect-dlg">
-							<label for="invencorrect-qty" class="">Adjust/Correct
-								Qty:</label><input id="invencorrect-qty" class="form-control"
-								type="number"> <label for="invencorrect-reason" class="">Reason
-								for Adjustment/Correction:</label>
-							<textarea id="invencorrect-reason" class="form-control"></textarea>
-						</div>
-						<div id="add-inventoty-dlg">
-							<label for="add-inventoty-dlg-whouse">Warehouse</label><select
-								class="form-control" id="add-inventoty-dlg-whouse"></select> <label
-								for="add-inventoty-dlg-pcat">CATEGORY</label><select
-								class="form-control" id="add-inventoty-dlg-pcat"></select> <label
-								for="add-inventoty-dlg-pcode">CODE</label><input type="text"
-								class="form-control" id="add-inventoty-dlg-pcode"> <label
-								for="add-inventoty-dlg-pmaker">MAKER</label><select
-								class="form-control" id="add-inventoty-dlg-pmaker"></select> <label
-								for="add-inventoty-dlg-pdetail">DETAIL</label><input
-								class="form-control" type="text" id="add-inventoty-dlg-pdetail">
-							<label for="add-inventoty-dlg-pqty">QTY</label><input
-								type="number" class="form-control" id="add-inventoty-dlg-pqty">
-						</div>
-					</div>
-				</div>
-			</div>
-			<div id="tabcontent-settings" class="tab-pane">
-				<br>
-				<ul class="nav nav-tabs">
-					<li id="li-settings-reorderpoint" class="active"><a
-						id="tab-settings-reorderpoint"
-						href="#tabcontent-settings-reorderpoint" " data-toggle="tab">Reorder
-							Point</a></li>
-					<li id="li-settings-vendorpref"><a
-						id="tab-settings-vendorpref"
-						href="#tabcontent-settings-vendorpref" " data-toggle="tab">Vendor
-							Preference</a></li>
-				</ul>
-				<div class="tab-content">
-					<div id="tabcontent-settings-reorderpoint" class="tab-pane active">
-						<div class="panel panel-primary">
-							<div class="panel-body">
-								<div>
-									<div id="cstock-spc-items">
-										<div style="float: right">
-											<div>
-												<select id="grp-reorder-point-select" class="form-control"
-													style="width: 200px">
-													<option value=0>Value</option>
-													<option value=1>Days Sales</option>
-													<option value=3>Months Sales</option>
-													<option value=4>Years Sales</option>
-												</select>
-												<input id="grp-reorder-point-input" type="number" class="form-control"
-													style="width: 200px">
-												<button id="btn-grp-reorder-point"
-													class="form-control btn btn-primary"
-													style="width: 200px; margin-top: 4px;margin-bottom:10px">Set
-													Reorder Point</button>
-											</div>
-										</div>
-										<label>SET REORDER POINT </label>
-										<div id="cstock-spc-items-grid"></div>
-									</div>
-
-								</div>
-							</div>
-						</div>
-					</div>
-					<div id="tabcontent-settings-vendorpref" class="tab-pane">
-						<div class="panel panel-default">
-							<div class="panel-heading">
-								<label>Generate Purchase Order: </label> <input type="radio"
-									id="auto-po-on" class="auto-po" value=1><label
-									for="auto-po-on">AUTO </label> <input type="radio"
-									id="auto-po-off" class="auto-po" value=0><label
-									for="auto-po-off">MANUAL </label>
-								<hr />
-							</div>
-							<div id="auto-po-on-div" class="panel-body">
-								<div class="panel panel-default">
-									<div class="panel-heading" style="height: 150px">
-										<div style="float: right">
-											<div>
-												<label for="venpref-type" style="float: left;">PREFERENCE
-													TYPE :</label><select id="venpref-type" class="form-control"
-													style="width: 200px;"></select>
-											</div>
-											<div>
-												<label for="venpref-selection"
-													style="float: left; margin-left: 50px; margin-top: 4px; margin-bottom: 4px; margin-right: 4px;">SELECTION
-													:</label> <select id="venpref-selection" class="form-control"
-													style="width: 200px"></select>
-												<button id="btn-group-venpref"
-													class="form-control btn btn-primary"
-													style="width: 300px; margin-left: 28px; margin-top: 4px">Set
-													Preference</button>
-											</div>
-										</div>
-										<label style="margin-top: 40px">SET <span
-											style='color: blue'>PREFERED VENDOR </span>
-										</label>
-									</div>
-									<div class="panel-body">
-										<div id="venpref-4"></div>
-									</div>
-
 								</div>
 							</div>
 						</div>
@@ -501,40 +507,39 @@
 				</div>
 			</div>
 		</div>
-	</div>
-	<div id="notification-dlg" style="display:none">
-		<div class="text-center" style="margin: 10px">
-			<span class="glyphicon glyphicon-warning-sign label label-default"
-				style="font-size: 30px; color: yellow;"> </span>
+		<div id="notification-dlg" style="display: none">
+			<div class="text-center" style="margin: 10px">
+				<span class="glyphicon glyphicon-warning-sign label label-default"
+					style="font-size: 30px; color: yellow;"> </span>
+			</div>
+			<div>
+				<span class="text"></span>
+			</div>
 		</div>
-		<div>
-			<span class="text"></span>
+		<div id="dlg-overview-email" style="display: none">
+			<form action="" class="form-group">
+				<label for="dlg-overview-email-to">To</label><input
+					class="form-control" id="dlg-overview-email-to" type="email">
+				<label for="dlg-overview-email-from">From</label><input
+					class="form-control" id="dlg-overview-email-from" type="email">
+				<label for="dlg-overview-email-subject">Subject</label><input
+					class="form-control" id="dlg-overview-email-subject" type="email">
+				<label for="dlg-overview-email-body">Content</label>
+				<textarea class="form-control" style="width: 360px"></textarea>
+			</form>
 		</div>
+		<nav class="sidebar">
+			<ul class="menu">
+				<li id="sidebar-home"><a href="index.html">Home</a></li>
+				<li id="sidebar-inventory"><a href="inventory.html">Inventory</a></li>
+				<li id="sidebar-products"><a href="products.html">Products</a></li>
+				<li id="sidebar-vendors"><a href="vendors.html">Vendors</a></li>
+				<li id="sidebar-orders"><a href="orders.html">Orders</a></li>
+				<li id="sidebar-reports"><a href="report.html">REPORTS</a></li>
+				<li id="sidebar-users"><a href="users.html">Users</a></li>
+			</ul>
+		</nav>
 	</div>
-	<div id="dlg-overview-email" style="display:none">
-		<form action="" class="form-group">
-			<label for="dlg-overview-email-to">To</label><input
-				class="form-control" id="dlg-overview-email-to" type="email">
-			<label for="dlg-overview-email-from">From</label><input
-				class="form-control" id="dlg-overview-email-from" type="email">
-			<label for="dlg-overview-email-subject">Subject</label><input
-				class="form-control" id="dlg-overview-email-subject" type="email">
-			<label for="dlg-overview-email-body">Content</label>
-			<textarea class="form-control" style="width: 360px"></textarea>
-		</form>
-	</div>
-	<nav class="sidebar">
-		<ul class="menu">
-			<li id="sidebar-home"><a href="index.html">Home</a></li>
-			<li id="sidebar-inventory"><a href="inventory.html">Inventory</a></li>
-			<li id="sidebar-products"><a href="products.html">Products</a></li>
-			<li id="sidebar-vendors"><a href="vendors.html">Vendors</a></li>
-			<li id="sidebar-orders"><a href="orders.html">Orders</a></li>
-			<li id="sidebar-reports"><a href="report.html">REPORTS</a></li>
-			<li id="sidebar-users"><a href="users.html">Users</a></li>
-		</ul>
-	</nav>
-	
 	<script src="lib/nav-sidebar.js"></script>
 	<script src="js/inventory-users.js"></script>
 	<script src="js/inventory-common.js"></script>

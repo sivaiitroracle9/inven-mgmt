@@ -90,96 +90,96 @@
 		</div>
 		<!-- /.container-fluid -->
 	</nav>
+	<div id="show-body" style="display: none">
+		<div class="container">
 
-	<div class="container">
-
-		<div class="panel panel-success">
-			<div class="panel-heading">
-				<label>LIST OF VENDORS</label>
-				<div class="pull-right">
-					<a class="btn btn-default"><span
-						class="glyphicon glyphicon-share"> Share</span></a> <a
-						class="btn btn-default"><span class="fa fa-print">
-							Print</span></a> <a class="btn btn-default"><span
-						class="glyphicon glyphicon-envelope"> Email</span></a>
+			<div class="panel panel-success">
+				<div class="panel-heading">
+					<label>LIST OF VENDORS</label>
+					<div class="pull-right">
+						<a class="btn btn-default"><span
+							class="glyphicon glyphicon-share"> Share</span></a> <a
+							class="btn btn-default"><span class="fa fa-print">
+								Print</span></a> <a class="btn btn-default"><span
+							class="glyphicon glyphicon-envelope"> Email</span></a>
+					</div>
+					<div class="btn-group pull-right">
+						<button type="button" class="btn btn-default dropdown-toggle"
+							data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							<span class="fa fa-download"> </span> Export <span class="caret"></span>
+						</button>
+						<ul class="dropdown-menu" style="background: #171048">
+							<li style="width: 96px"><a href="#"
+								onclick="vendorExportCSV()"><span class="fa fa-file-excel-o">
+								</span> CSV</a></li>
+							<li style="width: 96px"><a href="#"><span
+									class="fa fa-file-pdf-o"> </span> PDF</a></li>
+							<li style="width: 96px"><a href="#"><span
+									class="fa fa-file-code-o"> </span> JSON</a></li>
+						</ul>
+					</div>
+					<div class="btn-group pull-right">
+						<button type="button" class="btn btn-default dropdown-toggle"
+							data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							<span class="fa fa-upload"> </span> Import <span class="caret"></span>
+						</button>
+						<ul class="dropdown-menu" style="background: #171048">
+							<li style="width: 96px;"><a href="#" onclick=importFile()><span
+									class="fa fa-file-excel-o"> </span> CSV</a></li>
+							<li style="width: 96px"><a href="#" onclick=importFile()
+								style=""><span class="fa fa-file-pdf-o"> </span> PDF</a></li>
+							<li style="width: 96px"><a href="#" onclick=importFile()
+								style=""><span class="fa fa-file-code-o"> </span> JSON</a></li>
+							<li style="width: 96px; display: none"><input
+								id="input-vendors-file" type="file"></li>
+						</ul>
+					</div>
 				</div>
-				<div class="btn-group pull-right">
-					<button type="button" class="btn btn-default dropdown-toggle"
-						data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						<span class="fa fa-download"> </span> Export <span class="caret"></span>
-					</button>
-					<ul class="dropdown-menu" style="background: #171048">
-						<li style="width: 96px"><a href="#"
-							onclick="vendorExportCSV()"><span class="fa fa-file-excel-o">
-							</span> CSV</a></li>
-						<li style="width: 96px"><a href="#"><span
-								class="fa fa-file-pdf-o"> </span> PDF</a></li>
-						<li style="width: 96px"><a href="#"><span
-								class="fa fa-file-code-o"> </span> JSON</a></li>
-					</ul>
+				<div class="panel-body">
+					<div id="jsGrid" style="float: right;"></div>
 				</div>
-				<div class="btn-group pull-right">
-					<button type="button" class="btn btn-default dropdown-toggle"
-						data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						<span class="fa fa-upload"> </span> Import <span class="caret"></span>
-					</button>
-					<ul class="dropdown-menu" style="background: #171048">
-						<li style="width: 96px;"><a href="#" onclick=importFile()><span
-								class="fa fa-file-excel-o"> </span> CSV</a></li>
-						<li style="width: 96px"><a href="#" onclick=importFile()
-							style=""><span class="fa fa-file-pdf-o"> </span> PDF</a></li>
-						<li style="width: 96px"><a href="#" onclick=importFile()
-							style=""><span class="fa fa-file-code-o"> </span> JSON</a></li>
-						<li style="width: 96px; display: none"><input
-							id="input-vendors-file" type="file"></li>
-					</ul>
-				</div>
-			</div>
-			<div class="panel-body">
-				<div id="jsGrid" style="float: right;"></div>
 			</div>
 		</div>
-	</div>
 
-	<div id="dialog-form" title="Details">
-		<form id="vendorForm" class="form-group">
-			<p>
-				<label>Vendor Code: <input id="ven_code" type="text"
-					class="form-control" /></label>
-			</p>
-			<p>
-				<label>Name: <input id="ven_name" type="text"
-					class="form-control" /></label>
-			</p>
-			<p>
-				<label>Telephone Number: <input id="ven_tel" type="text"
-					class="form-control" /></label>
-			</p>
-			<p>
-				<label>Email: <input id="ven_email" type="text"
-					class="form-control"/ ></label>
-			</p>
-			<p>
-				<label>Address: <input id="ven_addr" type="text"
-					class="form-control" /></label>
-			</p>
-		</form>
+		<div id="dialog-form" title="Details">
+			<form id="vendorForm" class="form-group">
+				<p>
+					<label>Vendor Code: <input id="ven_code" type="text"
+						class="form-control" /></label>
+				</p>
+				<p>
+					<label>Name: <input id="ven_name" type="text"
+						class="form-control" /></label>
+				</p>
+				<p>
+					<label>Telephone Number: <input id="ven_tel" type="text"
+						class="form-control" /></label>
+				</p>
+				<p>
+					<label>Email: <input id="ven_email" type="text"
+						class="form-control"/ ></label>
+				</p>
+				<p>
+					<label>Address: <input id="ven_addr" type="text"
+						class="form-control" /></label>
+				</p>
+			</form>
+		</div>
+		<div id="dlg-import-vendors" title="Import Makers">
+			<div id="import-vendors-grid"></div>
+		</div>
+		<nav class="sidebar">
+			<ul class="menu">
+				<li id="sidebar-home"><a href="index.html">Home</a></li>
+				<li id="sidebar-inventory"><a href="inventory.html">Inventory</a></li>
+				<li id="sidebar-products"><a href="products.html">Products</a></li>
+				<li id="sidebar-vendors"><a href="vendors.html">Vendors</a></li>
+				<li id="sidebar-orders"><a href="orders.html">Orders</a></li>
+				<li id="sidebar-reports"><a href="report.html">REPORTS</a></li>
+				<li id="sidebar-users"><a href="users.html">Users</a></li>
+			</ul>
+		</nav>
 	</div>
-	<div id="dlg-import-vendors" title="Import Makers">
-		<div id="import-vendors-grid"></div>
-	</div>
-	<nav class="sidebar">
-		<ul class="menu">
-			<li id="sidebar-home"><a href="index.html">Home</a></li>
-			<li id="sidebar-inventory"><a href="inventory.html">Inventory</a></li>
-			<li id="sidebar-products"><a href="products.html">Products</a></li>
-			<li id="sidebar-vendors"><a href="vendors.html">Vendors</a></li>
-			<li id="sidebar-orders"><a href="orders.html">Orders</a></li>
-			<li id="sidebar-reports"><a href="report.html">REPORTS</a></li>
-			<li id="sidebar-users"><a href="users.html">Users</a></li>
-		</ul>
-	</nav>
-	
 	<script src="lib/nav-sidebar.js"></script>
 	<script src="js/vendors-users.js"></script>
 	<script src="js/vendors.js"></script>

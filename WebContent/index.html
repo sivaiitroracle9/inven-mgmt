@@ -96,238 +96,239 @@
 		</div>
 		<!-- /.container-fluid -->
 	</nav>
-
-	<div class="container-fluid">
-		<!-- Page Heading -->
-		<div class="row">
-			<div class="col-lg-12">
-				<select id="global-warehouse"
-					class="page-header pull-right form-control" style="width: 200px"></select>
-				<h1 class="page-header">
-					Dashboard <small>Statistics Overview</small>
-				</h1>
-				<ol class="breadcrumb">
-					<li class="active"><i class="fa fa-dashboard"></i> Dashboard</li>
-				</ol>
-			</div>
-		</div>
-
-		<div class="row">
-			<div class="col-lg-2 col-md-6">
-				<div class="panel panel-primary">
-					<div class="panel-heading">
-						<div class="row">
-							<div class="col-xs-3">
-								<i class="fa fa-comments fa-5x"></i>
-							</div>
-							<div class="col-xs-9 text-right">
-								<div class="huge">26</div>
-								<div>Messages!</div>
-							</div>
-						</div>
-					</div>
-					<a href="#">
-						<div class="panel-footer">
-							<span class="pull-left">View Details</span> <span
-								class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-							<div class="clearfix"></div>
-						</div>
-					</a>
-				</div>
-			</div>
-			<div class="col-lg-2 col-md-6">
-				<div class="panel panel-green">
-					<div class="panel-heading">
-						<div class="row">
-							<div class="col-xs-2">
-								<i class="fa fa-shopping-cart fa-5x"></i>
-							</div>
-							<div class="col-xs-9 text-right">
-								<div class="huge">10</div>
-								<div>New Purchase Orders!</div>
-							</div>
-						</div>
-					</div>
-					<a href="#">
-						<div class="panel-footer">
-							<span class="pull-left">View Details</span> <span
-								class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-							<div class="clearfix"></div>
-						</div>
-					</a>
-				</div>
-			</div>
-			<div class="col-lg-2 col-md-6">
-				<div class="panel panel-yellow">
-					<div class="panel-heading">
-						<div class="row">
-							<div class="col-xs-2">
-								<i class="fa fa-shopping-cart fa-5x"></i>
-							</div>
-							<div class="col-xs-9 text-right">
-								<div class="huge">12</div>
-								<div>New Sales Orders!</div>
-							</div>
-						</div>
-					</div>
-					<a href="#">
-						<div class="panel-footer">
-							<span class="pull-left">View Details</span> <span
-								class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-							<div class="clearfix"></div>
-						</div>
-					</a>
+	<div id="show-body" style="display: none">
+		<div class="container-fluid">
+			<!-- Page Heading -->
+			<div class="row">
+				<div class="col-lg-12">
+					<select id="global-warehouse"
+						class="page-header pull-right form-control" style="width: 200px"></select>
+					<h1 class="page-header">
+						Dashboard <small>Statistics Overview</small>
+					</h1>
+					<ol class="breadcrumb">
+						<li class="active"><i class="fa fa-dashboard"></i> Dashboard</li>
+					</ol>
 				</div>
 			</div>
 
-			<div class="col-lg-2 col-md-6">
-				<div class="panel panel-yellow">
-					<div class="panel-heading">
-						<div class="row">
-							<div class="col-xs-3">
-								<i class="fa fa-tasks fa-5x"></i>
-							</div>
-							<div class="col-xs-9 text-right">
-								<div class="huge">124</div>
-								<div>Low Stock alerts!</div>
-							</div>
-						</div>
-					</div>
-					<a href="#">
-						<div class="panel-footer">
-							<span class="pull-left">View Details</span> <span
-								class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-							<div class="clearfix"></div>
-						</div>
-					</a>
-				</div>
-			</div>
-			<div class="col-lg-3 col-md-6">
-				<div class="panel panel-green">
-					<div class="panel-heading">
-						<div class="row">
-							<div class="col-xs-3">
-								<i class="fa fa-usd fa-5x"></i>
-							</div>
-							<div class="col-xs-9 text-right">
-								<div class="huge">
-									<span id="inwhouse-ivalue"></span>
+			<div class="row">
+				<div class="col-lg-2 col-md-6">
+					<div class="panel panel-primary">
+						<div class="panel-heading">
+							<div class="row">
+								<div class="col-xs-3">
+									<i class="fa fa-comments fa-5x"></i>
 								</div>
-								<div>Inventory Value!</div>
-							</div>
-						</div>
-					</div>
-					<a href="#">
-						<div class="panel-footer">
-							<span class="pull-left">View Details</span> <span
-								class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-							<div class="clearfix"></div>
-						</div>
-					</a>
-				</div>
-			</div>
-		</div>
-		<!-- /.row -->
-
-		<div class="row">
-			<div class="col-lg-6">
-				<div class="panel panel-default">
-					<div class="panel-heading" style="white-space: nowrap;">
-						<h3 class="panel-title" style="line-height: 100%">
-							<i class="fa fa-bar-chart-o fa-fw"></i> <label>Stock
-								Chart</label>
-						</h3>
-						<div style="float: right">
-							<div style="float: left">
-								<div class="btn-group" role="group" aria-label="...">
-									<button id="btn-d" type="button" onclick="dmyf(0)"
-										class="btn btn-default">Day</button>
-									<button id="btn-m" type="button" onclick="dmyf(1)"
-										class="btn btn-default">Month</button>
-									<button id="btn-y" type="button" onclick="dmyf(2)"
-										class="btn btn-default">Year</button>
+								<div class="col-xs-9 text-right">
+									<div class="huge">26</div>
+									<div>Messages!</div>
 								</div>
-								<label>OR</label>
-							</div>
-							<div style="float: left; margin-left: 8px">
-								<label for="from">FROM : </label><input type="date" id="from"
-									name="from"><br /> <label for="to"
-									style="margin-left: 22px">TO : </label><input type="date"
-									id="to" name="to">
 							</div>
 						</div>
-						<div>
-							<div style="width: 300px; margin-bottom: 10px">
-								<select id="st-chart-type" class="form-control"
-									style="width: 200px; float: right">
-									<option value=0>In Warehouse Qty</option>
-									<option value=1>In-bound Qty</option>
-									<option value=2>Out-bound Qty</option>
-								</select> <label>Chart Type:</label>
+						<a href="#">
+							<div class="panel-footer">
+								<span class="pull-left">View Details</span> <span
+									class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+								<div class="clearfix"></div>
 							</div>
-							<div style="width: 300px; margin-bottom: 10px">
-								<select id="st-chart-cat" class="form-control category-lov"
-									style="width: 200px; float: right">
-								</select> <label>Category:</label>
-							</div>
-							<div style="width: 300px; margin-bottom: 10px">
-								<select id="st-chart-prod" class="form-control product-lov"
-									style="width: 200px; float: right">
-								</select> <label>Product:</label>
-							</div>
-						</div>
-					</div>
-					<div class="panel-body">
-						<div id="st-chart-qty"></div>
+						</a>
 					</div>
 				</div>
-			</div>
-			<div class="col-lg-6">
-				<div class="panel panel-default">
-					<div class="panel-heading" style="white-space: nowrap;">
-						<h3 class="panel-title" style="line-height: 100%">
-							<i class="fa fa-bar-chart-o fa-fw"></i> <label>Inventory Value</label>
-						</h3>
-						<div style="float: right">
-							<div style="float: left">
-								<div class="btn-group" role="group" aria-label="...">
-									<button id="btn-d" type="button" onclick="dmyf(0)"
-										class="btn btn-default">Day</button>
-									<button id="btn-m" type="button" onclick="dmyf(1)"
-										class="btn btn-default">Month</button>
-									<button id="btn-y" type="button" onclick="dmyf(2)"
-										class="btn btn-default">Year</button>
+				<div class="col-lg-2 col-md-6">
+					<div class="panel panel-green">
+						<div class="panel-heading">
+							<div class="row">
+								<div class="col-xs-2">
+									<i class="fa fa-shopping-cart fa-5x"></i>
 								</div>
-								<label>OR</label>
-							</div>
-							<div style="float: left; margin-left: 8px">
-								<label for="from">FROM : </label><input type="date" id="from"
-									name="from"><br /> <label for="to"
-									style="margin-left: 22px">TO : </label><input type="date"
-									id="to" name="to">
+								<div class="col-xs-9 text-right">
+									<div class="huge">10</div>
+									<div>New Purchase Orders!</div>
+								</div>
 							</div>
 						</div>
-						<div>
-							<div style="width: 300px; margin-bottom: 10px">
-								<select id="iv-chart-cat" class="form-control category-lov"
-									style="width: 200px; float: right">
-								</select> <label>Category:</label>
+						<a href="#">
+							<div class="panel-footer">
+								<span class="pull-left">View Details</span> <span
+									class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+								<div class="clearfix"></div>
 							</div>
-							<div style="width: 300px; margin-bottom: 10px">
-								<select id="iv-chart-prod" class="form-control product-lov"
-									style="width: 200px; float: right">
-								</select> <label>Product:</label>
-							</div>
-						</div>
+						</a>
 					</div>
-					<div class="panel-body">
-						<div id="morris-inventory-value-chart"></div>
+				</div>
+				<div class="col-lg-2 col-md-6">
+					<div class="panel panel-yellow">
+						<div class="panel-heading">
+							<div class="row">
+								<div class="col-xs-2">
+									<i class="fa fa-shopping-cart fa-5x"></i>
+								</div>
+								<div class="col-xs-9 text-right">
+									<div class="huge">12</div>
+									<div>New Sales Orders!</div>
+								</div>
+							</div>
+						</div>
+						<a href="#">
+							<div class="panel-footer">
+								<span class="pull-left">View Details</span> <span
+									class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+								<div class="clearfix"></div>
+							</div>
+						</a>
+					</div>
+				</div>
+
+				<div class="col-lg-2 col-md-6">
+					<div class="panel panel-yellow">
+						<div class="panel-heading">
+							<div class="row">
+								<div class="col-xs-3">
+									<i class="fa fa-tasks fa-5x"></i>
+								</div>
+								<div class="col-xs-9 text-right">
+									<div class="huge">124</div>
+									<div>Low Stock alerts!</div>
+								</div>
+							</div>
+						</div>
+						<a href="#">
+							<div class="panel-footer">
+								<span class="pull-left">View Details</span> <span
+									class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+								<div class="clearfix"></div>
+							</div>
+						</a>
+					</div>
+				</div>
+				<div class="col-lg-3 col-md-6">
+					<div class="panel panel-green">
+						<div class="panel-heading">
+							<div class="row">
+								<div class="col-xs-3">
+									<i class="fa fa-usd fa-5x"></i>
+								</div>
+								<div class="col-xs-9 text-right">
+									<div class="huge">
+										<span id="inwhouse-ivalue"></span>
+									</div>
+									<div>Inventory Value!</div>
+								</div>
+							</div>
+						</div>
+						<a href="#">
+							<div class="panel-footer">
+								<span class="pull-left">View Details</span> <span
+									class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+								<div class="clearfix"></div>
+							</div>
+						</a>
 					</div>
 				</div>
 			</div>
-		</div>
+			<!-- /.row -->
 
-		<!-- /.row -->
+			<div class="row">
+				<div class="col-lg-6">
+					<div class="panel panel-default">
+						<div class="panel-heading" style="white-space: nowrap;">
+							<h3 class="panel-title" style="line-height: 100%">
+								<i class="fa fa-bar-chart-o fa-fw"></i> <label>Stock
+									Chart</label>
+							</h3>
+							<div style="float: right">
+								<div style="float: left">
+									<div class="btn-group" role="group" aria-label="...">
+										<button id="btn-d" type="button" onclick="dmyf(0)"
+											class="btn btn-default">Day</button>
+										<button id="btn-m" type="button" onclick="dmyf(1)"
+											class="btn btn-default">Month</button>
+										<button id="btn-y" type="button" onclick="dmyf(2)"
+											class="btn btn-default">Year</button>
+									</div>
+									<label>OR</label>
+								</div>
+								<div style="float: left; margin-left: 8px">
+									<label for="from">FROM : </label><input type="date" id="from"
+										name="from"><br /> <label for="to"
+										style="margin-left: 22px">TO : </label><input type="date"
+										id="to" name="to">
+								</div>
+							</div>
+							<div>
+								<div style="width: 300px; margin-bottom: 10px">
+									<select id="st-chart-type" class="form-control"
+										style="width: 200px; float: right">
+										<option value=0>In Warehouse Qty</option>
+										<option value=1>In-bound Qty</option>
+										<option value=2>Out-bound Qty</option>
+									</select> <label>Chart Type:</label>
+								</div>
+								<div style="width: 300px; margin-bottom: 10px">
+									<select id="st-chart-cat" class="form-control category-lov"
+										style="width: 200px; float: right">
+									</select> <label>Category:</label>
+								</div>
+								<div style="width: 300px; margin-bottom: 10px">
+									<select id="st-chart-prod" class="form-control product-lov"
+										style="width: 200px; float: right">
+									</select> <label>Product:</label>
+								</div>
+							</div>
+						</div>
+						<div class="panel-body">
+							<div id="st-chart-qty"></div>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-6">
+					<div class="panel panel-default">
+						<div class="panel-heading" style="white-space: nowrap;">
+							<h3 class="panel-title" style="line-height: 100%">
+								<i class="fa fa-bar-chart-o fa-fw"></i> <label>Inventory
+									Value</label>
+							</h3>
+							<div style="float: right">
+								<div style="float: left">
+									<div class="btn-group" role="group" aria-label="...">
+										<button id="btn-d" type="button" onclick="dmyf(0)"
+											class="btn btn-default">Day</button>
+										<button id="btn-m" type="button" onclick="dmyf(1)"
+											class="btn btn-default">Month</button>
+										<button id="btn-y" type="button" onclick="dmyf(2)"
+											class="btn btn-default">Year</button>
+									</div>
+									<label>OR</label>
+								</div>
+								<div style="float: left; margin-left: 8px">
+									<label for="from">FROM : </label><input type="date" id="from"
+										name="from"><br /> <label for="to"
+										style="margin-left: 22px">TO : </label><input type="date"
+										id="to" name="to">
+								</div>
+							</div>
+							<div>
+								<div style="width: 300px; margin-bottom: 10px">
+									<select id="iv-chart-cat" class="form-control category-lov"
+										style="width: 200px; float: right">
+									</select> <label>Category:</label>
+								</div>
+								<div style="width: 300px; margin-bottom: 10px">
+									<select id="iv-chart-prod" class="form-control product-lov"
+										style="width: 200px; float: right">
+									</select> <label>Product:</label>
+								</div>
+							</div>
+						</div>
+						<div class="panel-body">
+							<div id="morris-inventory-value-chart"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- /.row -->
 			<div class="row">
 				<div class="col-lg-4">
 					<div class="panel panel-default">
@@ -392,8 +393,8 @@
 				<li id="sidebar-users"><a href="users.html">Users</a></li>
 			</ul>
 		</nav>
-		
-		<script src="lib/nav-sidebar.js"></script>
+	</div>
+	<script src="lib/nav-sidebar.js"></script>
 		<script src="js/home-data.js"></script>
 		<script src="js/index-common.js"></script>
 		<script src="js/index.js"></script>

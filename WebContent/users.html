@@ -90,62 +90,62 @@
 		</div>
 		<!-- /.container-fluid -->
 	</nav>
-
-	<div class="container-fluid">
-		<div class="panel panel-sucess">
-			<div class="panel-heading">
-				<label>USERS</label>
-				<div class="btn-group pull-right">
+	<div id="show-body" style="display: none">
+		<div class="container-fluid">
+			<div class="panel panel-sucess">
+				<div class="panel-heading">
+					<label>USERS</label>
 					<div class="btn-group pull-right">
-						<a class="btn btn-default"><span
-							class="glyphicon glyphicon-print" style="margin-right: 4px"></span>Print</a>
-						<a class="btn btn-default" onclick=open_dlg_overview_email()><span
-							class="glyphicon glyphicon-envelope" style="margin-right: 4px"></span>Email</a>
+						<div class="btn-group pull-right">
+							<a class="btn btn-default"><span
+								class="glyphicon glyphicon-print" style="margin-right: 4px"></span>Print</a>
+							<a class="btn btn-default" onclick=open_dlg_overview_email()><span
+								class="glyphicon glyphicon-envelope" style="margin-right: 4px"></span>Email</a>
+						</div>
+						<button type="button" class="btn btn-default dropdown-toggle"
+							data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							<span class="fa fa-download"> </span> Export <span class="caret"></span>
+						</button>
+						<ul class="dropdown-menu" style="background: #171048">
+							<li style="width: 96px"><a href="#"
+								onclick="exportOrderRevisionsCSV()"><span
+									class="fa fa-file-excel-o"> </span> CSV</a></li>
+							<li style="width: 96px"><a href="#"><span
+									class="fa fa-file-pdf-o"> </span> PDF</a></li>
+							<li style="width: 96px"><a href="#"><span
+									class="fa fa-file-code-o"> </span> JSON</a></li>
+						</ul>
 					</div>
-					<button type="button" class="btn btn-default dropdown-toggle"
-						data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						<span class="fa fa-download"> </span> Export <span class="caret"></span>
-					</button>
-					<ul class="dropdown-menu" style="background: #171048">
-						<li style="width: 96px"><a href="#"
-							onclick="exportOrderRevisionsCSV()"><span
-								class="fa fa-file-excel-o"> </span> CSV</a></li>
-						<li style="width: 96px"><a href="#"><span
-								class="fa fa-file-pdf-o"> </span> PDF</a></li>
-						<li style="width: 96px"><a href="#"><span
-								class="fa fa-file-code-o"> </span> JSON</a></li>
-					</ul>
+				</div>
+				<div class="panel-body">
+					<div id="users-grid"></div>
 				</div>
 			</div>
-			<div class="panel-body">
-				<div id="users-grid"></div>
+			<div id="dlg-overview-email">
+				<form action="" class="form-group">
+					<label for="dlg-overview-email-to">To</label><input
+						class="form-control" id="dlg-overview-email-to" type="email">
+					<label for="dlg-overview-email-from">From</label><input
+						class="form-control" id="dlg-overview-email-from" type="email">
+					<label for="dlg-overview-email-subject">Subject</label><input
+						class="form-control" id="dlg-overview-email-subject" type="email">
+					<label for="dlg-overview-email-body">Content</label>
+					<textarea class="form-control" style="width: 360px"></textarea>
+				</form>
 			</div>
 		</div>
-		<div id="dlg-overview-email">
-			<form action="" class="form-group">
-				<label for="dlg-overview-email-to">To</label><input
-					class="form-control" id="dlg-overview-email-to" type="email">
-				<label for="dlg-overview-email-from">From</label><input
-					class="form-control" id="dlg-overview-email-from" type="email">
-				<label for="dlg-overview-email-subject">Subject</label><input
-					class="form-control" id="dlg-overview-email-subject" type="email">
-				<label for="dlg-overview-email-body">Content</label>
-				<textarea class="form-control" style="width: 360px"></textarea>
-			</form>
-		</div>
+		<nav class="sidebar">
+			<ul class="menu">
+				<li id="sidebar-home"><a href="index.html">Home</a></li>
+				<li id="sidebar-inventory"><a href="inventory.html">Inventory</a></li>
+				<li id="sidebar-products"><a href="products.html">Products</a></li>
+				<li id="sidebar-vendors"><a href="vendors.html">Vendors</a></li>
+				<li id="sidebar-orders"><a href="orders.html">Orders</a></li>
+				<li id="sidebar-reports"><a href="report.html">REPORTS</a></li>
+				<li id="sidebar-users"><a href="users.html">Users</a></li>
+			</ul>
+		</nav>
 	</div>
-	<nav class="sidebar">
-		<ul class="menu">
-			<li id="sidebar-home"><a href="index.html">Home</a></li>
-			<li id="sidebar-inventory"><a href="inventory.html">Inventory</a></li>
-			<li id="sidebar-products"><a href="products.html">Products</a></li>
-			<li id="sidebar-vendors"><a href="vendors.html">Vendors</a></li>
-			<li id="sidebar-orders"><a href="orders.html">Orders</a></li>
-			<li id="sidebar-reports"><a href="report.html">REPORTS</a></li>
-			<li id="sidebar-users"><a href="users.html">Users</a></li>
-		</ul>
-	</nav>
-
 	<script src="lib/nav-sidebar.js"></script>
 	<script src="js/users.js"></script>
 </body>

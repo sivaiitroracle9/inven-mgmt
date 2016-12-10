@@ -165,3 +165,8 @@ function sidebarAccess(){
 		$("#sidebar-users").hide();
 	}
 }
+
+$(window).load(function() {
+	  // When the page has loaded
+	  $("#show-body").fadeIn(1000);
+	});
