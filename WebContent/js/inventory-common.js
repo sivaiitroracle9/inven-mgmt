@@ -314,6 +314,7 @@ var dlg_overview_email = $("#dlg-overview-email").dialog(
 
 			}
 });
+$("#dlg-overview-email").show();
 
 function pageData(data, pageIndex, pageSize) {
 	var pageData;

@@ -348,6 +348,7 @@ var dlg_overview_email = $("#dlg-overview-email").dialog(
 
 			}
 });
+$("#dlg-overview-email").show();
 
 function getNextInsertId(table) {
 	var rows = alasql("select max(id) as id from " + table + ";");

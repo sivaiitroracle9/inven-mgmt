@@ -1,5 +1,5 @@
 $("#porder-quotes").jsGrid({
-		width:"1100px",
+		width:"100%",
         filtering: true,
         sorting: true,
         autoload: true,
@@ -34,7 +34,7 @@ $("#porder-quotes").jsGrid({
         },
  
         fields: [
-            { name: "onumber", title: "ORD. NUMBER", type: "text", editing: false, width:200, align:"center",
+            { name: "onumber", title: "ORD. NUMBER", type: "text", editing: false, align:"center",
             	itemTemplate: function(value, item) {
             		if(item!=undefined) {
                 		return "<a href='#' onclick=openPODetails(" + item.id + ")>" + value + "</a>";
@@ -46,7 +46,7 @@ $("#porder-quotes").jsGrid({
             		}
             	}
             },
-            { name: "status", title: "STATUS", type: "select", items: getStatusLOV("PO"), valueField: "id", textField: "text", width:200, align:"center",
+            { name: "status", title: "STATUS", type: "select", items: getStatusLOV("PO"), valueField: "id", textField: "text",  align:"center",
             	
             	itemTemplate: function(value, item){
             		var str = "";
@@ -84,7 +84,7 @@ $("#porder-quotes").jsGrid({
             	}
             	
             },
-            { name: "poQuote", title: "QUOTE", type: "text", width:200, align:"center",
+            { name: "poQuote", title: "QUOTE", type: "text", align:"center",
             	itemTemplate: function(value, item){
             		if(!value || value=='') return "--";
             		var $a = $("<a style='color:blue;' target='_blank'>").attr("href", 
@@ -95,7 +95,7 @@ $("#porder-quotes").jsGrid({
             	}
             },
             
-            { name: "poInvoice", title: "INVOICE", type: "text", width:200, align:"center",
+            { name: "poInvoice", title: "INVOICE", type: "text", align:"center",
             	itemTemplate: function(value, item){
             		if(!value || value=='') return "--";
             		var $a = $("<a style='color:blue;' target='_blank'>").attr("href", 
@@ -105,7 +105,7 @@ $("#porder-quotes").jsGrid({
             		return $a;
             	}
             },
-            { name: "lastupdate", title: "LAST UPDATE", type: "text", width:200, align:"center",},
+            { name: "lastupdate", title: "LAST UPDATE", type: "text", align:"center",},
 
         ]
     });

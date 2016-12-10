@@ -17,6 +17,7 @@ var poOrderDetailsDlg = $("#po-order-details-dlg").dialog({
 		 od_dlg_po_item = [];
 	 }
 });
+$("#po-order-details-dlg").show();
 
 function openPODetails(id) {
 

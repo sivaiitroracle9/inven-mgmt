@@ -51,5 +51,3 @@ if(getPermission("orders-revisions")) {
 	}
 	$("#li-revisions").show();
 }
-$("body").hide();
-$("#po-order-details-dlg").hide();

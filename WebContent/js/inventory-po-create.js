@@ -12,6 +12,7 @@ var poOrderDetailsDlg = $("#dlg-inventory-create-po").dialog({
     	$("#po-warehouse-info-select").val(0);
     }
 });
+$("#dlg-inventory-create-po").show();
 
 var notificationDlg = $("#notification-dlg").dialog({
     autoOpen: false,
@@ -25,6 +26,7 @@ var notificationDlg = $("#notification-dlg").dialog({
         }
     },
 });
+$("#notification-dlg").show();
 
 $("#o-date").text((new Date()).toLocaleString());
 getVendorsLOV().forEach(function(lov){
