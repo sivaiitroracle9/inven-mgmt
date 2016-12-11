@@ -6,7 +6,7 @@ var dialog = $("#dialog-form").dialog({
 	buttons : [ {
 		text : "Save",
 		click : function() {
-			$("#vendorForm").submit();
+			$("#outletForm").submit();
 		}
 	}, {
 		text : "Cancel",
@@ -35,40 +35,40 @@ var showDetailsDialog = function(dialogType, vendor) {
     submitHandler = function(event) {
     	saveClient(vendor, dialogType === "Add");
     };
-    $("#ven_code").val(vendor["CODE"]);
-    $("#ven_name").val(vendor["NAME"]);
-    $("#ven_tel").val(vendor["TEL"]);
-    $("#ven_email").val(vendor["Email"]);
-    $("#ven_addr").val(vendor["Address"]);
+    $("#outlet_code").val(vendor["CODE"]);
+    $("#outlet_name").val(vendor["NAME"]);
+    $("#outlet_tel").val(vendor["TEL"]);
+    $("#outlet_email").val(vendor["Email"]);
+    $("#outlet_addr").val(vendor["Address"]);
 
     dialog.dialog("option", "title", dialogType + " vendor").dialog("open");
 };
 
-var saveClient = function(vendor, isNew) {
+var saveClient = function(outlet, isNew) {
 	
-	var dbvendor = {};
+	var dboutlet = {};
 	var id = 0;
-	if(isNew) dbvendor = vendor;
-	else id = vendor["id"];
+	if(isNew) dboutlet = outlet;
+	else id = outlet["id"];
 	
-	$.extend(dbvendor, {
-    	vencode: $("#ven_code").val(),
-    	name: $("#ven_name").val(),
-    	tel: $("#ven_tel").val(),
-    	email: $("#ven_email").val(),
-    	address: $("#ven_addr").val()
+	$.extend(dboutlet, {
+    	outletcode: $("#outlet_code").val(),
+    	name: $("#outlet_name").val(),
+    	tel: $("#outlet_tel").val(),
+    	email: $("#outlet_email").val(),
+    	address: $("#outlet_addr").val()
     });
-    isNew ? addVendor(dbvendor) : updateVendor(id, dbvendor);
+    isNew ? addOutlet(dboutlet) : updateOutlet(id, dboutlet);
     dialog.dialog("close");
-    refreshVendorGrid();
+    refreshOutletsGrid();
 };
 
-function refreshVendorGrid() {
-	$("#jsGrid").jsGrid("reset");
-	$("#jsGrid").jsGrid("loadData");
+function refreshOutletsGrid() {
+	$("#outlets-grid").jsGrid("reset");
+	$("#outlets-grid").jsGrid("loadData");
 }
 
-$("#jsGrid").jsGrid({
+$("#outlets-grid").jsGrid({
     width: "100%",
     autoload: true,
 	filtering: true,
@@ -87,12 +87,12 @@ $("#jsGrid").jsGrid({
     controller: {
         loadData: function(filter) {
         	
-        	var filtered = $.grep(getVendorsFromDB(), function(vendor) {
-                return (!filter["CODE"] || vendor["CODE"].indexOf(filter["CODE"]) > -1)
-            	&& (!filter["NAME"] || vendor["NAME"].indexOf(filter["NAME"]) > -1)
-            	&& (!filter["TEL"] || String(vendor["TEL"]).indexOf(filter["TEL"]) > -1)
-            	&& (!filter["Email"] || vendor["Email"].indexOf(filter["Email"]) > -1)
-                && (!filter["Address"] || vendor["Address"].indexOf(filter["Address"]) > -1);
+        	var filtered = $.grep(getOutletsFromDB(), function(outlet) {
+                return (!filter["CODE"] || outlet["CODE"].indexOf(filter["CODE"]) > -1)
+            	&& (!filter["NAME"] || outlet["NAME"].indexOf(filter["NAME"]) > -1)
+            	&& (!filter["TEL"] || String(outlet["TEL"]).indexOf(filter["TEL"]) > -1)
+            	&& (!filter["Email"] || outlet["Email"].indexOf(filter["Email"]) > -1)
+                && (!filter["Address"] || outlet["Address"].indexOf(filter["Address"]) > -1);
         	});
         	
         	if(filter.sortField != undefined && filter.sortOrder != undefined)
@@ -102,12 +102,12 @@ $("#jsGrid").jsGrid({
         },
         
         deleteItem: function(item) {
-        	deleteVendor(item);
-            refreshVendorGrid();
+        	deleteOutlet(item);
+        	refreshOutletsGrid();
         },
         updateItem: function(item) {
         	showDetailsDialog("Edit", item);
-            refreshVendorGrid();
+        	refreshOutletsGrid();
         },
 
     },
@@ -158,11 +158,11 @@ $("#jsGrid").jsGrid({
           		
           		var div = $("<div>");
           		
-          		this._createGridButton("jsgrid-edit-button", "Click to Edit this row", function(grid) {
+          		this._createGridButton("jsgrid-edit-button", "Edit Outlet", function(grid) {
                     grid.updateItem(item);
                 }).appendTo(div);
 
-                this._createGridButton("jsgrid-delete-button", "Click to Edit this row", function(grid) {
+                this._createGridButton("jsgrid-delete-button", "Delete Outlet", function(grid) {
                 	grid.deleteItem(item);
                 }).appendTo(div);
 
@@ -173,11 +173,11 @@ $("#jsGrid").jsGrid({
     ]
 });
 
-function updateVendor(id, vendor) {
-	var query = "update vendor set ";
+function updateOutlet(id, outlet) {
+	var query = "update outlet set ";
 	
 	var set = [];
-	Object.keys(vendor).forEach(function(key){
+	Object.keys(outlet).forEach(function(key){
 		set.push(key + "='" + vendor[key] + "'")
 	});
 	
@@ -187,44 +187,44 @@ function updateVendor(id, vendor) {
 	alasql(query);
 }
 
-function deleteVendor(vendor) {
-	console.log(vendor);
-	alasql("delete from vendor where id = " + vendor.id);
+function deleteOutlet(outlet) {
+	console.log(outlet);
+	alasql("delete from outlet where id = " + outlet.id);
 }
 
-function addVendor(vendor) {
-	var rows = alasql("select max(id) as id from vendor");
+function addOutlet(outlet) {
+	var rows = alasql("select max(id) as id from outlet");
 	var values = [];
 	if (rows.length == 1 && rows[0].id != undefined)
 		values.push(Number(rows[0].id) + 1);
 	else
 		values.push(Number(1));
 
-	Object.keys(vendor).forEach(function(key){
+	Object.keys(outlet).forEach(function(key){
 		if(key == "name")
-			values[1] = vendor[key];
-		else if(key == "vencode")
-			values[3] = vendor[key];
+			values[1] = outlet[key];
+		else if(key == "outletcode")
+			values[3] = outlet[key];
 		else if(key == "tel")
-			values[2] = vendor[key];
+			values[2] = outlet[key];
 		else if(key == "email")
-			values[4] = vendor[key];
-		else if(key == "addr")
-			values[5] = vendor[key];
+			values[4] = outlet[key];
+		else if(key == "address")
+			values[5] = outlet[key];
 	});
 	
-	alasql("INSERT INTO vendor VALUES(?,?,?,?,?,?)", values);
+	alasql("INSERT INTO outlet VALUES(?,?,?,?,?,?)", values);
 }
 
-function getVendorsFromDB(){
-	var rows = alasql("SELECT * FROM vendor order by id desc");
+function getOutletsFromDB(){
+	var rows = alasql("SELECT * FROM outlet order by id desc");
 
 	var data = [];
 	if(rows.length !=0 ) {
 		rows.forEach(function(r){
 			var d = {};
 			d["id"] = r.id;
-			d["CODE"] = r.vencode;
+			d["CODE"] = r.outletcode;
 			d["NAME"] = r.name;
 			d["TEL"] = r.tel;
 			d["Email"] = r.email;
@@ -251,11 +251,11 @@ function sortJsonArray(data, field, sortOrder){
 }
 
 
-var import_vendors = {};
-$("#input-vendors-file").change(function(event) {
+var import_outlets = {};
+$("#input-outlets-file").change(function(event) {
     var data = null;
     var file = event.target.files[0];
-    import_vendors = {};
+    import_outlets = {};
     if(file.type =="application/vnd.ms-excel" && file.name.indexOf(".csv") != -1) {
         var reader = new FileReader();
         reader.readAsText(file);
@@ -268,18 +268,18 @@ $("#input-vendors-file").change(function(event) {
             		var csvDataLine = csvData[i].trim();
             		var csvDataLineVal = csvDataLine.split(",");
             		if(csvDataLineVal.length == 5) {
-                		var vendor = {};
-                		vendor["row-id"] = i;
-                		vendor["snum"] = i;
-                		vendor["vcode"] = csvDataLineVal[0].trim();
-                		vendor["vname"] = (csvDataLineVal[1]).trim();
-                		vendor["vtel"] = csvDataLineVal[2].trim();
-                		vendor["vemail"] = csvDataLineVal[3].trim();
-                		vendor["vaddr"] = csvDataLineVal[4].trim();
-                		import_vendors[i] = vendor;	
+                		var outlet = {};
+                		outlet["row-id"] = i;
+                		outlet["snum"] = i;
+                		outlet["ocode"] = csvDataLineVal[0].trim();
+                		outlet["oname"] = (csvDataLineVal[1]).trim();
+                		outlet["otel"] = csvDataLineVal[2].trim();
+                		outlet["oemail"] = csvDataLineVal[3].trim();
+                		outlet["oaddr"] = csvDataLineVal[4].trim();
+                		import_outlets[i] = outlet;	
             		}
             	}
-            	importVendorDialog.dialog("open");
+            	importOutletDialog.dialog("open");
             } else {
             	alert('No data to import!');
             }
@@ -290,66 +290,66 @@ $("#input-vendors-file").change(function(event) {
     }
 });
 
-function importVendors() {
-	var importData = Object.values(import_vendors);
+function importOutlets() {
+	var importData = Object.values(import_outlets);
 	if(importData.length > 0) {
 		importData.forEach(function(data){
-			var query = "INSERT INTO vendor VALUES (";
+			var query = "INSERT INTO outlet VALUES (";
 			var values = [];
-			values[0] = getNextInsertId("vendor");
+			values[0] = getNextInsertId("outlet");
 			
-			values[1] = "'" + data["vname"] + "'";
-			values[2] = "'" + data["vtel"] + "'";
-			values[3] = "'" + data["vcode"] + "'";
-			values[4] = "'" + data["vemail"] + "'";
-			values[5] = "'" + data["vaddr"] + "'";
+			values[1] = "'" + data["oname"] + "'";
+			values[2] = "'" + data["otel"] + "'";
+			values[3] = "'" + data["ocode"] + "'";
+			values[4] = "'" + data["oemail"] + "'";
+			values[5] = "'" + data["oaddr"] + "'";
 			query += values.join(",");
 			query += ")";
 			alasql(query);
 		});
-		refreshVendorGrid();
+		refreshOutletGrid();
 	}
 }
 
-$("#import-vendors-grid").jsGrid({
+$("#import-outlets-grid").jsGrid({
     height: "500px",
     width: "870px",
     autoload: true,
     editing: true,
     
     onItemDeleted: function(){
-    	$("#import-vendors-grid").jsGrid("render");
+    	$("#import-outlets-grid").jsGrid("render");
     },
     controller: {
         loadData: function() {
-        	return Object.values(import_vendors);
+        	return Object.values(import_outlets);
         },
         
         deleteItem: function(item) {
-        	delete import_vendors[item["row-id"]];
+        	delete import_outlets[item["row-id"]];
         	var snum = 0;
-        	Object.values(import_vendors).forEach(function(d){
+        	Object.values(import_outlets).forEach(function(d){
         		d["snum"] = ++snum;
         	});
         },
         updateItem: function(item) {
-        	import_vendors[item["row-id"]] = item;
-        	$("#import-vendors-grid").jsGrid("render");
+        	import_outlets[item["row-id"]] = item;
+        	$("#import-outlets-grid").jsGrid("render");
         },
     },
     
     fields: [
     	{ name: "snum", title:"", type:"number", width:"30px", editing:false},
-        { name: "vcode", title:"VENDOR CODE", type: "text", width:"150px", },
-        { name: "vname", title:"VENDOR NAME", type: "text", width:"150px", },
-        { name: "vtel", title:"VENDOR TEL", type: "text", width:"150px", },
-        { name: "vemail", title:"VENDOR EMAIL", type: "text", width:"150px", },
-        { name: "vaddr", title:"VENDOR ADDRESS", type: "text", width:"150px", },
+        { name: "ocode", title:"OUTLET CODE", type: "text", width:"150px", },
+        { name: "oname", title:"OUTLET NAME", type: "text", width:"150px", },
+        { name: "otel", title:"OUTELET TEL", type: "text", width:"150px", },
+        { name: "oemail", title:"OUTELET EMAIL", type: "text", width:"150px", },
+        { name: "oaddr", title:"OUTELET ADDRESS", type: "text", width:"150px", },
     	{ type: "control", },
     ]
 });
 
-var importVendorDialog = $("#dlg-import-vendors").dialog({
+var importOutletDialog = $("#dlg-import-outlets").dialog({
     autoOpen: false,
     width: 900,
     modal: true,
@@ -364,8 +364,8 @@ var importVendorDialog = $("#dlg-import-vendors").dialog({
         }
     },
 	open: function(event) {
-		$("#import-vendors-grid").jsGrid("loadData");
-		$("#import-vendors-grid").jsGrid("render");
+		$("#import-outlets-grid").jsGrid("loadData");
+		$("#import-outlets-grid").jsGrid("render");
 
 		$('.ui-dialog-buttonpane').find('button:contains("Import")')
 			.removeClass("ui-button ui-corner-all ui-widget")
@@ -374,8 +374,8 @@ var importVendorDialog = $("#dlg-import-vendors").dialog({
 	 },
     close: function() {
     	import_vendors = {};
-    	$("#input-vendors-file").val("");
-    	refreshVendorGrid();
+    	$("#input-outlets-file").val("");
+    	refreshOutletGrid();
     }
 });
 
@@ -386,16 +386,16 @@ function getNextInsertId(table) {
 	return insertId + 1;
 }
 
-function vendorExportCSV() {
+function outletExportCSV() {
 	
-	var vendors = [];
-	var itemsCount = $("#jsGrid").jsGrid("_itemsCount");
-	var pageSize = $("#jsGrid").jsGrid("option","pageSize");
+	var outlets = [];
+	var itemsCount = $("#outlets-grid").jsGrid("_itemsCount");
+	var pageSize =$("#outlets-grid").jsGrid("option","pageSize");
 	var pages = Math.ceil(itemsCount/pageSize);
 	for(var i=0; i<pages; i++) {
-		$("#jsGrid").jsGrid("option","pageIndex",i + 1);
-		var newdata = $("#jsGrid").jsGrid("option","data");
-		newdata.forEach(function(d){vendors.push(d)})
+		$("#outlets-grid").jsGrid("option","pageIndex",i + 1);
+		var newdata = $("#outlets-grid").jsGrid("option","data");
+		newdata.forEach(function(d){outlets.push(d)})
 	}
 	
 	var csvData = "";
@@ -410,18 +410,18 @@ function vendorExportCSV() {
 	header[3] = "Email";
 	header[4] = "Address";
 	csvData += header.join(cellDelimiter) + lineDelimiter;
-	vendors.forEach(function(vendor){
+	outlets.forEach(function(outlet){
 		var v = [];
-		v[0] = vendor["CODE"];
-		v[1] = vendor["NAME"];
-		v[2] = vendor["TEL"];
-		v[3] = vendor["Email"];
-		v[4] = vendor["Address"];
+		v[0] = outlet["CODE"];
+		v[1] = outlet["NAME"];
+		v[2] = outlet["TEL"];
+		v[3] = outlet["Email"];
+		v[4] = outlet["Address"];
 		csvData += v.join(cellDelimiter) + lineDelimiter;
 	});
     var hiddenElement = document.createElement('a');
     hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csvData);
     hiddenElement.target = '_blank';
-    hiddenElement.download = 'vendors.csv';
+    hiddenElement.download = 'outlets.csv';
     hiddenElement.click();
 }
