@@ -349,6 +349,7 @@ function createPO(po_items_inserted) {
 		values.push("'" + date + "'");
 		values.push("''");
 		values.push("''");
+		values.push(getUserId());
 		var orderInsert = "INSERT INTO porders VALUES (" + values.join(",") + ")";
 		console.log(orderInsert)
 		alasql(orderInsert);
@@ -375,6 +376,7 @@ function createPO(po_items_inserted) {
 			values.push(0); // received
 			values.push("'" + date + "'");
 			values.push(0);
+			values.push(getUserId());
 			var poitemInsert = "INSERT INTO poitems VALUES (" + values.join(",") + ")";
 			console.log(poitemInsert)
 			alasql(poitemInsert);

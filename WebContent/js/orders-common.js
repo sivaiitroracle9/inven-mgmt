@@ -358,7 +358,8 @@ function getNextInsertId(table) {
 }
 
 function insertOrderRevision(onumber, otype, oitem, ofield, ofrom, oto, odate){
-	alasql("INSERT INTO order_revision VALUES(" + getNextInsertId("order_revision") + ",'" + onumber + "','" + otype + "','" + oitem + "','" + ofield + "','" + ofrom + "','" + oto +"','" + odate + "');" );
+	alasql("INSERT INTO order_revision VALUES(" + getNextInsertId("order_revision") + ",'" + onumber + "','" 
+			+ otype + "','" + oitem + "','" + ofield + "','" + ofrom + "','" + oto +"','" + odate + "'," + getUserId() + ");" );
 }
 
 var global_status_map = {};

@@ -166,6 +166,12 @@ function sidebarAccess(){
 		$("#sidebar-vendors").hide();
 	}
 	
+	if(pmap["sb-outlets"]) {
+		$("#sidebar-outlets").show();
+	} else {
+		$("#sidebar-outlets").hide();
+	}
+	
 	if(pmap["sb-orders"]) {
 		$("#sidebar-orders").show();
 	} else {
@@ -188,3 +194,20 @@ function sidebarAccess(){
 $(window).load(function() {
 	$("#show-body").fadeIn(1000);
 });
+
+function getUserId(){
+	return user;
+}
+
+function getUserDetailById(userId) {
+	var rows = alasql("select users.name, whouse.name as warehouse, users.designation, users.email " +
+			"from users outer join whouse on users.whouse=whouse.id where users.id="+userId);
+	if(rows) {
+		return {name: rows[0].name, warehouse:rows[0].warehouse, designation:rows[0].designation, email:rows[0].email};
+	}
+}
+
+function getUserDetailString(userId){
+	var userString = getUserDetailById(userId);
+	return userString.name + " [ " + userString.designation + " - " + userString.warehouse + " - " +userString.email +" ]";
+}

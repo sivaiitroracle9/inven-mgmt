@@ -385,7 +385,8 @@ function getAllStatusLOV() {
 }
 
 function insertOrderRevision(onumber, otype, oitem, ofield, ofrom, oto, odate){
-	alasql("INSERT INTO order_revision VALUES(" + getNextInsertId("order_revision") + ",'" + onumber + "','" + otype + "','" + oitem + "','" + ofield + "','" + ofrom + "','" + oto +"','" + odate + "');" );
+	alasql("INSERT INTO order_revision VALUES(" + getNextInsertId("order_revision") + ",'" + onumber + "','" 
+			+ otype + "','" + oitem + "','" + ofield + "','" + ofrom + "','" + oto +"','" + odate + "'," + getUserId() + ");" );
 }
 
 function getOnlyDate(date) {

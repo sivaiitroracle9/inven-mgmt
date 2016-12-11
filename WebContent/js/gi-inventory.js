@@ -30,7 +30,8 @@ $("#goodsissue-orderid-update-btn").click(function(){
     		if(issuedQty == 0) status = 19;
     		else if(orderedQty > issuedQty) status = 20;
     		else status = 21;
-    		alasql("update soitems set issued=" + issuedQty + ", status=" + status + " where id = " + upitem.id);
+    		alasql("update soitems set issued=" + issuedQty + ", status=" + status + ", lastupdatedby=" + getUserId() 
+        				+ " where id = " + upitem.id);
     		if(rows[0].status!==status)
     			insertOrderRevision(orderId, "SALES", upitem.pcode, "STATUS", global_status_map[rows[0].status], global_status_map[status], date);
     		
@@ -71,7 +72,8 @@ $("#goodsissue-orderid-update-btn").click(function(){
 				orderStatus = 14;
 			}
 			if(sorder.status != orderStatus) {
-				alasql("update sorders set status=" + orderStatus + ", lastupdate='" + date + "' where soid = '" + orderId + "'");
+				alasql("update sorders set status=" + orderStatus + ", lastupdate='" + date + "', lastupdatedby=" + getUserId() 
+        				+ " where soid = '" + orderId + "'");
 	    		insertOrderRevision(orderId, "SALES", "--", "STATUS", global_status_map[sorder[0].status], global_status_map[orderStatus], date);	
 			}
 		}

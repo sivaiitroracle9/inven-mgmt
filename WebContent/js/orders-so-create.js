@@ -355,6 +355,7 @@ function createSO(so_items_inserted) {
 		values.push(Number(status));
 		var date = (new Date()).toLocaleString();
 		values.push("'" + date + "'");
+		values.push(getUserId());
 		var orderInsert = "INSERT INTO sorders VALUES (" + values.join(",") + ")";
 		console.log(orderInsert)
 		alasql(orderInsert);
@@ -380,6 +381,7 @@ function createSO(so_items_inserted) {
 			values.push(19); // status
 			values.push(0); // issued
 			values.push("'" + (new Date()).toLocaleString() + "'");
+			values.push(getUserId());
 			var soitemInsert = "INSERT INTO soitems VALUES (" + values.join(",") + ")";
 			console.log(soitemInsert)
 			alasql(soitemInsert);

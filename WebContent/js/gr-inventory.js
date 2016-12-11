@@ -29,7 +29,8 @@ $("#goodsreceive-orderid-update-btn").click(function(){
     		if(received == 0) status = 16; // NOT RECEIVED
     		else if(qty > received) status = 17;
     		else status = 18;
-    		alasql("update poitems set received=" + received + ", status=" + status + ", lastupdate='" + date + "' where id = " + upitem.id);
+    		alasql("update poitems set received=" + received + ", status=" + status + ", lastupdate='" + date + "', lastupdatedby=" + getUserId() 
+        				+ " where id = " + upitem.id);
     		if(rows[0].status!==status)
     			insertOrderRevision(upitem.poid, "PURCHASE", upitem.pcode, "STATUS", global_status_map[rows[0].status], global_status_map[status], date);
     		
@@ -73,7 +74,8 @@ $("#goodsreceive-orderid-update-btn").click(function(){
 				orderStatus = 6;
 			}
 			if(porder.status != orderStatus) {
-				alasql("update porders set status=" + orderStatus + ", lastupdate='" + date + "' where poid = '" + orderId + "'");
+				alasql("update porders set status=" + orderStatus + ", lastupdate='" + date + "', lastupdatedby=" + getUserId() 
+        				+ " where poid = '" + orderId + "'");
 	    		insertOrderRevision(orderId, "PURCHASE", "--", "STATUS", global_status_map[porder[0].status], global_status_map[orderStatus], date);	
 			}
 		}

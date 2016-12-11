@@ -17,7 +17,8 @@ $("#order-revision").jsGrid({
     					&& (!filter["ofield"] || iitem["ofield"]==0 || iitem["ofield"] == filter["ofield"])
     					&& (!filter["ofrom"] || iitem["ofrom"].indexOf(filter["ofrom"])!=-1)
     					&& (!filter["oto"] || iitem["oto"].indexOf(filter["oto"])!=-1)
-    					&& (!filter["odate"] || iitem["odate"].indexOf(filter["odate"])!=-1));
+    					&& (!filter["odate"] || iitem["odate"].indexOf(filter["odate"])!=-1)
+    					&& (!filter["lastupdatedby"] || iitem["lastupdatedby"].indexOf(filter["lastupdatedby"])!=-1));
     		});
     		
     		if(filter.sortField != undefined && filter.sortOrder != undefined) {
@@ -46,6 +47,7 @@ $("#order-revision").jsGrid({
 		{name:"ofrom", title:"FROM", type:"text", width:150,align:"center",},
 		{name:"oto", title:"TO", type:"text", width:150,align:"center",},
 		{name:"odate", title:"DATE", type:"text", width:150,align:"center",},
+		{name:"lastupdatedby", title:"UPDATED BY", type:"text", width:150,align:"center",},
 	]
 });
 
@@ -64,6 +66,7 @@ function getOrderRevisions(){
 			item.ofrom = d.ofrom;
 			item.oto = d.oto;
 			item.odate = d.odate;
+			item.lastupdatedby = getUserDetailString(d.lastupdatedby);
 			data.push(item);
 		});
 	}
@@ -86,6 +89,7 @@ function exportOrderRevisionsCSV() {
 	header[4] = "FROM";
 	header[5] = "TO";
 	header[6] = "DATE";
+	header[7] = "UPDATED BY";
 	csvData += header.join(cellDelimiter) + lineDelimiter;
 	revisions.forEach(function(revision){
 		var v = [];
@@ -96,6 +100,7 @@ function exportOrderRevisionsCSV() {
 		v[4] = revision.ofrom;
 		v[5] = revision.oto;
 		v[6] = revision.odate.trim();
+		v[7] = revision.lastupdatedby.trim();
 		csvData += v.join(cellDelimiter) + lineDelimiter;
 	});
 	downloadCSVFile("order-revisions", csvData)

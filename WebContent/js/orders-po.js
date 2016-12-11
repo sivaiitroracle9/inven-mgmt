@@ -135,7 +135,9 @@ $("#po-dlg-items").jsGrid({
         if(rows && Number(rows[0].qprice) !== Number(args.item.qprice)) {
         	insertOrderRevision(args.item.poid, "PURCHASE", "--", "QUOTED PRICE", Number(rows[0].qprice), Number(args.item.qprice), date);	
         }
-    	alasql("update poitems set qprice=" + Number(args.item.qprice) + ", lastupdate='" + date + "' where poid='" + args.item.poid + "' and pid=" + args.item.pid);
+    	alasql("update poitems set qprice=" + Number(args.item.qprice) 
+    				+ ", lastupdate='" + date + "', lastupdatedby=" + getUserId() 
+    				+ " where poid='" + args.item.poid + "' and pid=" + args.item.pid);
     },
     
     controller: {
@@ -200,15 +202,19 @@ $("#po-orders-grid").jsGrid({
         	var rows = alasql("select status from porders where id = " + args.item.id + ";");
         	if(rows && Number(rows[0].status) !== Number(args.item.status)) {
         		insertOrderRevision(args.item.onumber, "PURCHASE", "--", "STATUS", 
-        				global_status_map[Number(rows[0].status)], global_status_map[Number(args.item.status)], date);	
+        				global_status_map[Number(rows[0].status)], 
+        				global_status_map[Number(args.item.status)], 
+        				date);	
         	}
         	console.log(args)
-        	var q = "update porders set status =" + Number(args.item.status) + ", lastupdate='" + date + "' where id =" + args.item.id + ";";
+        	var q = "update porders set status =" + Number(args.item.status) 
+        				+ ", lastupdate='" + date + "', lastupdatedby=" + getUserId() 
+        				+ " where id =" + args.item.id + ";";
         	alasql(q);
         },
         
         controller: {
-        	loadData: function() {
+        	loadData: function(filter) {
         		var porders = alasql("select * from porders order by id desc");
 
         		var data = [];
@@ -221,16 +227,26 @@ $("#po-orders-grid").jsGrid({
         				d["whouse"] = or["warehouse"];
         				d["status"] = or["status"];
         				d["lastupdate"] = or["lastupdate"];
+        				d["lastupdatedby"] = getUserDetailString(or["lastupdatedby"]);
         				data.push(d);
         			});
         		}
-        		console.log(data)
-        		return data;
+        		
+            	var filtered = $.grep(data, function(so) {
+                    return (!filter["onumber"] || so["onumber"].indexOf(filter["onumber"])) 
+                    	&& (!filter["vendor"] || so["vendor"]==filter["vendor"])
+                    	&& (!filter["whouse"] || so["whouse"]==filter["whouse"])
+                    	&& (!filter["status"] || so["status"]==filter["status"])
+                    	&& (!filter["lastupdate"] || so["lastupdate"].indexOf(filter["lastupdate"]))
+                    	&& (!filter["lastupdatedby"] || so["lastupdatedby"].indexOf(filter["lastupdatedby"]));
+            	});
+        		
+        		return filtered;
         	},
         },
  
         fields: [
-            { name: "onumber", title: "ORD. NUMBER", type: "text", editing: false,
+            { name: "onumber", title: "ORD. NUMBER", type: "text", editing: false, align:"center",
             	itemTemplate: function(value, item) {
             		if(item!=undefined) {
                 		return "<a href='#' onclick=openPODetails(" + item.id + ")>" + value + "</a>";
@@ -242,9 +258,9 @@ $("#po-orders-grid").jsGrid({
             		}
             	}
             },
-            { name: "vendor", title: "VENDOR", type: "select", items: getVendorsLOV(), valueField: "id", textField: "text", editing: false,},
-            { name: "whouse", title: "WAREHOUSE", type: "select", items: getWarehousesLOV(), valueField: "id", textField: "text", editing: false,},
-            { name: "status", title: "STATUS", type: "select", items: getStatusLOV("PO"), valueField: "id", textField: "text",
+            { name: "vendor", title: "VENDOR", type: "select", items: getVendorsLOV(), valueField: "id", textField: "text", editing: false, align:"center",},
+            { name: "whouse", title: "WAREHOUSE", type: "select", items: getWarehousesLOV(), valueField: "id", textField: "text", editing: false, align:"center",},
+            { name: "status", title: "STATUS", type: "select", items: getStatusLOV("PO"), valueField: "id", textField: "text", align:"center",
             	
             	itemTemplate: function(value, item){
             		var str = "";
@@ -282,11 +298,12 @@ $("#po-orders-grid").jsGrid({
             	}
             	
             },
-            { name: "lastupdate", title: "LAST UPDATE", type: "text", filtering: false, editing: false,},
-            {type: "control",
+            { name: "lastupdate", title: "LAST UPDATE", type: "text", editing: false, align:"center",},
+            { name: "lastupdatedby", title: "LAST UPDATED BY", type: "text", editing: false, align:"center",},
+            {type: "control", align:"center",
             	deleteButton: false,
             	itemTemplate: function(value, item) {
-            		if(Number(item.status) == 1 && Number(item.status) == 7)
+            		if((Number(item.status) == 1 || Number(item.status) == 7))
             			return this._createEditButton(item);
             	}
             }
@@ -299,7 +316,9 @@ function poUpdatePayment() {
 		var invoiceFile = $("#invoice-input").prop('files')[0].name;
 		var date = (new Date()).toLocaleString();
 		insertOrderRevision(data[0].poid, "PURCHASE", "--", "PO INVOICE", "--", "Attached: " + invoiceFile, date);
-		var q = "UPDATE porders set status=7, poInvoice='" + invoiceFile + "', lastupdate='" + date + "' where poid='" + data[0].poid + "'";
+		var q = "UPDATE porders set status=7, poInvoice='" + invoiceFile 
+						+ "', lastupdate='" + date + "', lastupdatedby=" 
+						+ getUserId() + " where poid='" + data[0].poid + "'";
 		alasql(q);
 		refreshPOGrids();
 		poOrderDetailsDlg.dialog("close");
@@ -313,7 +332,8 @@ function sendToVendor(poid) {
 		var quoteFile = $("#poQuote-input").prop('files')[0].name;
 		var date = (new Date()).toLocaleString();
 		insertOrderRevision(poid, "PURCHASE", "--", "PO QUOTE", "--", "Attached: " + quoteFile, date);
-		var q = "UPDATE porders set status=4, poQuote='" + quoteFile + "', lastupdate='" + date + "' where poid='" + poid + "'";
+		var q = "UPDATE porders set status=4, poQuote='" + quoteFile + "', lastupdate='" 
+						+ date + "', lastupdatedby=" + getUserId() + " where poid='" + poid + "'";
 		alasql(q);
 		refreshPOGrids();
 		poOrderDetailsDlg.dialog("close");

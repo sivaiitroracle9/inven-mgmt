@@ -146,12 +146,13 @@ $("#so-orders-grid").jsGrid({
         				global_status_map[Number(rows[0].status)], global_status_map[Number(args.item.status)], date);	
         	}
         	console.log(args)
-        	var q = "update sorders set status =" + Number(args.item.status) + ", lastupdate='" + date + "' where id =" + args.item.id + ";";
+        	var q = "update sorders set status =" + Number(args.item.status) + ", lastupdate='" + date + "', lastupdatedby=" + getUserId() 
+        				+ " where id =" + args.item.id + ";";
         	alasql(q);
         },
         
         controller: {
-        	loadData: function() {
+        	loadData: function(filter) {
         		var sorders = alasql("select * from sorders order by id desc");
 
         		var data = [];
@@ -164,15 +165,26 @@ $("#so-orders-grid").jsGrid({
         				d["whouse"] = or["warehouse"];
         				d["status"] = or["status"];
         				d["lastupdate"] = or["lastupdate"];
+        				d["lastupdatedby"] = getUserDetailString(or["lastupdatedby"]);
         				data.push(d);
         			});
         		}
-        		return data;
+        		
+            	var filtered = $.grep(data, function(so) {
+                    return (!filter["onumber"] || so["onumber"].indexOf(filter["onumber"])) 
+                    	&& (!filter["outlet"] || so["outlet"]==filter["outlet"])
+                    	&& (!filter["whouse"] || so["whouse"]==filter["whouse"])
+                    	&& (!filter["status"] || so["status"]==filter["status"])
+                    	&& (!filter["lastupdate"] || so["lastupdate"].indexOf(filter["lastupdate"]))
+                    	&& (!filter["lastupdatedby"] || so["lastupdatedby"].indexOf(filter["lastupdatedby"]));
+            	});
+        		
+        		return filtered;
         	},
         },
  
         fields: [
-            { name: "onumber", title: "ORD. NUMBER", type: "text", editing: false,
+            { name: "onumber", title: "ORD. NUMBER", type: "text", editing: false, align:"center",
             	itemTemplate: function(value, item) {
             		if(item!=undefined) {
                 		return "<a href='#' onclick=openSODetails(" + item.id + ")>" + value + "</a>";
@@ -184,9 +196,9 @@ $("#so-orders-grid").jsGrid({
             		}
             	}
             },
-            { name: "whouse", title: "WAREHOUSE", type: "select", items: getWarehousesLOV(), valueField: "id", textField: "text", editing: false,},
-            { name: "outlet", title: "OUTLET", type: "select", items: getOutletsLOV(), valueField: "id", textField: "text", editing: false,},
-            { name: "status", title: "STATUS", type: "select", items: getStatusLOV("SO"), valueField: "id", textField: "text",
+            { name: "whouse", title: "WAREHOUSE", type: "select", items: getWarehousesLOV(), valueField: "id", textField: "text", editing: false, align:"center",},
+            { name: "outlet", title: "OUTLET", type: "select", items: getOutletsLOV(), valueField: "id", textField: "text", editing: false, align:"center",},
+            { name: "status", title: "STATUS", type: "select", items: getStatusLOV("SO"), valueField: "id", textField: "text", align:"center",
 
             	itemTemplate: function(value, item){
             		var str = "";
@@ -223,8 +235,8 @@ $("#so-orders-grid").jsGrid({
             	}
             	
             },
-            { name: "lastupdate", title: "LAST UPDATE", type: "text", filtering: false, editing: false,},
-            { name: "lastupdatedUser", title: "LAST UPDATED BY", type: "text", filtering: false, editing: false,},
+            { name: "lastupdate", title: "LAST UPDATE", type: "text", editing: false, align:"center",},
+            { name: "lastupdatedby", title: "LAST UPDATED BY", type: "text", editing: false, align:"center",},
             {type: "control",
             	deleteButton: false,
             	itemTemplate: function(value, item) {
