@@ -595,3 +595,44 @@ function downloadCSVFile(filename, csvData){
     hiddenElement.download = filename + '.csv';
     hiddenElement.click();
 }
+
+
+
+function open_dlg_overview_email(email) {
+	dlg_overview_email.dialog("open");
+	if(email) {
+		$("#dlg-overview-email-to").val(email)
+	}
+	$("#dlg-overview-email-from").val(getUserEmail());
+}
+
+var dlg_overview_email = $("#dlg-overview-email").dialog(
+		{
+			autoOpen : false,
+			width : 400,
+			modal : true,
+			closeOnEscape : true,
+			title: "Compose Email",
+			buttons : {
+				Send : function() {
+					$(this).dialog("close");
+				},
+				Cancel : function() {
+					$(this).dialog("close");
+				}
+			},
+			open : function(event) {
+
+				$('.ui-dialog-buttonpane').find('button:contains("Send")')
+						.removeClass("ui-button ui-corner-all ui-widget")
+						.addClass('btn btn-primary');
+				$('.ui-dialog-buttonpane').find('button:contains("Cancel")')
+				.removeClass("ui-button ui-corner-all ui-widget")
+				.addClass('btn btn-default');
+			},
+			close : function(event) {
+				$("#dlg-overview-email-to").val("");
+				$("#dlg-overview-email-from").val("");
+			}
+});
+$("#dlg-overview-email").show();

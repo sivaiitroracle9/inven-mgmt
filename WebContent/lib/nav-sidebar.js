@@ -14,7 +14,9 @@ var global_permissions_map = {
 			"sb-outlets":true,
 			"sb-orders":true,
 			"orders-po-tab":true,
+			"orders-po-edit":true,
 			"orders-so-tab":true,
+			"orders-so-edit":true,
 			"orders-revisions":true,
 			"orders-st-tab":true,
 			"sb-reports":true,
@@ -190,6 +192,10 @@ function getUserId(){
 	return user;
 }
 
+function getUserEmail() {
+	return getUserDetailById(getUserId()).email;
+}
+
 function getUserDetailById(userId) {
 	var rows = alasql("select users.name, whouse.name as warehouse, users.designation, users.email " +
 			"from users outer join whouse on users.whouse=whouse.id where users.id="+userId);
@@ -197,6 +203,7 @@ function getUserDetailById(userId) {
 		return {name: rows[0].name, warehouse:rows[0].warehouse, designation:rows[0].designation, email:rows[0].email};
 	}
 }
+
 
 function getUserDetailString(userId){
 	var userString = getUserDetailById(userId);

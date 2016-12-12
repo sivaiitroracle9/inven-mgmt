@@ -7,6 +7,8 @@
 <script src="lib/jsgrid.min.js"></script>
 
 <link href="css/bootstrap.css" rel="stylesheet" />
+<link href="font-awesome/css/font-awesome.min.css" rel="stylesheet"
+	type="text/css">
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <link href="css/jsgrid.min.css" rel="stylesheet" />
@@ -108,11 +110,11 @@
 						<div class="panel-heading">
 							<label>LIST OF PRODUCTS</label>
 							<div class="pull-right">
-								<a class="btn btn-default"><span
-									class="glyphicon glyphicon-share"> Share</span></a> <a
+								<!-- <a class="btn btn-default"><span
+									class="glyphicon glyphicon-share"> Share</span></a> --> <a
 									class="btn btn-default"><span class="fa fa-print">
 										Print</span></a> <a class="btn btn-default"><span
-									class="glyphicon glyphicon-envelope"> Email</span></a>
+									class="glyphicon glyphicon-envelope" onclick="open_dlg_overview_email()"> Email</span></a>
 							</div>
 							<div class="btn-group pull-right">
 								<button type="button" class="btn btn-default dropdown-toggle"
@@ -164,11 +166,11 @@
 						<div class="panel-heading">
 							<label>LIST OF CATEGORIES</label>
 							<div class="pull-right">
-								<a class="btn btn-default"><span
-									class="glyphicon glyphicon-share"> Share</span></a> <a
+								<!-- <a class="btn btn-default"><span
+									class="glyphicon glyphicon-share"> Share</span></a> --> <a
 									class="btn btn-default"><span class="fa fa-print">
 										Print</span></a> <a class="btn btn-default"><span
-									class="glyphicon glyphicon-envelope"> Email</span></a>
+									class="glyphicon glyphicon-envelope" onclick="open_dlg_overview_email()"> Email</span></a>
 							</div>
 							<div class="btn-group pull-right">
 								<button type="button" class="btn btn-default dropdown-toggle"
@@ -220,17 +222,17 @@
 						<div class="panel-heading">
 							<label>LIST OF MAKERS</label>
 							<div class="pull-right">
-								<a class="btn btn-default"><span
-									class="glyphicon glyphicon-share"> Share</span></a> <a
+								<!-- <a class="btn btn-default"><span
+									class="glyphicon glyphicon-share"> Share</span></a> --> <a
 									class="btn btn-default"><span class="fa fa-print">
 										Print</span></a> <a class="btn btn-default"><span
-									class="glyphicon glyphicon-envelope"> Email</span></a>
+									class="glyphicon glyphicon-envelope" onclick="open_dlg_overview_email()"> Email</span></a>
 							</div>
 							<div class="btn-group pull-right">
 								<button type="button" class="btn btn-default dropdown-toggle"
 									data-toggle="dropdown" aria-haspopup="true"
 									aria-expanded="false">
-									<span class="fa fa-download"> </span> Export <span
+									<span class="fa fa-upload"> </span> Export <span
 										class="caret"></span>
 								</button>
 								<ul class="dropdown-menu" style="background: #171048">
@@ -247,7 +249,7 @@
 								<button type="button" class="btn btn-default dropdown-toggle"
 									data-toggle="dropdown" aria-haspopup="true"
 									aria-expanded="false">
-									<span class="fa fa-upload"> </span> Import <span class="caret"></span>
+									<span class="fa fa-download"> </span> Import <span class="caret"></span>
 								</button>
 								<ul class="dropdown-menu" style="background: #171048">
 									<li style="width: 96px"><a href="#"
@@ -272,7 +274,18 @@
 			</div>
 
 		</div>
-
+		<div id="dlg-overview-email" style="display: none">
+			<form action="" class="form-group">
+				<label for="dlg-overview-email-to">To</label><input
+					class="form-control" id="dlg-overview-email-to" type="email">
+				<label for="dlg-overview-email-from">From</label><input
+					class="form-control" id="dlg-overview-email-from" type="email">
+				<label for="dlg-overview-email-subject">Subject</label><input
+					class="form-control" id="dlg-overview-email-subject" type="email">
+				<label for="dlg-overview-email-body">Content</label>
+				<textarea class="form-control" style="width: 360px"></textarea>
+			</form>
+		</div>
 		<div id="proddialog-form" title="Details">
 			<form id="productForm" class="form-group">
 				<div>

@@ -32,11 +32,6 @@ function openPODetails(id) {
 	$("#attached-po-quote").text("");
 	$("#attached-po-invoice").text("");
 	
-	if(status == 2) enableQuoteInDlg();
-	else disableQuoteInDlg();
-	if(status == 6) enablePaymentInDlg();
-	else disablePaymentInDlg();
-	
 	$("#po-quote-send-tovendor").attr("onclick", "sendToVendor('"+ponumber+"')");
 	if(status >= 4) {
 		$("#attached-po-quote").show();
@@ -111,6 +106,10 @@ function openPODetails(id) {
 		});
 	}
 	console.log(od_dlg_po_item)
+	
+	toggleQuoteInDlg(status);
+	togglePaymentInDlg(status);
+	
 	poOrderDetailsDlg.dialog({
 		minWidth : 1050
 	});
@@ -138,6 +137,9 @@ $("#po-dlg-items").jsGrid({
     	alasql("update poitems set qprice=" + Number(args.item.qprice) 
     				+ ", lastupdate='" + date + "', lastupdatedby=" + getUserId() 
     				+ " where poid='" + args.item.poid + "' and pid=" + args.item.pid);
+    	
+    	var porders = alasql("select status from porders where poid='"+args.item.poid+"'");
+    	toggleQuoteInDlg(porders[0].status);
     },
     
     controller: {
@@ -172,8 +174,8 @@ $("#po-dlg-items").jsGrid({
         },
         {name:"qprice", title:"Quoted PIRCE (UNIT)", type: "number", width:80,
         	itemTemplate: function(value, item){
-        		if(value === 0) return "--";
-        		return value;
+        		if(value === 0) return "<span class='po-dlg-items-qprice'>--</span>";
+        		return "<span class='po-dlg-items-qprice'>" + value + "</span>";;
         	}
         },
         {type: "control",
@@ -303,7 +305,7 @@ $("#po-orders-grid").jsGrid({
             {type: "control", align:"center",
             	deleteButton: false,
             	itemTemplate: function(value, item) {
-            		if((Number(item.status) == 1 || Number(item.status) == 7))
+            		if((Number(item.status) == 1 || Number(item.status) == 7) && getPermission("orders-po-edit"))
             			return this._createEditButton(item);
             	}
             }
@@ -327,7 +329,6 @@ function poUpdatePayment() {
 }
 
 function sendToVendor(poid) {
-	
 	if($("#poQuote-input").prop('files').length!=0) {
 		var quoteFile = $("#poQuote-input").prop('files')[0].name;
 		var date = (new Date()).toLocaleString();
@@ -343,22 +344,37 @@ function sendToVendor(poid) {
 	}
 }
 
-function disableQuoteInDlg() {
-	$("#poQuote-input").prop("disabled", true);
-	$("#po-quote-send-tovendor").prop("disabled", true);
+function toggleQuoteInDlg(status) {
+	if(status == 2) {
+		$("#poQuote-input").prop("disabled", false);
+		if(qpriceSet()) {
+			$("#po-quote-send-tovendor").prop("disabled", false);	
+		}	
+	} else {
+		$("#poQuote-input").prop("disabled", true);
+		$("#po-quote-send-tovendor").prop("disabled", true);
+	}
 }
 
-function enableQuoteInDlg() {
-	$("#poQuote-input").prop("disabled", false);
-	$("#po-quote-send-tovendor").prop("disabled", false);
+function togglePaymentInDlg(status) {
+	if(status == 6) {
+		$("#invoice-input").prop("disabled", false);
+		$("#update-payment").prop("disabled", false);	
+	} else {
+		$("#invoice-input").prop("disabled", true);
+		$("#update-payment").prop("disabled", true);
+	}
 }
 
-function disablePaymentInDlg() {
-	$("#invoice-input").prop("disabled", true);
-	$("#update-payment").prop("disabled", true);
-}
 
-function enablePaymentInDlg() {
-	$("#invoice-input").prop("disabled", false);
-	$("#update-payment").prop("disabled", false);
+function qpriceSet() {
+	var set = true;
+	if(od_dlg_po_item.length!=0){
+		od_dlg_po_item.forEach(function(i){
+			if(i.qprice == 0) {
+				set = false;
+			}
+		})
+	}
+	return set;
 }

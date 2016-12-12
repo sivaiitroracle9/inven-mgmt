@@ -10,6 +10,7 @@
 <link href="css/jsgrid.min.css" rel="stylesheet" />
 <link href="css/jsgrid-theme.min.css" rel="stylesheet" />
 <link href="css/font-awesome.min.css" rel="stylesheet" />
+
 <link href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"
 	rel="stylesheet" />
 <link href="css/toastr.min.css" rel="stylesheet" />
@@ -134,10 +135,10 @@
 					<br> <br> <br>
 					<button id="generate-report" class="btn btn-success">Run</button>
 					<div class="btn-group" role="group" aria-label="...">
-						<a id="btn-download" class="btn btn-default">DOWNLOAD</a> <a
-							id="btn-print" class="btn btn-default">PRINT</a> <a
+						<a id="btn-download" class="btn btn-default"><span class="fa fa-download" style="margin-right:2px"> </span>DOWNLOAD</a> <a
+							id="btn-print" class="btn btn-default"><span class="glyphicon glyphicon-print" style="margin-right:2px"> </span>PRINT</a> <a
 							id="btn-email" onclick="open_dlg_overview_email()"
-							class="btn btn-default">EMAIL</a>
+							class="btn btn-default"><span class="glyphicon glyphicon-envelope" style="margin-right:2px"> </span>EMAIL</a>
 					</div>
 				</div>
 				<div id="report-grids" class="panel-body">

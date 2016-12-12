@@ -11,7 +11,8 @@
 <script src="lib/jsgrid.min.js"></script>
 <link href="css/jsgrid.min.css" rel="stylesheet" />
 <link href="css/jsgrid-theme.min.css" rel="stylesheet" />
-
+<link href="font-awesome/css/font-awesome.min.css" rel="stylesheet"
+	type="text/css">
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
 <link href="css/style.css" rel="stylesheet" />
@@ -92,7 +93,7 @@
 		<!-- /.container-fluid -->
 	</nav>
 	<div id="show-body" style="display: none">
-		<div class="container">
+		<div class="container-fluid">
 
 			<div class="panel panel-success">
 				<div class="panel-heading">
@@ -101,13 +102,13 @@
 						<a class="btn btn-default"><span
 							class="glyphicon glyphicon-share"> Share</span></a> <a
 							class="btn btn-default"><span class="fa fa-print">
-								Print</span></a> <a class="btn btn-default"><span
+								Print</span></a> <a class="btn btn-default" onclick=open_dlg_overview_email()><span
 							class="glyphicon glyphicon-envelope"> Email</span></a>
 					</div>
 					<div class="btn-group pull-right">
 						<button type="button" class="btn btn-default dropdown-toggle"
 							data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-							<span class="fa fa-download"> </span> Export <span class="caret"></span>
+							<span class="fa fa-upload"> </span> Export <span class="caret"></span>
 						</button>
 						<ul class="dropdown-menu" style="background: #171048">
 							<li style="width: 96px"><a href="#"
@@ -122,7 +123,7 @@
 					<div class="btn-group pull-right">
 						<button type="button" class="btn btn-default dropdown-toggle"
 							data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-							<span class="fa fa-upload"> </span> Import <span class="caret"></span>
+							<span class="fa fa-download"> </span> Import <span class="caret"></span>
 						</button>
 						<ul class="dropdown-menu" style="background: #171048">
 							<li style="width: 96px;"><a href="#" onclick=importFile()><span
@@ -141,7 +142,18 @@
 				</div>
 			</div>
 		</div>
-
+		<div id="dlg-overview-email" style="display: none">
+			<form action="" class="form-group">
+				<label for="dlg-overview-email-to">To</label><input
+					class="form-control" id="dlg-overview-email-to" type="email">
+				<label for="dlg-overview-email-from">From</label><input
+					class="form-control" id="dlg-overview-email-from" type="email">
+				<label for="dlg-overview-email-subject">Subject</label><input
+					class="form-control" id="dlg-overview-email-subject" type="email">
+				<label for="dlg-overview-email-body">Content</label>
+				<textarea class="form-control" style="width: 360px"></textarea>
+			</form>
+		</div>
 		<div id="dialog-form" title="Details">
 			<form id="vendorForm" class="form-group">
 				<p>

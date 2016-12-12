@@ -240,6 +240,7 @@ function getWarehouseById(id) {
 		d["name"] = rows[0].name;
 		d["tel"] = rows[0].tel;
 		d["address"] = rows[0].addr;
+		d["address"] = rows[0].addr;
 		return d;
 	}
 }

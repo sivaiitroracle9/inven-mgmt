@@ -59,9 +59,12 @@ function init(){
 	var warehouse = $("#global-warehouse").val();
 	var ivalue = setInventoryValue(warehouse);
 	var date = (new Date()).toLocaleDateString();
-	generateInventoryValueChart(ivalue, date);
-	generateStockQtyBarChart(warehouse, $("select#st-chart-type").val(), 
-			$("select#st-chart-cat").val(), $("select#st-chart-prod").val(), date);
+	
+	$(window).load(function() {
+		generateInventoryValueChart(ivalue, date);
+		generateStockQtyBarChart(warehouse, $("select#st-chart-type").val(), 
+				$("select#st-chart-cat").val(), $("select#st-chart-prod").val(), date);
+	});
 }
 
 function setInventoryValue(whouse){

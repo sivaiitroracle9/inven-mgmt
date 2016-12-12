@@ -50,6 +50,7 @@ $("#po-warehouse-info-select").on("change", function(event) {
 		$("#po-warehouse-info-name").text(whouse["name"]);
 		$("#po-warehouse-info-address").text(whouse["address"]);
 		$("#po-warehouse-info-tel").text(whouse["tel"]);
+		$("#po-warehouse-info-tel").text(whouse["tel"]);
 	}
 });
 

@@ -133,7 +133,7 @@
 										<button type="button" class="btn btn-default dropdown-toggle"
 											data-toggle="dropdown" aria-haspopup="true"
 											aria-expanded="false">
-											<span class="fa fa-download"> </span> Export <span
+											<span class="fa fa-upload"> </span> Export <span
 												class="caret"></span>
 										</button>
 										<ul class="dropdown-menu" style="background: #171048">
@@ -149,7 +149,7 @@
 										<button type="button" class="btn btn-default dropdown-toggle"
 											data-toggle="dropdown" aria-haspopup="true"
 											aria-expanded="false">
-											<span class="fa fa-upload"> </span> Import <span
+											<span class="fa fa-download"> </span> Import <span
 												class="caret"></span>
 										</button>
 										<ul class="dropdown-menu" style="background: #171048">
@@ -277,7 +277,7 @@
 										<button type="button" class="btn btn-default dropdown-toggle"
 											data-toggle="dropdown" aria-haspopup="true"
 											aria-expanded="false">
-											<span class="fa fa-download"> </span> Export <span
+											<span class="fa fa-uplaod"> </span> Export <span
 												class="caret"></span>
 										</button>
 										<ul class="dropdown-menu" style="background: #171048">
@@ -293,7 +293,7 @@
 										<button type="button" class="btn btn-default dropdown-toggle"
 											data-toggle="dropdown" aria-haspopup="true"
 											aria-expanded="false">
-											<span class="fa fa-upload"> </span> Import <span
+											<span class="fa fa-download"> </span> Import <span
 												class="caret"></span>
 										</button>
 										<ul class="dropdown-menu" style="background: #171048">
@@ -445,7 +445,7 @@
 													</p>
 												</div>
 											</div>
-											<div id="so-to-info" class="panel panel-info">
+											<div id="so-to-info" class="panel panel-info" style="width:800px">
 												<div class="panel-heading">
 													<label>To: </label> <select id="so-to-info-select"
 														class="btn btn-default dropdown-toggle">
@@ -524,7 +524,7 @@
 								<button type="button" class="btn btn-default dropdown-toggle"
 									data-toggle="dropdown" aria-haspopup="true"
 									aria-expanded="false">
-									<span class="fa fa-download"> </span> Export <span
+									<span class="fa fa-upload"> </span> Export <span
 										class="caret"></span>
 								</button>
 								<ul class="dropdown-menu" style="background: #171048">
@@ -600,9 +600,7 @@
 								</p>
 								<p>
 									Email: <span id="po-vendor-dlg-email"></span> <a
-										onclick=open_dlg_overview_email(
-										'povendor')
-															style="margin: 4px"><span
+										onclick='open_dlg_overview_email()'	style="margin: 4px"><span
 										class="glyphicon glyphicon-envelope" style="margin-right: 4px">
 									</span></a>
 								</p>
@@ -640,7 +638,7 @@
 							id="attached-po-quote" style="color: blue; display: none"
 							target="_blank"></a><br />
 						<button id="po-quote-send-tovendor" onclick=""
-							class="btn btn-default pull-right">
+							class="btn btn-default pull-right" disabled>
 							<span class="fa fa-send-o"></span>Send to Vendor
 						</button>
 					</div>

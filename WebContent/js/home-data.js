@@ -1,7 +1,3 @@
-/**
- * http://usejsdoc.org/
- */
-
 function generateInventoryData(base, date){
 	
 	var maxbase = base*(1.1);
@@ -13,7 +9,7 @@ function generateInventoryData(base, date){
 	d.d = morrisDate(date);
 	d.value = Math.floor(base);
 	data.push(d);
-	for(var i=1; i<90; i++) {
+	for(var i=1; i<70; i++) {
 		d={};
 		newdate.setDate(newdate.getDate() - 1);
 		d.d = morrisDate(newdate);
@@ -55,10 +51,10 @@ function generateStockQtyData(base, date){
 	var d={};
 	var date = new Date(date);
 	var newdate = date;
-	d.d = morrisDate(date);
+	d.date = morrisDate(date);
 	d.units = Math.floor(base);
 	data.push(d);
-	for(var i=1; i<90; i++) {
+	for(var i=1; i<70; i++) {
 		d={};
 		newdate.setDate(newdate.getDate() - 1);
 		d.date = morrisDate(newdate);

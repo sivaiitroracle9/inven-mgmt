@@ -240,7 +240,7 @@ $("#so-orders-grid").jsGrid({
             {type: "control",
             	deleteButton: false,
             	itemTemplate: function(value, item) {
-            		if(item.status === 9 || item.status === 14) {
+            		if((item.status === 9 || item.status === 14) && getPermission("orders-so-edit")) {
                 		return this._createEditButton(item);	
             		}
             	}
