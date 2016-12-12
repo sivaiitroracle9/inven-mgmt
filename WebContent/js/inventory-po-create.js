@@ -1,3 +1,10 @@
+$("#inven-grp-po").hide();
+$(".inven-po-cls").hide();
+if(getPermission("inventory-po-create")) {
+	$("#inven-grp-po").show();
+	$(".inven-po-cls").show();
+}
+
 //------------------------------------------------------------------------------------- PO ----------------------------------------------------------------------------------------
 var poOrderDetailsDlg = $("#dlg-inventory-create-po").dialog({
     autoOpen: false,

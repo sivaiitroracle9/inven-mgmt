@@ -282,8 +282,12 @@ function getProductDetailLOV(args){
 	return lov;
 }
 
-function open_dlg_overview_email() {
+function open_dlg_overview_email(email) {
 	dlg_overview_email.dialog("open");
+	if(email) {
+		$("#dlg-overview-email-to").val(email)
+	}
+	$("#dlg-overview-email-from").val(getUserEmail());
 }
 
 var dlg_overview_email = $("#dlg-overview-email").dialog(
@@ -311,7 +315,8 @@ var dlg_overview_email = $("#dlg-overview-email").dialog(
 				.addClass('btn btn-default');
 			},
 			close : function(event) {
-
+				$("#dlg-overview-email-to").val("");
+				$("#dlg-overview-email-from").val("");
 			}
 });
 $("#dlg-overview-email").show();

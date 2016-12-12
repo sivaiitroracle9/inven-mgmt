@@ -83,7 +83,9 @@ function openPODetails(id) {
 	$("#po-vendor-dlg-address").text(vendor["Address"]);
 	$("#po-vendor-dlg-tel").text(vendor["TEL"]);
 	$("#po-vendor-dlg-email").text(vendor["Email"]);
-
+	$("#po-vendor-dlg-email").siblings("a").eq(0).attr("onclick", "open_dlg_overview_email('" + vendor["Email"] + "')");
+	
+	
 	var selectQry = "select * from poitems where poid='" + ponumber + "'";
 	console.log(selectQry)
 	var poitems = alasql(selectQry);
