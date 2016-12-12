@@ -85,9 +85,9 @@ $(window).click(function(event){
 	}
 });
 
-var user = parseInt($.url().param('user'));
-var login = parseInt($.url().param('login'));
-if(!user) {
+var user = $.cookie("cuser");
+var login = $.cookie("clogin");
+if(!user && user!="") {
 	$(location).attr('href', 'login.html')
 } else {
 
@@ -95,25 +95,16 @@ if(!user) {
 	$("#username").text(rows[0].name);
 	$("#defaultWhouse").text(rows[0].warehouse);
 	$("#defaultdesignation").text(rows[0].designation);
-
-	$("nav.sidebar ul.menu").find("li a").each(function(){
-		if(user) {
-			$(this).attr("href", $(this).attr("href") + "?user="+user + "&&login=1");
-		}
-	});
-	$(".nav-home-url").each(function(){
-		if(user) {
-			$(this).attr("href", $(this).attr("href") + "?user="+user + "&&login=1");
-		}
-	});
 	
 	sidebarAccess();
-	if(login != 1) {
+	if(login != "") {
 		redirectToFirstPage();
 	}
 }
 
 function logout() {
+	$.cookie("cuser","");
+	$.cookie("clogin","");
 	$(location).attr('href', 'login.html');
 }
 
